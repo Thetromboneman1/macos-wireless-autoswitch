@@ -4,6 +4,8 @@
 <dict>
     <key>Label</key>
     <string>local.macos-wireless-autoswitch.fork-sync</string>
+    <key>UserName</key>
+    <string>root</string>
     <key>ProgramArguments</key>
     <array>
         <string>/Users/corn/Documents/Corn_Automation/macos-wireless-autoswitch/scripts/fork-sync-update.sh</string>
