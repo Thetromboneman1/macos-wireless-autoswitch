@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>local.macos-wireless-autoswitch.fork-sync</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/corn/Documents/Corn_Automation/macos-wireless-autoswitch/scripts/fork-sync-update.sh</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>1800</integer>
+    <key>KeepAlive</key>
+    <false/>
+    <key>StandardOutPath</key>
+    <string>/tmp/macos-wireless-autoswitch-fork-sync.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/macos-wireless-autoswitch-fork-sync.log</string>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
