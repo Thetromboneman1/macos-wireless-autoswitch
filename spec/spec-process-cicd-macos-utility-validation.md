@@ -1,8 +1,8 @@
 ---
 title: CI/CD Workflow Specification - macOS Utility Validation
-version: 1.0
+version: 1.1
 date_created: 2025-09-14
-last_updated: 2025-09-14
+last_updated: 2026-04-29
 owner: DevOps Team
 tags: [process, cicd, github-actions, automation, macos, shell-scripts, validation]
 ---
@@ -11,7 +11,7 @@ tags: [process, cicd, github-actions, automation, macos, shell-scripts, validati
 
 **Purpose**: Validate shell script syntax, test network detection logic, and ensure macOS compatibility for the wireless auto-switch utility
 **Trigger Events**: Push to main/master branch, pull requests, manual dispatch
-**Target Environments**: macOS runners (latest, Ventura, Sonoma, Sequoia)
+**Target Environments**: macOS runners (latest, Sonoma, Sequoia, Tahoe)
 
 ## Execution Flow Diagram
 
@@ -40,7 +40,7 @@ graph TD
 | mock-testing | Test network detection with mocked interfaces | shellcheck-analysis | macOS-latest |
 | documentation-check | Validate README and documentation | None | Ubuntu-latest |
 | security-scan | Check for security vulnerabilities | syntax-validation | Ubuntu-latest |
-| integration-test | End-to-end testing on macOS | mock-testing | macOS-12, macOS-13, macOS-14 |
+| integration-test | End-to-end testing on macOS | mock-testing | macOS-14, macOS-15, macOS-16 |
 
 ## Requirements Matrix
 
@@ -114,7 +114,7 @@ compatibility_matrix: file  # Description: macOS version compatibility results
 
 ### Environmental Constraints
 
-- **Runner Requirements**: macOS-12, macOS-13, macOS-14 for integration tests
+- **Runner Requirements**: macOS-14, macOS-15, macOS-16 for integration tests
 - **Network Access**: Required for package installation and updates
 - **Permissions**: Standard repository permissions, no elevated access needed
 

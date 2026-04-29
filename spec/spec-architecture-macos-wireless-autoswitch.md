@@ -1,23 +1,23 @@
 ---
 title: Architecture Specification - macOS Wireless Auto-Switch Utility
-version: 1.0
+version: 1.1
 date_created: 2025-09-14
-last_updated: 2025-09-14
+last_updated: 2026-04-29
 owner: System Architecture Team
 tags: [architecture, macos, networking, launchd, system-utility, automation]
 ---
 
 # Introduction
 
-This specification defines the architecture, requirements, and implementation guidelines for the macOS Wireless Auto-Switch utility - a system service that automatically manages WiFi connectivity based on wired network adapter status. The utility provides seamless network switching without user intervention, eliminating connection conflicts between wired and wireless interfaces.
+This specification defines the architecture, requirements, and implementation guidelines for the macOS Wireless Auto-Switch utility - a system service that automatically manages WiFi connectivity based on wired and VLAN virtual adapter status. The utility provides seamless network switching without user intervention, eliminating connection conflicts between wired/VLAN and wireless interfaces.
 
 ## 1. Purpose & Scope
 
 ### Purpose
-Define the complete architecture and requirements for a macOS system utility that automatically toggles WiFi connectivity based on the presence of active wired network connections.
+Define the complete architecture and requirements for a macOS system utility that automatically toggles WiFi connectivity based on the presence of active wired or VLAN network connections.
 
 ### Scope
-- **In Scope**: Network interface detection, WiFi state management, system service integration, installation/management tooling, macOS compatibility (Ventura 13.x, Sonoma 14.x, Sequoia 15.x)
+- **In Scope**: Network interface detection, WiFi state management, system service integration, installation/management tooling, macOS compatibility (Sonoma 14.x, Sequoia 15.x, Tahoe 16.x)
 - **Out of Scope**: GUI applications, network configuration management beyond WiFi toggle, third-party network managers, cross-platform support
 - **Target Audience**: System administrators, developers maintaining macOS network automation tools, DevOps engineers
 - **Assumptions**: Administrator privileges available, standard macOS networking stack, bash shell environment
@@ -30,15 +30,15 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **Airport Power**: macOS WiFi radio state (on/off) controlled via networksetup command
 - **System Configuration**: macOS framework for network and system state monitoring located at `/Library/Preferences/SystemConfiguration`
 - **Self-Assigned Address**: IPv4 address in 169.254.x.x range assigned when DHCP fails
-- **Wired Interface**: Ethernet, Thunderbolt, LAN, or USB-C network adapters with active IP assignment
+- **Wired/VLAN Interface**: Ethernet, Thunderbolt, LAN, USB-C, or VLAN virtual network adapters with active IP assignment
 
 ## 3. Requirements, Constraints & Guidelines
 
 ### Functional Requirements
-- **REQ-001**: System shall detect active wired network connections with valid IP addresses
-- **REQ-002**: System shall automatically disable WiFi when wired connection is active
-- **REQ-003**: System shall automatically enable WiFi when no wired connections are active
-- **REQ-004**: System shall support multiple wired adapter types (Ethernet, Thunderbolt, LAN, AX88179A)
+- **REQ-001**: System shall detect active wired or VLAN network connections with valid IP addresses
+- **REQ-002**: System shall automatically disable WiFi when wired or VLAN connection is active
+- **REQ-003**: System shall automatically enable WiFi when no wired or VLAN connections are active
+- **REQ-004**: System shall support multiple adapter types (Ethernet, Thunderbolt, LAN, AX88179A, VLAN)
 - **REQ-005**: System shall ignore loopback (127.0.0.1) and self-assigned (169.254.x.x) IP addresses
 - **REQ-006**: System shall respond to network configuration changes in real-time
 - **REQ-007**: System shall provide comprehensive installation and management tooling
@@ -55,7 +55,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **SEC-004**: Scripts shall be owned by root with appropriate execution permissions
 
 ### Compatibility Requirements
-- **COMP-001**: System shall support macOS Ventura (version 22.x), Sonoma (23.x), and Sequoia (24.x)
+- **COMP-001**: System shall support macOS Sonoma (23.x), Sequoia (24.x), and Tahoe (25.x)
 - **COMP-002**: System shall require Bash 4+ for proper array handling
 - **COMP-003**: System shall integrate with standard macOS networking utilities
 
@@ -132,13 +132,13 @@ Define the complete architecture and requirements for a macOS system utility tha
 ## 5. Acceptance Criteria
 
 ### Network Detection
-- **AC-001**: Given multiple network interfaces, When wired interface has valid IP address, Then system shall detect active wired connection
-- **AC-002**: Given wired interface with self-assigned IP (169.254.x.x), When evaluating connection status, Then system shall treat as inactive connection
-- **AC-003**: Given no wired interfaces with valid IPs, When evaluating connection status, Then system shall detect no active wired connections
+- **AC-001**: Given multiple network interfaces, When wired or VLAN interface has valid IP address, Then system shall detect active wired/VLAN connection
+- **AC-002**: Given wired or VLAN interface with self-assigned IP (169.254.x.x), When evaluating connection status, Then system shall treat as inactive connection
+- **AC-003**: Given no wired or VLAN interfaces with valid IPs, When evaluating connection status, Then system shall detect no active wired/VLAN connections
 
 ### WiFi State Management  
-- **AC-004**: Given active wired connection detected, When WiFi is currently enabled, Then system shall disable WiFi and log action
-- **AC-005**: Given no active wired connections, When WiFi is currently disabled, Then system shall enable WiFi and log action
+- **AC-004**: Given active wired/VLAN connection detected, When WiFi is currently enabled, Then system shall disable WiFi and log action
+- **AC-005**: Given no active wired/VLAN connections, When WiFi is currently disabled, Then system shall enable WiFi and log action
 - **AC-006**: Given WiFi state change command fails, When executing networksetup command, Then system shall exit with error code 1
 
 ### System Integration
@@ -157,7 +157,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **Unit Testing**: Shell script function validation using bash test framework
 - **Integration Testing**: Network interface detection with mocked system commands
 - **System Testing**: End-to-end validation on target macOS versions
-- **Compatibility Testing**: Cross-version validation on Ventura, Sonoma, Sequoia
+- **Compatibility Testing**: Cross-version validation on Sonoma, Sequoia, Tahoe
 
 ### Testing Frameworks
 - **Shell Testing**: Bash Automated Testing System (BATS) for script validation
@@ -215,7 +215,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 
 #### Flexibility vs Simplicity
 - **Trade-off**: Hardcoded adapter type detection vs dynamic discovery
-- **Rationale**: Explicit adapter type list (Ethernet, LAN, Thunderbolt, AX88179A) provides predictable behavior
+- **Rationale**: Explicit adapter type list (Ethernet, LAN, Thunderbolt, AX88179A, VLAN) provides predictable behavior
 
 #### Security vs Usability
 - **Trade-off**: Requires sudo privileges for installation
@@ -236,7 +236,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **FWK-003**: LaunchDaemon framework - System service execution environment
 
 ### Hardware Dependencies
-- **HW-001**: Network interfaces - Physical Ethernet, Thunderbolt, LAN, or USB-C adapters
+- **HW-001**: Network interfaces - Physical Ethernet, Thunderbolt, LAN, USB-C, or VLAN virtual adapters
 - **HW-002**: WiFi capability - Wireless network interface for state management
 - **HW-003**: Administrator access - User account with sudo privileges
 
@@ -246,22 +246,26 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **FS-003**: System logging - Write access to system log facilities
 
 ### Network Dependencies
-- **NET-001**: DHCP services - For valid IP address assignment to wired interfaces
-- **NET-002**: Network infrastructure - Physical network connectivity for wired adapters
+- **NET-001**: DHCP services - For valid IP address assignment to wired and VLAN interfaces
+- **NET-002**: Network infrastructure - Physical network connectivity for wired adapters and parent VLAN links
 
 ### Version Dependencies
-- **VER-001**: macOS Ventura 13.x+ - Minimum supported operating system version
+- **VER-001**: macOS Sonoma 14.x+ - Minimum supported operating system version
 - **VER-002**: Bash 4.0+ - Required for proper array handling and script execution
 
 ## 9. Examples & Edge Cases
 
 ### Basic Network Detection Logic
 ```bash
-# Detect wired interfaces with valid IP addresses
-INTERFACES=$(networksetup -listnetworkserviceorder | \
+# Detect wired and VLAN interfaces with valid IP addresses
+WIRED_INTERFACES=$(networksetup -listnetworkserviceorder | \
     grep "Hardware Port" | \
-    grep "Ethernet\|LAN\|Thunderbolt\|AX88179A" | \
+    grep "Ethernet\|LAN\|Thunderbolt\|AX88179A\|VLAN" | \
     awk -F ": " '{print $3}' | sed 's/)//g')
+
+VLAN_INTERFACES=$(ifconfig -l | tr ' ' '\n' | grep -E '^vlan[0-9]+$')
+
+INTERFACES="$WIRED_INTERFACES $VLAN_INTERFACES"
 
 for INTERFACE in $INTERFACES; do
     IPCHECK=$(ifconfig "$INTERFACE" | \
@@ -283,7 +287,7 @@ WIFIINTERFACES=$(networksetup -listallhardwareports | \
     sed -e 's/Hardware Port:/\'$'\n/g' | \
     grep Wi-Fi | awk '{print $3}')
 
-# Toggle WiFi based on wired connection status
+# Toggle WiFi based on wired/VLAN connection status
 if [ $IPFOUND ]; then
     networksetup -setairportpower "$WIFIINTERFACES" off || exit 1
     logger "wireless.sh: turning off wireless card ($WIFIINTERFACES)"
@@ -296,12 +300,12 @@ fi
 ### Edge Cases
 
 #### Multiple Wired Interfaces
-- **Scenario**: System has both Ethernet and Thunderbolt adapters connected
-- **Behavior**: Detection logic finds first interface with valid IP and enables wired mode
+- **Scenario**: System has Ethernet and VLAN adapters connected
+- **Behavior**: Detection logic finds first interface with valid IP and enables wired/VLAN mode
 - **Handling**: Loop through all interfaces, set IPFOUND=true on first valid IP
 
 #### Rapid Network Changes
-- **Scenario**: User frequently connects/disconnects wired adapter
+- **Scenario**: User frequently connects/disconnects wired or VLAN adapter
 - **Behavior**: Each change triggers LaunchDaemon execution
 - **Handling**: 10-second sleep prevents rapid cycling and system instability
 
@@ -311,8 +315,8 @@ fi
 - **Handling**: Check for WiFi interface existence before state changes
 
 #### Invalid IP Assignments
-- **Scenario**: Wired interface gets self-assigned IP (169.254.x.x)
-- **Behavior**: System treats as no valid wired connection
+- **Scenario**: Wired or VLAN interface gets self-assigned IP (169.254.x.x)
+- **Behavior**: System treats as no valid wired/VLAN connection
 - **Handling**: Explicit exclusion of 169.254.x.x range in IP detection
 
 #### Permission Failures
@@ -323,7 +327,7 @@ fi
 ## 10. Validation Criteria
 
 ### Functional Validation
-- **VAL-001**: Script correctly identifies all supported wired adapter types on test hardware
+- **VAL-001**: Script correctly identifies all supported wired/VLAN adapter types on test hardware
 - **VAL-002**: WiFi toggle operations complete successfully across all supported macOS versions
 - **VAL-003**: IP address filtering excludes loopback and self-assigned addresses correctly
 - **VAL-004**: LaunchDaemon responds to network configuration changes within specified timeframes
@@ -344,7 +348,7 @@ fi
 - **VAL-013**: File permissions prevent unauthorized modification of system components
 
 ### Compatibility Validation
-- **VAL-014**: Solution operates correctly across Ventura, Sonoma, and Sequoia macOS versions
+- **VAL-014**: Solution operates correctly across Sonoma, Sequoia, and Tahoe macOS versions
 - **VAL-015**: Hardware compatibility verified with various adapter types and configurations
 - **VAL-016**: Script handles differences in command output formats across macOS versions
 

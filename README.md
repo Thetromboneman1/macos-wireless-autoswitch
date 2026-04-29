@@ -1,6 +1,6 @@
 # macOS Wireless Auto-Switch
 
-Automatically disable Wi-Fi when a wired connection is active, then restore Wi-Fi when wired disconnects.
+Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, then restore Wi-Fi when all wired/VLAN links disconnect.
 
 ## What This Repo Contains
 
@@ -60,7 +60,8 @@ networksetup -listallhardwareports
 
 ## Project Notes
 
-- Uses hardware-port detection for Ethernet, LAN, Thunderbolt, and AX88179A adapters.
+- Uses hardware-port detection for Ethernet, LAN, Thunderbolt, AX88179A, and VLAN adapters.
+- Includes VLAN virtual interfaces (for example `vlan10`) when deciding whether Wi-Fi should be disabled.
 - Ignores loopback and self-assigned IP ranges when deciding wired status.
 - Requires admin privileges for system-level network changes.
 

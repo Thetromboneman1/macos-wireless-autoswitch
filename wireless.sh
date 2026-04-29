@@ -2,7 +2,7 @@
 
 #
 # macOS Wireless Auto-Switch Utility
-# Automatically toggles WiFi off when wired Ethernet connection is detected
+# Automatically toggles WiFi off when wired or VLAN virtual connections are detected
 # and back on when disconnected. Supports Sonoma, Sequoia, and Tahoe.
 #
 # Requirements: Root privileges, macOS 14+, Bash 4+
@@ -13,7 +13,7 @@ set -euo pipefail  # Exit on error, undefined variables, and pipe failures
 
 # Constants
 readonly SCRIPT_NAME="wireless.sh"
-readonly SUPPORTED_ADAPTERS="Ethernet|LAN|Thunderbolt|AX88179A"
+readonly SUPPORTED_ADAPTERS="Ethernet|LAN|Thunderbolt|AX88179A|VLAN"
 readonly SUPPORTED_OS_VERSIONS="23|24|25"  # Sonoma, Sequoia, Tahoe
 readonly LOOP_PREVENTION_DELAY=10
 
@@ -57,6 +57,39 @@ get_wired_interfaces() {
 }
 
 #
+# Get list of VLAN virtual interfaces (e.g., vlan10)
+# Returns: Space-separated list of VLAN interface names
+#
+get_vlan_interfaces() {
+    ifconfig -l 2>/dev/null | \
+        tr ' ' '\n' | \
+        grep -E '^vlan[0-9]+$' | \
+        tr '\n' ' ' | \
+        sed 's/[[:space:]]*$//'
+}
+
+#
+# Merge and deduplicate interface lists
+# Arguments: $@ - one or more space-separated interface lists
+# Returns: Space-separated unique interface names
+#
+merge_interfaces() {
+    local merged=""
+    local token
+
+    for token in $*; do
+        if [[ -z "$token" ]]; then
+            continue
+        fi
+        if [[ " $merged " != *" $token "* ]]; then
+            merged+="$token "
+        fi
+    done
+
+    echo "${merged% }"
+}
+
+#
 # Get list of WiFi interfaces
 # Returns: Space-separated list of WiFi interface names  
 #
@@ -92,16 +125,16 @@ get_interface_ip() {
 }
 
 #
-# Check if any wired interface has a valid IP address
+# Check if any wired or VLAN interface has a valid IP address
 # Sets global IPFOUND variable to "true" if found
 #
 detect_wired_connection() {
     IPFOUND=""
     
-    log_message "Starting wired connection detection..."
+    log_message "Starting wired/VLAN connection detection..."
     
     if [[ -z "$INTERFACES" ]]; then
-        log_message "No wired interfaces detected"
+        log_message "No wired or VLAN interfaces detected"
         return 0
     fi
     
@@ -114,7 +147,7 @@ detect_wired_connection() {
         
         if [[ -n "$ip_address" ]]; then
             IPFOUND="true"
-            log_message "Active wired connection detected on interface $interface with IP $ip_address"
+            log_message "Active wired/VLAN connection detected on interface $interface with IP $ip_address"
             break
         else
             log_message "No IP found on interface $interface"
@@ -122,7 +155,7 @@ detect_wired_connection() {
     done
     
     if [[ -z "$IPFOUND" ]]; then
-        log_message "No active wired connections detected"
+        log_message "No active wired/VLAN connections detected"
     fi
 }
 
@@ -169,10 +202,17 @@ main() {
     fi
     
     # Get network interfaces
-    INTERFACES=$(get_wired_interfaces)
+    local wired_interfaces
+    local vlan_interfaces
+
+    wired_interfaces=$(get_wired_interfaces)
+    vlan_interfaces=$(get_vlan_interfaces)
+    INTERFACES=$(merge_interfaces "$wired_interfaces" "$vlan_interfaces")
     WIFIINTERFACES=$(get_wifi_interfaces)
     
-    log_message "Detected wired interfaces: ${INTERFACES:-none}"
+    log_message "Detected wired interfaces: ${wired_interfaces:-none}"
+    log_message "Detected VLAN interfaces: ${vlan_interfaces:-none}"
+    log_message "Detected wired/VLAN interfaces: ${INTERFACES:-none}"
     log_message "Detected WiFi interfaces: ${WIFIINTERFACES:-none}"
     
     # Detect wired connection status
@@ -181,10 +221,10 @@ main() {
     # Manage WiFi state based on wired connection
     if [[ -n "$IPFOUND" ]]; then
         toggle_wifi "off"
-        log_message "WiFi disabled due to active wired connection"
+        log_message "WiFi disabled due to active wired/VLAN connection"
     else
         toggle_wifi "on"
-        log_message "WiFi enabled due to no active wired connections"
+        log_message "WiFi enabled due to no active wired/VLAN connections"
     fi
     
     # Prevent LaunchDaemon restart loops
