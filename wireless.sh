@@ -47,12 +47,7 @@ get_os_version() {
 #
 get_wired_interfaces() {
     /usr/sbin/networksetup -listnetworkserviceorder | \
-        grep "Hardware Port" | \
-        grep -E "${SUPPORTED_ADAPTERS}" | \
-        awk -F ": " '{print $3}' | \
-        sed 's/)//g' | \
-        grep -v "bridge" | \
-        tr '\n' ' ' | \
+        awk -F ": " '/Hardware Port/ && $0 ~ /(Ethernet|LAN|Thunderbolt|AX88179A|VLAN)/ {gsub(/\)/, "", $3); if ($3 !~ /bridge/) printf "%s ", $3}' | \
         sed 's/[[:space:]]*$//'
 }
 
@@ -63,7 +58,7 @@ get_wired_interfaces() {
 get_vlan_interfaces() {
     ifconfig -l 2>/dev/null | \
         tr ' ' '\n' | \
-        grep -E '^vlan[0-9]+$' | \
+    awk '/^vlan[0-9]+$/ {printf "%s ", $0}' | \
         tr '\n' ' ' | \
         sed 's/[[:space:]]*$//'
 }
@@ -95,10 +90,9 @@ merge_interfaces() {
 #
 get_wifi_interfaces() {
     /usr/sbin/networksetup -listallhardwareports | \
+        awk '/Hardware Port: Wi-Fi/ {getline; if ($1 == "Device:") print $2}' | \
         tr '\n' ' ' | \
-        sed -e 's/Hardware Port:/\n/g' | \
-        grep Wi-Fi | \
-        awk '{print $3}'
+        sed 's/[[:space:]]*$//'
 }
 
 #
@@ -106,20 +100,77 @@ get_wifi_interfaces() {
 # Arguments: $1 - interface name
 # Returns: IP address if valid, empty string otherwise
 #
+get_interface_status() {
+    local interface="$1"
+
+    ifconfig "$interface" 2>/dev/null | awk '/status:/ {print $2; exit}' || true
+}
+
+#
+# Check whether an interface is actively linked
+# Arguments: $1 - interface name
+# Returns: 0 if active, 1 otherwise
+#
+is_interface_active() {
+    local interface="$1"
+
+    if [[ -z "$interface" ]]; then
+        return 1
+    fi
+
+    local interface_dump
+    interface_dump=$(ifconfig "$interface" 2>/dev/null || true)
+
+    if [[ -z "$interface_dump" ]]; then
+        return 1
+    fi
+
+    local status
+    status=$(printf '%s\n' "$interface_dump" | awk '/status:/ {print $2; exit}')
+
+    # Prefer explicit link status when available.
+    if [[ -n "$status" ]]; then
+        [[ "$status" == "active" ]] || return 1
+    else
+        # Some virtual interfaces do not expose a status line.
+        printf '%s\n' "$interface_dump" | head -1 | grep -q 'RUNNING' || return 1
+    fi
+
+    # VLAN links depend on their parent interface carrier state.
+    if [[ "$interface" =~ ^vlan[0-9]+$ ]]; then
+        local parent_interface
+        parent_interface=$(printf '%s\n' "$interface_dump" | sed -n 's/.*parent interface: \([[:alnum:]_.-]*\).*/\1/p' | head -1)
+
+        if [[ -n "$parent_interface" ]]; then
+            local parent_status
+            parent_status=$(get_interface_status "$parent_interface")
+            [[ "$parent_status" == "active" ]] || return 1
+        fi
+    fi
+
+    return 0
+}
+
 get_interface_ip() {
     local interface="$1"
     
     if [[ -z "$interface" ]]; then
-        return 1
+        echo ""
+        return 0
     fi
     
+    if ! is_interface_active "$interface"; then
+        echo ""
+        return 0
+    fi
+
     # Get IP address, excluding loopback and self-assigned addresses
     local ip_result
     ip_result=$(ifconfig "$interface" 2>/dev/null | \
         grep -E 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | \
         grep -E -v '127\.0\.0\.1|169\.254\.' | \
         awk '{print $2}' | \
-        head -1 2>/dev/null)
+        head -1 2>/dev/null || true)
     
     echo "$ip_result"
 }
@@ -142,8 +193,12 @@ detect_wired_connection() {
     
     for interface in $INTERFACES; do
         log_message "Checking interface: $interface"
+        local interface_status
+        interface_status=$(get_interface_status "$interface" || true)
+        log_message "Interface status for $interface: ${interface_status:-unknown}"
+
         local ip_address
-        ip_address=$(get_interface_ip "$interface")
+        ip_address=$(get_interface_ip "$interface" || true)
         
         if [[ -n "$ip_address" ]]; then
             IPFOUND="true"
