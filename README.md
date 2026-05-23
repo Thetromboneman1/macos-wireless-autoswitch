@@ -58,6 +58,15 @@ sudo launchctl load /Library/LaunchDaemons/com.computernetworkbasics.wifionoff.p
 networksetup -listallhardwareports
 ```
 
+## Fork Sync CI (Maintainers)
+
+The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes and is safe to trigger manually from the Actions tab.
+
+- Checkout auth is not persisted globally.
+- Push auth is scoped to `origin` only.
+- Upstream fetch runs anonymously with retries to reduce intermittent credential prompt failures.
+- Transient runner/network issues are tolerated so the next schedule can self-heal.
+
 ## Project Notes
 
 - Uses hardware-port detection for Ethernet, LAN, Thunderbolt, AX88179A, and VLAN adapters.
