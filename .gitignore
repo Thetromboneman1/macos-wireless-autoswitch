@@ -1,0 +1,6 @@
+.DS_Store
+
+# Odysseus runtime state
+odysseus/.env
+odysseus/data/
+odysseus/logs/

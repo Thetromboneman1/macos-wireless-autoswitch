@@ -7,6 +7,7 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - `wireless.sh`: core detection and Wi-Fi toggle logic.
 - `com.computernetworkbasics.wifionoff.plist`: launchd daemon that watches macOS network state.
 - `install.sh`: install, update, and uninstall helper.
+- `odysseus/`: companion Docker setup for Odysseus wired to local Gemma model endpoints.
 - `docs/`: implementation and architecture notes.
 
 ## Supported Platforms
@@ -73,6 +74,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Includes VLAN virtual interfaces (for example `vlan10`) when deciding whether Wi-Fi should be disabled.
 - Ignores loopback and self-assigned IP ranges when deciding wired status.
 - Requires admin privileges for system-level network changes.
+- Optional Odysseus/Gemma companion setup is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
 
 ## License
 
