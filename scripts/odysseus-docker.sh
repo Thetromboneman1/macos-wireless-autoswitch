@@ -66,17 +66,30 @@ wait_for_odysseus() {
 configure_gemma() {
   load_env
   wait_for_odysseus
+  local gemma_api_key="${ODYSSEUS_GEMMA_API_KEY:-}"
+  if [ -z "$gemma_api_key" ] && [ -f "$HOME/.omlx/settings.json" ]; then
+    gemma_api_key="$(python3 - <<'PY'
+import json
+from pathlib import Path
+try:
+    data = json.loads(Path.home().joinpath(".omlx/settings.json").read_text(encoding="utf-8"))
+    print((data.get("auth") or {}).get("api_key") or "")
+except Exception:
+    print("")
+PY
+)"
+  fi
   compose exec -T \
-    -e ODYSSEUS_GEMMA_BASE_URL="${ODYSSEUS_GEMMA_BASE_URL:-http://host.docker.internal:11434/v1}" \
+    -e ODYSSEUS_GEMMA_BASE_URL="${ODYSSEUS_GEMMA_BASE_URL:-http://host.docker.internal:18080/v1}" \
     -e ODYSSEUS_GEMMA_PRIMARY_BASE_URL="${ODYSSEUS_GEMMA_PRIMARY_BASE_URL:-}" \
     -e ODYSSEUS_GEMMA_CODING_BASE_URL="${ODYSSEUS_GEMMA_CODING_BASE_URL:-}" \
     -e ODYSSEUS_GEMMA_FAST_BASE_URL="${ODYSSEUS_GEMMA_FAST_BASE_URL:-}" \
     -e ODYSSEUS_GEMMA_SMALL_BASE_URL="${ODYSSEUS_GEMMA_SMALL_BASE_URL:-}" \
-    -e ODYSSEUS_GEMMA_PRIMARY_MODEL="${ODYSSEUS_GEMMA_PRIMARY_MODEL:-google/gemma-4-31B-it}" \
-    -e ODYSSEUS_GEMMA_CODING_MODEL="${ODYSSEUS_GEMMA_CODING_MODEL:-google/gemma-4-26B-A4B-it}" \
-    -e ODYSSEUS_GEMMA_FAST_MODEL="${ODYSSEUS_GEMMA_FAST_MODEL:-google/gemma-4-E4B-it}" \
-    -e ODYSSEUS_GEMMA_SMALL_MODEL="${ODYSSEUS_GEMMA_SMALL_MODEL:-google/gemma-4-E2B-it}" \
-    -e ODYSSEUS_GEMMA_API_KEY="${ODYSSEUS_GEMMA_API_KEY:-}" \
+    -e ODYSSEUS_GEMMA_PRIMARY_MODEL="${ODYSSEUS_GEMMA_PRIMARY_MODEL:-mlx-community--gemma-4-31b-it-4bit}" \
+    -e ODYSSEUS_GEMMA_CODING_MODEL="${ODYSSEUS_GEMMA_CODING_MODEL:-mlx-community--gemma-4-26b-a4b-it-4bit}" \
+    -e ODYSSEUS_GEMMA_FAST_MODEL="${ODYSSEUS_GEMMA_FAST_MODEL:-mlx-community--gemma-4-e4b-it-4bit}" \
+    -e ODYSSEUS_GEMMA_SMALL_MODEL="${ODYSSEUS_GEMMA_SMALL_MODEL:-mlx-community--gemma-4-e2b-it-4bit}" \
+    -e ODYSSEUS_GEMMA_API_KEY="$gemma_api_key" \
     odysseus python - <<'PY'
 import json
 import os
@@ -85,7 +98,7 @@ from datetime import datetime
 from core.database import SessionLocal, ModelEndpoint, init_db
 from src.settings import load_settings, save_settings
 
-base = os.environ.get("ODYSSEUS_GEMMA_BASE_URL", "http://host.docker.internal:11434/v1").rstrip("/")
+base = os.environ.get("ODYSSEUS_GEMMA_BASE_URL", "http://host.docker.internal:18080/v1").rstrip("/")
 api_key = os.environ.get("ODYSSEUS_GEMMA_API_KEY", "")
 
 roles = {
@@ -93,28 +106,28 @@ roles = {
         "id": "gemma-primary",
         "name": "Gemma 4 31B - primary chat/reasoning",
         "url": os.environ.get("ODYSSEUS_GEMMA_PRIMARY_BASE_URL") or base,
-        "model": os.environ.get("ODYSSEUS_GEMMA_PRIMARY_MODEL", "google/gemma-4-31B-it"),
+        "model": os.environ.get("ODYSSEUS_GEMMA_PRIMARY_MODEL", "mlx-community--gemma-4-31b-it-4bit"),
         "purpose": "primary chat/reasoning",
     },
     "coding": {
         "id": "gemma-coding",
         "name": "Gemma 4 26B A4B - coding/edit/apply",
         "url": os.environ.get("ODYSSEUS_GEMMA_CODING_BASE_URL") or base,
-        "model": os.environ.get("ODYSSEUS_GEMMA_CODING_MODEL", "google/gemma-4-26B-A4B-it"),
+        "model": os.environ.get("ODYSSEUS_GEMMA_CODING_MODEL", "mlx-community--gemma-4-26b-a4b-it-4bit"),
         "purpose": "coding/edit/apply",
     },
     "fast": {
         "id": "gemma-fast",
         "name": "Gemma 4 E4B - fast chat/edit/apply/autocomplete",
         "url": os.environ.get("ODYSSEUS_GEMMA_FAST_BASE_URL") or base,
-        "model": os.environ.get("ODYSSEUS_GEMMA_FAST_MODEL", "google/gemma-4-E4B-it"),
+        "model": os.environ.get("ODYSSEUS_GEMMA_FAST_MODEL", "mlx-community--gemma-4-e4b-it-4bit"),
         "purpose": "fast chat/edit/apply/autocomplete",
     },
     "small": {
         "id": "gemma-small",
         "name": "Gemma 4 E2B - small/routing tasks",
         "url": os.environ.get("ODYSSEUS_GEMMA_SMALL_BASE_URL") or base,
-        "model": os.environ.get("ODYSSEUS_GEMMA_SMALL_MODEL", "google/gemma-4-E2B-it"),
+        "model": os.environ.get("ODYSSEUS_GEMMA_SMALL_MODEL", "mlx-community--gemma-4-e2b-it-4bit"),
         "purpose": "small/routing tasks",
     },
 }

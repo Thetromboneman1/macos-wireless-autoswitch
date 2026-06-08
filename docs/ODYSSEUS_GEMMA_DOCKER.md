@@ -38,10 +38,10 @@ The configurator creates these Odysseus model endpoints:
 
 | Role | Endpoint ID | Default model ID | Intended use |
 | --- | --- | --- | --- |
-| Primary | `gemma-primary` | `google/gemma-4-31B-it` | Primary chat/reasoning |
-| Coding | `gemma-coding` | `google/gemma-4-26B-A4B-it` | Coding/edit/apply |
-| Fast | `gemma-fast` | `google/gemma-4-E4B-it` | Fast chat/edit/apply/autocomplete |
-| Small | `gemma-small` | `google/gemma-4-E2B-it` | Small/routing tasks |
+| Primary | `gemma-primary` | `mlx-community--gemma-4-31b-it-4bit` | Primary chat/reasoning |
+| Coding | `gemma-coding` | `mlx-community--gemma-4-26b-a4b-it-4bit` | Coding/edit/apply |
+| Fast | `gemma-fast` | `mlx-community--gemma-4-e4b-it-4bit` | Fast chat/edit/apply/autocomplete |
+| Small | `gemma-small` | `mlx-community--gemma-4-e2b-it-4bit` | Small/routing tasks |
 
 Odysseus settings are seeded as:
 
@@ -60,18 +60,18 @@ Odysseus does not currently expose separate first-class settings for every "codi
 
 Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through an OpenAI-compatible API.
 
-Default endpoint:
+Default oMLX endpoint:
 
 ```text
-http://host.docker.internal:11434/v1
+http://host.docker.internal:18080/v1
 ```
 
-That works well for a host process such as Ollama, llama.cpp server, vLLM, or LM Studio when it exposes an OpenAI-compatible API and listens outside loopback from the container's point of view.
+The helper auto-detects the local oMLX API key from `~/.omlx/settings.json` when `ODYSSEUS_GEMMA_API_KEY` is blank. The key is passed into Odysseus during configuration and is not committed to Git.
 
 If all four models are served from one API, edit:
 
 ```bash
-ODYSSEUS_GEMMA_BASE_URL=http://host.docker.internal:11434/v1
+ODYSSEUS_GEMMA_BASE_URL=http://host.docker.internal:18080/v1
 ```
 
 If the models are served on different ports, set per-role URLs:
@@ -128,7 +128,7 @@ From inside Odysseus, each endpoint should be visible in Admin or the model pick
 docker compose --env-file odysseus/.env -p odysseus-gemma -f odysseus/docker-compose.yml exec odysseus \
   python - <<'PY'
 import httpx
-print(httpx.get("http://host.docker.internal:11434/v1/models", timeout=5).text[:1000])
+print(httpx.get("http://host.docker.internal:18080/health", timeout=5).text[:1000])
 PY
 ```
 
