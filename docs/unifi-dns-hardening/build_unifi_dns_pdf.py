@@ -1,0 +1,266 @@
+from pathlib import Path
+
+from weasyprint import HTML
+
+
+OUT_DIR = Path(__file__).resolve().parent
+PDF_PATH = OUT_DIR / "UCG-Fiber-DNS-Catchall-Hardening-Guide.pdf"
+HTML_PATH = OUT_DIR / "UCG-Fiber-DNS-Catchall-Hardening-Guide.html"
+
+
+html = r"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>UCG Fiber DNS Catch-All Hardening Guide</title>
+  <style>
+    @page {
+      size: Letter;
+      margin: 0.72in 0.76in 0.72in 0.76in;
+      @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-size: 9px;
+        color: #5d6b7a;
+      }
+    }
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.32;
+      color: #16212f;
+    }
+    h1 {
+      font-size: 24pt;
+      line-height: 1.05;
+      margin: 0 0 8px 0;
+      color: #0b315f;
+    }
+    h2 {
+      font-size: 15pt;
+      margin: 20px 0 7px 0;
+      color: #174f86;
+      border-bottom: 1px solid #d8e2ee;
+      padding-bottom: 3px;
+    }
+    h3 {
+      font-size: 12pt;
+      margin: 13px 0 5px 0;
+      color: #173b5f;
+    }
+    p { margin: 0 0 7px 0; }
+    ul, ol { margin: 5px 0 9px 22px; padding: 0; }
+    li { margin: 3px 0; }
+    code {
+      font-family: Menlo, Consolas, monospace;
+      font-size: 9.5pt;
+      background: #eef3f8;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    .meta {
+      color: #4c5b6d;
+      font-size: 10pt;
+      margin-bottom: 14px;
+    }
+    .callout {
+      background: #f3f7fb;
+      border-left: 4px solid #2e74b5;
+      padding: 9px 11px;
+      margin: 10px 0 12px 0;
+    }
+    .warn {
+      background: #fff8e6;
+      border-left: 4px solid #b47d00;
+      padding: 9px 11px;
+      margin: 10px 0 12px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin: 7px 0 12px 0;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #cbd7e5;
+      padding: 6px 7px;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th {
+      background: #e8eef5;
+      color: #142b44;
+      font-weight: 700;
+    }
+    .narrow { width: 22%; }
+    .mid { width: 28%; }
+    .wide { width: 50%; }
+    .small { font-size: 9.5pt; color: #4a5868; }
+    .break-before { page-break-before: always; }
+  </style>
+</head>
+<body>
+  <h1>UCG Fiber DNS Catch-All Hardening Guide</h1>
+  <p class="meta">Device: UCG Fiber | UniFi Network: 10.4.57 | Scope: Default, Trusted, and IoT networks only</p>
+
+  <div class="callout">
+    <strong>Goal:</strong> force hardcoded plaintext DNS to your gateway, then have the gateway forward upstream through your encrypted DNS provider. For encrypted client-side DNS, block it rather than trying to redirect it.
+  </div>
+
+  <h2>1. Current Network Map</h2>
+  <table>
+    <thead>
+      <tr><th class="narrow">Network</th><th class="mid">Gateway DNS</th><th class="wide">Catch Rule Needed</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Default</td><td><code>192.168.1.1</code> on <code>br0</code></td><td><code>DNS Catch - Default</code></td></tr>
+      <tr><td>Trusted</td><td><code>192.168.10.1</code> on <code>br10</code></td><td><code>DNS Catch - Trusted</code></td></tr>
+      <tr><td>IoT</td><td><code>192.168.20.1</code> on <code>br20</code></td><td><code>DNS Catch - IoT</code></td></tr>
+    </tbody>
+  </table>
+  <p>Do not add Guest rules if you are not using the Guest network.</p>
+
+  <h2>2. Confirm Gateway Upstream Encrypted DNS</h2>
+  <ol>
+    <li>Open UniFi Network.</li>
+    <li>Go to <strong>Settings</strong> and confirm DNS Shield / encrypted DNS is enabled for the gateway.</li>
+    <li>Confirm the selected upstream provider is your intended provider, such as your NextDNS profile.</li>
+    <li>Confirm DHCP on each network advertises the gateway IP as DNS:
+      <ul>
+        <li>Default: <code>192.168.1.1</code></li>
+        <li>Trusted: <code>192.168.10.1</code></li>
+        <li>IoT: <code>192.168.20.1</code></li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>3. Verify the Three NAT Catch Rules</h2>
+  <p>Path for Network 10.x: <strong>Settings > Policy Table > Create New Policy > NAT</strong>. If the rule already exists, open it and verify the fields below.</p>
+  <table>
+    <thead>
+      <tr><th>Field</th><th>Default</th><th>Trusted</th><th>IoT</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Name</td><td><code>DNS Catch - Default</code></td><td><code>DNS Catch - Trusted</code></td><td><code>DNS Catch - IoT</code></td></tr>
+      <tr><td>NAT Type</td><td>Destination NAT</td><td>Destination NAT</td><td>Destination NAT</td></tr>
+      <tr><td>Interface</td><td><code>br0</code> / Default</td><td><code>br10</code> / Trusted</td><td><code>br20</code> / IoT</td></tr>
+      <tr><td>Protocol</td><td>TCP and UDP</td><td>TCP and UDP</td><td>TCP and UDP</td></tr>
+      <tr><td>Destination Port</td><td><code>53</code></td><td><code>53</code></td><td><code>53</code></td></tr>
+      <tr><td>Translated IP</td><td><code>192.168.1.1</code></td><td><code>192.168.10.1</code></td><td><code>192.168.20.1</code></td></tr>
+      <tr><td>Translated Port</td><td><code>53</code></td><td><code>53</code></td><td><code>53</code></td></tr>
+      <tr><td>IP Version</td><td>IPv4 only</td><td>IPv4 only</td><td>IPv4 only</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warn">
+    <strong>Do not create NAT redirects for 853 or 443.</strong> DNS-over-TLS, DNS-over-QUIC, and DNS-over-HTTPS use encryption and certificate validation. Redirecting them to port 53 usually breaks traffic unpredictably. Block them instead.
+  </div>
+
+  <h2 class="break-before">4. Do Not Use Object Manager for Port Blocking</h2>
+  <p>In Network 10.4.57, <strong>Object Oriented Networking / Object Manager</strong> is outcome-based. It is useful for devices, networks, IP addresses, domains, regions, apps, routing, QoS, and broad internet/local security outcomes. It is not where you define destination-port blocking.</p>
+  <div class="warn">
+    <strong>If you created an Object Manager item named <code>DNS Plaintext</code>, disable or delete it.</strong> That object does not represent TCP/UDP port 53. It can create broader secure/blocklist behavior than intended.
+  </div>
+  <p>Use the NAT rules from Step 3 for plaintext DNS redirection. Use Policy Table firewall/traffic rules for destination ports such as <code>853</code>, <code>784</code>, <code>8853</code>, and selected <code>443</code> DoH destinations.</p>
+
+  <h2>5. Create Only the Address Objects You Need</h2>
+  <p>Create address objects only for destination IP lists, not for port lists. The main useful object here is the public DoH resolver destination list.</p>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Type</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Public DoH Resolvers - Block</code></td><td>IP Address / Address Group</td><td>Destinations to block on TCP/UDP <code>443</code> because they are known public DoH providers.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Create an address object named <code>Public DoH Resolvers - Block</code>. Start with these common resolver IPs and update the group over time:</p>
+  <p class="small"><code>1.1.1.1</code>, <code>1.0.0.1</code>, <code>1.1.1.2</code>, <code>1.0.0.2</code>, <code>1.1.1.3</code>, <code>1.0.0.3</code>, <code>8.8.8.8</code>, <code>8.8.4.4</code>, <code>9.9.9.9</code>, <code>149.112.112.112</code>, <code>208.67.222.222</code>, <code>208.67.220.220</code>, <code>94.140.14.14</code>, <code>94.140.15.15</code>, <code>185.228.168.9</code>, <code>185.228.169.9</code>, <code>76.76.2.0</code>, <code>76.76.10.0</code>, <code>45.90.28.0</code>, <code>45.90.30.0</code>, <code>194.242.2.2</code>, <code>194.242.2.3</code></p>
+  <p>This list is a starter set, not a permanent complete database. Use UniFi traffic logs, NextDNS logs, and client testing to expand it.</p>
+
+  <h2>6. Add Firewall Blocks Above General Allow Rules</h2>
+  <p>Go to <strong>Settings > Policy Table</strong>, not Object Manager. Create firewall/security policies from each client network zone to Internet/WAN. Put these above broad allow-to-internet rules.</p>
+  <p>If your Policy Table editor exposes a <strong>Port</strong>, <strong>Destination Port</strong>, <strong>Service</strong>, or <strong>Advanced</strong> field, enter the ports directly in the rule. If it does not expose a port/service field, use the legacy firewall/traffic rule editor for these port-specific blocks; Object Manager cannot express them.</p>
+
+  <h3>Rule A: Block DoT and DoQ</h3>
+  <table>
+    <tbody>
+      <tr><td class="narrow">Name</td><td><code>Block Encrypted DNS Ports - Default</code>, <code>Trusted</code>, <code>IoT</code></td></tr>
+      <tr><td>Action</td><td>Block / Drop</td></tr>
+      <tr><td>Source</td><td>Default network, then repeat for Trusted and IoT</td></tr>
+      <tr><td>Destination</td><td>Internet / WAN</td></tr>
+      <tr><td>Destination Ports</td><td>TCP <code>853</code>, UDP <code>853</code>, UDP <code>784</code>, UDP <code>8853</code></td></tr>
+      <tr><td>Logging</td><td>Enable for the first few days, then disable if noisy.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Rule B: Block Known DoH Resolvers on HTTPS</h3>
+  <table>
+    <tbody>
+      <tr><td class="narrow">Name</td><td><code>Block Public DoH Resolvers - Default</code>, <code>Trusted</code>, <code>IoT</code></td></tr>
+      <tr><td>Action</td><td>Block / Drop</td></tr>
+      <tr><td>Source</td><td>Default network, then repeat for Trusted and IoT</td></tr>
+      <tr><td>Destination</td><td><code>Public DoH Resolvers - Block</code></td></tr>
+      <tr><td>Destination Ports</td><td>TCP/UDP <code>443</code></td></tr>
+      <tr><td>Logging</td><td>Enable initially to discover hardcoded devices.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Rule C: Backup Block for Plain DNS to WAN</h3>
+  <p>Your DNAT rules should catch TCP/UDP 53 before this rule. This backup rule confirms that any plain DNS escaping NAT gets blocked.</p>
+  <table>
+    <tbody>
+      <tr><td class="narrow">Name</td><td><code>Block Direct DNS to WAN - Default</code>, <code>Trusted</code>, <code>IoT</code></td></tr>
+      <tr><td>Action</td><td>Block / Drop</td></tr>
+      <tr><td>Source</td><td>Default network, then repeat for Trusted and IoT</td></tr>
+      <tr><td>Destination</td><td>Internet / WAN</td></tr>
+      <tr><td>Destination Ports</td><td>TCP/UDP <code>53</code></td></tr>
+      <tr><td>Placement</td><td>Below the NAT rules, above broad allow-to-internet policy.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>7. Optional Hardening</h2>
+  <ul>
+    <li>Block VPN/proxy/Tor application categories for IoT if you do not need them.</li>
+    <li>Keep QUIC generally allowed unless you specifically want to force HTTP/3 off. If blocking QUIC, start with UDP <code>443</code> only to the DoH resolver IP group.</li>
+    <li>If you later enable IPv6 on LAN networks, add equivalent IPv6 DNS policy or disable IPv6 RA/DHCPv6 on those VLANs. IPv4 DNAT does not control IPv6 DNS.</li>
+  </ul>
+
+  <h2>8. Validation Checklist</h2>
+  <ol>
+    <li>From a Default client, run a lookup against a hardcoded resolver, for example <code>nslookup example.com 8.8.8.8</code>. It should still resolve because NAT redirects it to the gateway.</li>
+    <li>Repeat from Trusted and IoT clients.</li>
+    <li>Check UniFi policy counters for the three DNS catch NAT rules. UDP counters should increase; TCP may stay low unless a client uses TCP DNS.</li>
+    <li>Try a DoT client against <code>1.1.1.1:853</code> or <code>8.8.8.8:853</code>. It should fail.</li>
+    <li>Try a DoH endpoint such as Cloudflare or Google. It should fail when the destination IP is in your DoH block group.</li>
+    <li>Open your encrypted DNS provider dashboard and confirm normal client browsing is visible through the gateway profile.</li>
+    <li>Watch UniFi logs for blocked devices. If a device is repeatedly hitting a missing DoH resolver IP, add that IP to the DoH block group.</li>
+  </ol>
+
+  <h2>9. Rollback Plan</h2>
+  <ol>
+    <li>Disable the new firewall block rules first; leave the NAT catch rules in place.</li>
+    <li>If a specific device breaks, review its blocked destination and decide whether to add a narrow exception.</li>
+    <li>Only disable NAT catch rules if basic DNS resolution fails across an entire VLAN.</li>
+  </ol>
+
+  <h2>References</h2>
+  <ul>
+    <li>Ubiquiti Help Center: DNAT, SNAT, and Masquerading in UniFi.</li>
+    <li>Ubiquiti Help Center: Traffic &amp; Policy Management in UniFi.</li>
+    <li>Ubiquiti Help Center: Content and Domain Filtering in UniFi.</li>
+  </ul>
+</body>
+</html>
+"""
+
+
+def main() -> None:
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    HTML_PATH.write_text(html, encoding="utf-8")
+    HTML(filename=str(HTML_PATH)).write_pdf(str(PDF_PATH))
+    print(PDF_PATH)
+
+
+if __name__ == "__main__":
+    main()
