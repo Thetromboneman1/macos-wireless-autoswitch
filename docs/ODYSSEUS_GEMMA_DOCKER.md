@@ -68,6 +68,14 @@ http://host.docker.internal:18080/v1
 
 The helper auto-detects the local oMLX API key from `~/.omlx/settings.json` when `ODYSSEUS_GEMMA_API_KEY` is blank. The key is passed into Odysseus during configuration and is not committed to Git.
 
+The host oMLX runtime should use TTL-based unloading so all four Gemma role models are not permanently resident. Apply the balanced policy with:
+
+```bash
+scripts/omlx-power-policy.sh normal
+```
+
+Use `scripts/omlx-power-policy.sh battery` when unplugged or under thermal pressure. See `docs/OMLX_POWER_POLICY.md` for the exact TTLs and manual unload/load commands.
+
 If all four models are served from one API, edit:
 
 ```bash

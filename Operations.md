@@ -26,3 +26,21 @@ scripts/odysseus-docker.sh down
 ```
 
 See `docs/ODYSSEUS_GEMMA_DOCKER.md` for Gemma endpoint mapping and model-server requirements.
+
+## oMLX Power Policy
+
+```bash
+# show loaded models and persisted TTL/pinning settings
+scripts/omlx-power-policy.sh status
+
+# normal plugged-in policy
+scripts/omlx-power-policy.sh normal
+
+# battery/thermal pressure policy
+scripts/omlx-power-policy.sh battery
+
+# apply the correct policy for the current power source once
+scripts/omlx-power-watch.sh --once
+```
+
+See `docs/OMLX_POWER_POLICY.md` for the Gemma role TTLs and manual unload/load commands.

@@ -8,6 +8,7 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - `com.computernetworkbasics.wifionoff.plist`: launchd daemon that watches macOS network state.
 - `install.sh`: install, update, and uninstall helper.
 - `odysseus/`: companion Docker setup for Odysseus wired to local Gemma model endpoints.
+- `scripts/omlx-power-policy.sh`: host oMLX memory/battery policy for Gemma model TTLs and unload/load actions.
 - `docs/`: implementation and architecture notes.
 
 ## Supported Platforms
@@ -75,6 +76,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Ignores loopback and self-assigned IP ranges when deciding wired status.
 - Requires admin privileges for system-level network changes.
 - Optional Odysseus/Gemma companion setup is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
+- oMLX memory and battery policy is documented in `docs/OMLX_POWER_POLICY.md`.
 
 ## License
 
