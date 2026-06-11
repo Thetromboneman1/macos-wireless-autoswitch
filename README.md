@@ -78,6 +78,29 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Optional Odysseus/Gemma companion setup is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
 - oMLX memory and battery policy is documented in `docs/OMLX_POWER_POLICY.md`.
 
+## Local AI Companion Architecture
+
+```mermaid
+flowchart LR
+  subgraph Host["macOS host"]
+    OMLX["oMLX 0.4.3<br/>127.0.0.1:18080/v1"]
+    Policy["com.corn.omlx-power-policy<br/>battery/normal TTLs"]
+  end
+  subgraph Docker["Optional companion services"]
+    Odysseus["Odysseus<br/>127.0.0.1:7000"]
+    Chroma["ChromaDB<br/>127.0.0.1:8100"]
+    Searx["SearXNG<br/>internal only"]
+    Ntfy["ntfy<br/>127.0.0.1:8091"]
+  end
+  Policy --> OMLX
+  Odysseus -->|"host.docker.internal:18080/v1"| OMLX
+  Odysseus --> Chroma
+  Odysseus --> Searx
+  Odysseus --> Ntfy
+```
+
+The canonical cross-repo local AI map is maintained in `/Users/corn/Documents/Boneman_Projects/local-ai-platform/ARCHITECTURE.md`.
+
 ## License
 
 MIT. See `LICENSE`.

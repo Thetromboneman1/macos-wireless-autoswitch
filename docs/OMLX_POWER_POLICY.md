@@ -1,6 +1,18 @@
 # oMLX Power Policy
 
-This repo keeps model serving outside Docker on the host-side oMLX runtime so Apple Silicon can use MLX and Metal directly. Use `scripts/omlx-power-policy.sh` to keep the four Gemma role models available without keeping every large model resident all day.
+This repo keeps model serving outside Docker on the host-side oMLX `0.4.3` runtime so Apple Silicon can use MLX and Metal directly. Use `scripts/omlx-power-policy.sh` to keep the four Gemma role models available without keeping every large model resident all day.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  Watch["omlx-power-watch.sh<br/>power-source watcher"] --> Policy["omlx-power-policy.sh"]
+  Policy --> Settings["~/.omlx/settings.json<br/>idle_timeout"]
+  Policy --> ModelSettings["~/.omlx/model_settings.json<br/>ttl_seconds + unpinned"]
+  Policy --> OMLX["oMLX app<br/>127.0.0.1:18080"]
+  OMLX --> Models["Gemma 4 MLX role set"]
+  Containers["Docker consumers"] -->|"host.docker.internal:18080/v1"| OMLX
+```
 
 ## Model Roles
 
@@ -67,6 +79,13 @@ rm -f ~/Library/LaunchAgents/com.corn.omlx-power-policy.plist
 - oMLX app runtime: restarts oMLX by default so persisted settings are loaded.
 - In conserve and battery modes: asks oMLX to unload the 31B and 26B models immediately after restart.
 - `scripts/omlx-power-watch.sh`: optionally runs as a user LaunchAgent and applies `normal` or `battery` only when the power source changes.
+
+Current live audit command:
+
+```bash
+scripts/omlx-power-policy.sh status
+launchctl print "gui/$(id -u)/com.corn.omlx-power-policy" | sed -n '1,60p'
+```
 
 Set `OMLX_RESTART=0` to only write settings without restarting oMLX:
 

@@ -54,11 +54,11 @@ Odysseus settings are seeded as:
 | Default fallback chain | Coding, then Fast, then Small |
 | Utility fallback chain | Fast |
 
-Odysseus does not currently expose separate first-class settings for every "coding/edit/apply/autocomplete" sub-role. Those models are still pinned and selectable in the model picker, and the role map is persisted at `odysseus/data/gemma-role-map.json`.
+Odysseus does not currently expose separate first-class settings for every "coding/edit/apply/autocomplete" sub-role. Those models are still registered and selectable in the model picker, and the role map is persisted at `odysseus/data/gemma-role-map.json`.
 
 ## Model Server Requirement
 
-Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through an OpenAI-compatible API.
+Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through an OpenAI-compatible API. The current host runtime is oMLX `0.4.3`.
 
 Default oMLX endpoint:
 
