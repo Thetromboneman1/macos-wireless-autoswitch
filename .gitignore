@@ -7,3 +7,7 @@ odysseus/logs/
 
 # Local machine config backups
 backups/
+
+# Python validation caches
+__pycache__/
+*.pyc
