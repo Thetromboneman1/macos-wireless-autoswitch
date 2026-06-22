@@ -81,6 +81,8 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - AdGuard LocalDNSCrypt is documented in `docs/network/adguard-dnscrypt-setup.md`.
 - GitHub-star modernization decisions are documented in `docs/autonomous-modernization/11-github-stars-full-implementation.md`.
 - Approved GitHub-star trial helpers are documented in `docs/star-tools/approved-star-trials.md`.
+- Unified local-AI platform architecture is documented in `docs/autonomous-modernization/16-unified-ai-platform-architecture.md`.
+- Daily platform status can be checked with `scripts/star-tools/platform-status.sh`.
 
 ## Local AI Companion Architecture
 
@@ -106,6 +108,8 @@ flowchart LR
 ```
 
 The canonical cross-repo local AI map is maintained in `/Users/corn/Documents/Boneman_Projects/local-ai-platform/ARCHITECTURE.md`.
+
+The repo-local integration map for the GitHub-star platform layer is maintained in `docs/architecture/`, with the operational runbook at `docs/operations/platform-runbook.md`.
 
 ## License
 

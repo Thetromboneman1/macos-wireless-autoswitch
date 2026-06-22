@@ -105,4 +105,4 @@ Validation commands are recorded in the final response for the commit that inclu
 
 ## Approved Implementation Follow-up
 
-The approved execution pass is documented in [12-approved-star-implementation.md](12-approved-star-implementation.md). It created the `Boneman Projects` 1Password vault, downloaded small README/reference snapshots for the approved lightweight trial set, and added a safe shallow-clone trial helper that writes only to ignored `tmp/star-downloads/`.
+The approved execution pass is documented in [12-approved-star-implementation.md](12-approved-star-implementation.md). It originally created an empty `Boneman Projects` 1Password vault, but the corrected canonical vault is `Boneman`. The pass also downloaded small README/reference snapshots for the approved lightweight trial set and added a safe shallow-clone trial helper that writes only to ignored `tmp/star-downloads/`.

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-22",
+  "default_front_door": {
+    "name": "oMLX native MLX Gemma stack",
+    "base_url": "http://127.0.0.1:18080/v1",
+    "auth": "local oMLX credential; prefer 1Password Boneman pointer or ~/.omlx/settings.json at runtime"
+  },
+  "lanes": [
+    {
+      "id": "reasoning",
+      "model": "mlx-community--gemma-4-31b-it-4bit",
+      "engine": "oMLX/MLX",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "use_for": ["architecture", "planning", "hard debugging", "review synthesis"]
+    },
+    {
+      "id": "coding",
+      "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+      "engine": "oMLX/MLX",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "use_for": ["default local coding", "repo edits", "agent workflows"]
+    },
+    {
+      "id": "gguf-coding-specialist",
+      "model": "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
+      "engine": "llama.cpp llama-server",
+      "base_url": "http://127.0.0.1:8002/v1",
+      "use_for": ["GGUF benchmark lane", "portable coding lane", "llama.cpp production simulation"]
+    },
+    {
+      "id": "fast-agent",
+      "model": "mlx-community--gemma-4-e4b-it-4bit",
+      "engine": "oMLX/MLX",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "use_for": ["fast local edits", "summaries", "cheap agent turns"]
+    },
+    {
+      "id": "routing-utility",
+      "model": "mlx-community--gemma-4-e2b-it-4bit",
+      "engine": "oMLX/MLX",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "use_for": ["classification", "routing", "low-latency utility calls"]
+    }
+  ],
+  "routers": [
+    {
+      "name": "OpenCode provider config",
+      "status": "wired",
+      "role": "developer-facing provider selection"
+    },
+    {
+      "name": "OmniRoute",
+      "status": "installed_stopped",
+      "role": "routing lab only until provider-secret threat model is complete"
+    },
+    {
+      "name": "headroom",
+      "status": "installed_stopped",
+      "role": "prompt compression/proxy lab only; do not front production traffic by default"
+    }
+  ],
+  "policy": {
+    "avoid_default": ["Ollama"],
+    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard"],
+    "secret_vault": "Boneman"
+  }
+}

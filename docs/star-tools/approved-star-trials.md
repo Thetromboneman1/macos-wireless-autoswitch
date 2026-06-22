@@ -9,7 +9,7 @@ This folder documents lightweight trials for GitHub-starred tools. Trials are in
 - Download size, model size, bandwidth, and storage are no longer blockers for approved trials.
 - Do not start services that replace DNSCrypt, AdGuard, Codex, OpenCode, Hermes, Goose, oMLX, or llama.cpp defaults unless the trial explicitly calls for that replacement.
 - Store future secrets only in 1Password:
-  - vault: `Boneman Projects`
+  - vault: `Boneman`
   - item naming: `<Tool Name> - API Token`, `<Tool Name> - Local AI`, or `<Tool Name> - Service Config`
 
 ## Commands

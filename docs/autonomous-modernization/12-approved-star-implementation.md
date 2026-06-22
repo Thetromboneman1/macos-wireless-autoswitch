@@ -8,7 +8,7 @@
 - Approved scope: implement safe, non-overlapping GitHub-star changes; download needed files under 20 GB; store future secrets in 1Password; commit and push after validation.
 - Push approval: approved after validation.
 - DNSCrypt state: Apps/Browsers -> AdGuard DNS Protection -> LocalDNSCrypt `127.0.0.1:53530` -> `dnscrypt-proxy 2.1.16` -> encrypted upstream resolvers.
-- 1Password vault target: `Boneman Projects`.
+- 1Password vault target: `Boneman`.
 
 ## 1Password
 
@@ -23,7 +23,7 @@ Decision:
 
 Change:
 
-- Created 1Password vault `Boneman Projects`.
+- A previous run created `Boneman Projects`; the corrected canonical target is now `Boneman`.
 
 Secrets:
 
@@ -121,4 +121,4 @@ rm -f scripts/star-tools/run-approved-star-trial.sh
 git revert <commit>
 ```
 
-The 1Password vault `Boneman Projects` is empty. Remove it from the 1Password app or CLI only if you no longer want the approved vault.
+The 1Password vault `Boneman Projects` was later found to be an empty duplicate. Use `Boneman` for all new local AI, star-tool, and service secrets. Remove the duplicate vault only after confirming it remains empty.

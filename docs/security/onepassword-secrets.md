@@ -7,7 +7,7 @@ Secrets for local AI, DNS, GitHub-star trials, and agent integrations must not b
 Preferred storage:
 
 ```text
-1Password vault: Boneman Projects
+1Password vault: Boneman
 Item naming:
   <Repo or Tool Name> - Local AI
   <Repo or Tool Name> - API Token
@@ -18,17 +18,17 @@ Observed CLI state on 2026-06-22:
 
 - `op` CLI is installed.
 - Signed-in account is visible.
-- A vault named `Boneman Projects` was not initially listed by `op vault list`.
-- The approval prompt allowed creating `Boneman Projects` when `Boneman` existed.
-- `Boneman Projects` was created successfully and is the confirmed target vault.
+- The canonical vault is `Boneman`.
+- A previous run created `Boneman Projects`, but the user has corrected the target to `Boneman`.
+- `Boneman Projects` is currently an empty duplicate and should not receive new items.
 
 No 1Password items were created in this pass because no implemented star required a secret.
 
 ## Current Vault
 
 ```text
-1Password vault: Boneman Projects
-Status: created and available
+1Password vault: Boneman
+Status: available and already contains local AI/service items
 Items created by this repo pass: none
 ```
 
@@ -37,7 +37,7 @@ Items created by this repo pass: none
 When a future integration needs a secret, document it like this:
 
 ```text
-1Password vault: Boneman Projects
+1Password vault: Boneman
 Item: <Tool Name> - API Token
 Field: credential
 Used by: <script/config path>
@@ -56,3 +56,13 @@ git diff --cached | grep -Ei 'secret|token|password|apikey|api_key|private_key|B
 ```
 
 Inspect any hits manually. Documentation that names secret handling policy is acceptable; real values are not.
+
+## Duplicate Vault Handling
+
+`Boneman Projects` exists but was empty when audited. Do not hard-delete it from automation. The safe cleanup path is:
+
+```bash
+op item list --vault "Boneman Projects" --format json
+```
+
+If the result is still an empty list, remove or archive the duplicate vault manually in 1Password after confirming no other machine or teammate depends on it.
