@@ -1,5 +1,9 @@
 # 09 - Final Recommendations
 
+## 2026-06-22 Star Deployment Update
+
+The recommended starred repos from the deferred-star reassessment have now been implemented locally where safe. See [15-star-deployment-implementation.md](15-star-deployment-implementation.md) for installed paths, launch commands, validation results, safety notes, and rollback steps.
+
 ## What Changed
 
 - Added autonomous modernization docs.
@@ -10,7 +14,7 @@
 
 ## What Was Installed
 
-Nothing.
+The latest deployment pass installed LEANN, Octopoda, edge-lm, PonyExl3, turbovec, SiliconScope CLI, llm-wiki, Understand-Anything, OmniRoute dependencies, headroom proxy, and the OpenHands agent-server image. See [15-star-deployment-implementation.md](15-star-deployment-implementation.md).
 
 ## What Was Removed
 
@@ -32,4 +36,3 @@ rm -f docs/network/dnscrypt-audit.md
 rm -f scripts/local-ai/benchmark-engine-bakeoff.py
 git revert <commit>
 ```
-

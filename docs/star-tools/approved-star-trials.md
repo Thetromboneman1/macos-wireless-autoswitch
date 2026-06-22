@@ -6,8 +6,8 @@ This folder documents lightweight trials for GitHub-starred tools. Trials are in
 
 - Trial checkouts go under `tmp/star-downloads/`.
 - Do not commit trial checkouts or downloaded binaries.
-- Do not pull models larger than 20 GB without explicit approval.
-- Do not start services that replace DNSCrypt, AdGuard, Codex, OpenCode, Hermes, Goose, oMLX, or llama.cpp defaults.
+- Download size, model size, bandwidth, and storage are no longer blockers for approved trials.
+- Do not start services that replace DNSCrypt, AdGuard, Codex, OpenCode, Hermes, Goose, oMLX, or llama.cpp defaults unless the trial explicitly calls for that replacement.
 - Store future secrets only in 1Password:
   - vault: `Boneman Projects`
   - item naming: `<Tool Name> - API Token`, `<Tool Name> - Local AI`, or `<Tool Name> - Service Config`
@@ -33,6 +33,24 @@ Remove all trial checkouts:
 ```bash
 rm -rf tmp/star-downloads
 ```
+
+Validate the deployed recommended tools:
+
+```bash
+scripts/star-tools/validate-star-deployments.sh
+```
+
+Start guarded local services only when you intend to use them:
+
+```bash
+scripts/star-tools/start-octopoda-local.sh
+scripts/star-tools/start-headroom-proxy.sh http://127.0.0.1:18080
+scripts/star-tools/start-omniroute-local.sh
+scripts/star-tools/start-openhands-docker.sh
+scripts/star-tools/start-understand-dashboard.sh
+```
+
+See `docs/autonomous-modernization/15-star-deployment-implementation.md` for the completed deployment map and rollback notes.
 
 ## Approved Lightweight Trial Set
 
