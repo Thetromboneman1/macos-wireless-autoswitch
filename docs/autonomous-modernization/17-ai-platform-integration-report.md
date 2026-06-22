@@ -18,6 +18,7 @@ This pass converted the installed starred tools into a coherent local-AI platfor
 | Secrets | Added [secret-inventory.md](../security/secret-inventory.md). | Inventory records retrieval methods only; no values. |
 | App configs | Wired Codex, OpenCode, Goose, Hermes, VS Code, and workspace settings to the shared policy files. | JSON/YAML/TOML parse checks and app-specific CLI checks. |
 | 1Password cleanup | Deleted empty duplicate `Boneman Projects` vault after confirming item count was zero. | `op vault get "Boneman Projects"` returns not found. |
+| Hermes MLX | Added PDF-driven Hermes/oMLX/Rapid-MLX architecture, validation, and rollback docs. | oMLX and Rapid-MLX passed tool-call validation; GGUF lane is no-MTP. |
 
 ## Tool Integration Status
 
@@ -52,3 +53,4 @@ This pass converted the installed starred tools into a coherent local-AI platfor
 - Goose and Hermes user configs now reference the shared platform policy.
 - VS Code user, Hermes workspace, and OpenClaw workspace settings now reference the shared platform policy.
 - Extended per-engine MLX and llama.cpp benchmark passes were run and merged into [07-benchmarks.md](07-benchmarks.md).
+- Hermes host CLI now defaults to the validated oMLX host endpoint and Gemma 26B-A4B model; Rapid-MLX Qwen3.6 is installed as a lab lane.

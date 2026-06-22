@@ -30,6 +30,8 @@ Raw validation artifacts:
 | oMLX | `mlx-community--gemma-4-26b-a4b-it-4bit` | pass | pass | pass |
 | Rapid-MLX | `qwen3.6-35b-4bit` | pass | pass | pass |
 
+Hermes CLI one-shot validation was attempted after setting the host endpoint and model. It returned `API call failed after 3 retries: Connection error.` The endpoint-level validations above prove the local OpenAI-compatible servers work, so the remaining issue is in Hermes' provider/auth/config path rather than oMLX or Rapid-MLX serving.
+
 ## Benchmark Takeaways
 
 | Engine | Short coding tok/s | Moderate context tok/s | 2-way aggregate tok/s | Takeaway |
@@ -42,6 +44,7 @@ Raw validation artifacts:
 
 - Rapid-MLX warned that Qwen3.6-35B-A3B 4-bit can exceed comfortable memory pressure on this 64 GB Mac when other large local services are open.
 - The first uncached Rapid-MLX stream was slow during benchmark warmup, while cached/non-stream calls were much faster.
+- Hermes CLI one-shot still needs a follow-up pass for its auth/provider path even though direct endpoint validation passes.
 - Ollama is not installed in PATH, so it was not benchmarked.
 - Lightning MLX was not installed because its current public path emphasizes MTP/MTPLX, which conflicts with the PDF rule for this Mac.
 
