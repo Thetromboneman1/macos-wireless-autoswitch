@@ -1,5 +1,44 @@
 # DNSCrypt Audit - 2026-06-22
 
+## 2026-06-22 AdGuard Correction
+
+The AdGuard screenshot showed DNS Protection enabled with provider `LocalDNSCrypt` at `127.0.0.1:53530`. The earlier audit had only seen `/opt/homebrew/etc/dnscrypt-proxy.toml` with `listen_addresses = ['127.0.0.1:53']` and had not confirmed an active dnscrypt-proxy process.
+
+Root cause:
+
+- dnscrypt-proxy config existed, but the Homebrew `dnscrypt-proxy` package was not installed.
+- Nothing was listening on `127.0.0.1:53530` or `127.0.0.1:53`.
+- AdGuard was pointed at a local DNSCrypt endpoint that did not exist yet.
+
+Fix applied:
+
+- Backed up `/opt/homebrew/etc/dnscrypt-proxy.toml` to `backups/dnscrypt-20260622-105231/`.
+- Installed `dnscrypt-proxy 2.1.16`.
+- Changed `listen_addresses` to `['127.0.0.1:53530']` to match AdGuard.
+- Started the user Homebrew service `homebrew.mxcl.dnscrypt-proxy`.
+- Added `scripts/network/dnscrypt-healthcheck.sh`.
+
+Validated path:
+
+```text
+Apps/Browsers
+  -> AdGuard for Mac DNS Protection
+  -> LocalDNSCrypt 127.0.0.1:53530
+  -> dnscrypt-proxy
+  -> encrypted upstream resolvers
+  -> Internet
+```
+
+Validation evidence:
+
+- `lsof` showed `dnscrypt-proxy` listening on UDP and TCP `127.0.0.1:53530`.
+- `dig @127.0.0.1 -p 53530 example.com` returned `NOERROR`.
+- `dig +tcp @127.0.0.1 -p 53530 example.com` returned `NOERROR`.
+- `dig @127.0.0.1 -p 53530 dnssec-failed.org` returned `SERVFAIL`.
+- `dig @127.0.0.1 -p 53530 sigok.verteiltesysteme.net` returned `NOERROR`.
+
+See [adguard-dnscrypt-setup.md](adguard-dnscrypt-setup.md) for operating commands and rollback.
+
 ## Current State
 
 Facts:
@@ -7,8 +46,8 @@ Facts:
 - macOS resolver path currently points to `192.168.10.1` on `vlan0`.
 - `/etc/resolv.conf` also lists `nameserver 192.168.10.1`, but macOS warns that `scutil --dns` is authoritative.
 - AdGuard for Mac and WireGuard are running.
-- `/opt/homebrew/etc/dnscrypt-proxy.toml` exists and is configured to listen on `127.0.0.1:53`.
-- `dnscrypt-proxy`, Unbound, NextDNS, and dnsmasq were not observed as active local resolver processes.
+- `/opt/homebrew/etc/dnscrypt-proxy.toml` exists and is now configured to listen on `127.0.0.1:53530` for AdGuard.
+- At initial audit time, `dnscrypt-proxy`, Unbound, NextDNS, and dnsmasq were not observed as active local resolver processes. After the correction, `dnscrypt-proxy` is active on `127.0.0.1:53530`.
 - `dig` over UDP to system DNS and `@192.168.10.1` timed out during this audit; `dig +tcp` to `192.168.10.1` succeeded in about 1 ms.
 - `dscacheutil` and `curl` resolved and reached `example.com`, so macOS/browser resolution still worked.
 
@@ -46,8 +85,8 @@ macOS client -> local Unbound -> dnscrypt-proxy -> upstream resolver
 
 | Area | Finding | Risk |
 | --- | --- | --- |
-| DNSCrypt | Config exists but service is not active in the resolver path. | Assuming DNSCrypt protection when it is not actually used. |
-| Local listener | No active local DNS listener was confirmed on port 53. | Switching DNS to `127.0.0.1` now would likely break DNS. |
+| DNSCrypt | Config existed but the package/service was missing; fixed by installing and starting dnscrypt-proxy on `53530`. | AdGuard DNS Protection would fail if dnscrypt-proxy stops. |
+| Local listener | Final listener is `127.0.0.1:53530`, matching AdGuard. | Port drift between AdGuard and dnscrypt-proxy would break filtered DNS. |
 | UDP DNS | `dig` UDP queries timed out, while TCP DNS to router worked. | Some tools may experience delay/fallback behavior. |
 | Cache | dnscrypt-proxy config has cache enabled, size `4096`, min TTL `2400`, max TTL `86400`. | Fine if active, irrelevant while inactive; high min TTL can keep stale answers longer. |
 | Privacy filters | `require_nolog=true`, `require_nofilter=true`, `require_dnssec=false`, IPv6 upstreams disabled. | Privacy-focused, but DNSSEC is not required by dnscrypt-proxy. |
@@ -111,4 +150,3 @@ sudo killall -HUP mDNSResponder
 ```
 
 Then restore the previous resolver path to `192.168.10.1` if DHCP does not repopulate it.
-

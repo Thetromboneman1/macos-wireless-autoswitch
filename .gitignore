@@ -4,3 +4,6 @@
 odysseus/.env
 odysseus/data/
 odysseus/logs/
+
+# Local machine config backups
+backups/

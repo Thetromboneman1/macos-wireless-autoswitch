@@ -42,3 +42,17 @@ Ranked export: `github-stars-ranked.json`
 
 No starred repo was installed or vendored in this pass, so rollback is documentation-only.
 
+## 2026-06-22 Ranked Implementation Update
+
+The ranked file was used as the source of truth for the DNSCrypt correction pass. The only install performed was `dnscrypt-proxy`, because it directly fixed the AdGuard `LocalDNSCrypt` target. No agent framework, RAG system, GUI monitor, model format, or large model was installed from the ranked stars.
+
+Implemented or confirmed:
+
+- `aaif-goose/goose`, Hermes repos, and OpenClaw remain tracked as existing local-stack components.
+- `google-gemma/gemma-skills` and `nvk/llm-wiki` remain high-value documentation/evaluation candidates.
+- DNSCrypt was repaired as the approved network item, with docs in [../network/adguard-dnscrypt-setup.md](../network/adguard-dnscrypt-setup.md).
+
+Deferred:
+
+- `SiliconScope`, `Understand-Anything`, `headroom`, `LEANN`, `turbovec`, `Octopoda-OS`, `osaurus`, `OpenHands`, `npcsh`, `ECC`, `gbrain`, `PonyExl3`, `edge-lm`, and `ApodexAI/AgentHarness`.
+- Reason: each requires a separate trial scope, adds another running service/framework, or overlaps the current Codex/OpenCode/Hermes/oMLX/llama.cpp stack.
