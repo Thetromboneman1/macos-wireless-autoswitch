@@ -11,3 +11,6 @@ backups/
 # Python validation caches
 __pycache__/
 *.pyc
+
+# GitHub-star trial checkouts and downloads
+tmp/star-downloads/

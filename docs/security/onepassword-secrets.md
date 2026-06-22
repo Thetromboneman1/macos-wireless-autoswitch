@@ -18,10 +18,19 @@ Observed CLI state on 2026-06-22:
 
 - `op` CLI is installed.
 - Signed-in account is visible.
-- A vault named `Boneman Projects` was not listed by `op vault list`.
-- Closest listed vault name: `Boneman`.
+- A vault named `Boneman Projects` was not initially listed by `op vault list`.
+- The approval prompt allowed creating `Boneman Projects` when `Boneman` existed.
+- `Boneman Projects` was created successfully and is the confirmed target vault.
 
 No 1Password items were created in this pass because no implemented star required a secret.
+
+## Current Vault
+
+```text
+1Password vault: Boneman Projects
+Status: created and available
+Items created by this repo pass: none
+```
 
 ## Documentation Pattern
 
@@ -47,4 +56,3 @@ git diff --cached | grep -Ei 'secret|token|password|apikey|api_key|private_key|B
 ```
 
 Inspect any hits manually. Documentation that names secret handling policy is acceptable; real values are not.
-

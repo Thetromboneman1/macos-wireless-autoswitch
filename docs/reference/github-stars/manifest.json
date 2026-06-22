@@ -1,0 +1,79 @@
+[
+  {
+    "repo": "kennss/SiliconScope",
+    "url": "https://github.com/kennss/SiliconScope/blob/main/README.md",
+    "path": "docs/reference/github-stars/kennss__SiliconScope__README.md",
+    "sha256": "a0829eb9e905c34059e747d9b95c1e4d26991795125df7a3507293611996d76b",
+    "bytes": 13461
+  },
+  {
+    "repo": "beamivalice/PonyExl3",
+    "url": "https://github.com/beamivalice/PonyExl3/blob/master/README.md",
+    "path": "docs/reference/github-stars/beamivalice__PonyExl3__README.md",
+    "sha256": "58e37cb6ae124b2d94f19a32a2fd6fcbe8e1d01cf379816dbaeb9fecfd75b184",
+    "bytes": 28142
+  },
+  {
+    "repo": "StarTrail-org/LEANN",
+    "url": "https://github.com/StarTrail-org/LEANN/blob/main/README.md",
+    "path": "docs/reference/github-stars/StarTrail-org__LEANN__README.md",
+    "sha256": "e70f209fc25a204245da9dfed28ce30b165907ac5bcbe3299b94344a43b5ee2b",
+    "bytes": 51922
+  },
+  {
+    "repo": "Egonex-AI/Understand-Anything",
+    "url": "https://github.com/Egonex-AI/Understand-Anything/blob/main/README.md",
+    "path": "docs/reference/github-stars/Egonex-AI__Understand-Anything__README.md",
+    "sha256": "9af36b88f241cebff485bde0cdd77644af665455af67616e4ffb6182fe465aa4",
+    "bytes": 17269
+  },
+  {
+    "repo": "headroomlabs-ai/headroom",
+    "url": "https://github.com/headroomlabs-ai/headroom/blob/main/README.md",
+    "path": "docs/reference/github-stars/headroomlabs-ai__headroom__README.md",
+    "sha256": "ccfda7527cf587caf6a8e27ba514076df1e7bf0b732bb10ad73db1f8f22b0ce9",
+    "bytes": 24397
+  },
+  {
+    "repo": "nvk/llm-wiki",
+    "url": "https://github.com/nvk/llm-wiki/blob/master/README.md",
+    "path": "docs/reference/github-stars/nvk__llm-wiki__README.md",
+    "sha256": "65aa159cb246304ced9a6aa55120b1388db094f47b4c90885beb74d697872bc7",
+    "bytes": 42140
+  },
+  {
+    "repo": "john-rocky/coreai-model-zoo",
+    "url": "https://github.com/john-rocky/coreai-model-zoo/blob/main/README.md",
+    "path": "docs/reference/github-stars/john-rocky__coreai-model-zoo__README.md",
+    "sha256": "3d6191a89ba8001ccbb57846b3b8d91b1c82c4a2d9f719b2e59fd77662bbdefd",
+    "bytes": 8404
+  },
+  {
+    "repo": "apple/container",
+    "url": "https://github.com/apple/container/blob/main/README.md",
+    "path": "docs/reference/github-stars/apple__container__README.md",
+    "sha256": "d553939d46d0da043d67ffb8de088629acc6907f2d1c645defd84eba94914bef",
+    "bytes": 3973
+  },
+  {
+    "repo": "google-gemma/gemma-skills",
+    "url": "https://github.com/google-gemma/gemma-skills/blob/main/README.md",
+    "path": "docs/reference/github-stars/google-gemma__gemma-skills__README.md",
+    "sha256": "3bd48248d74d1a11d3d9fc9ed10032e5df876baca202872dec8edbb97ac67602",
+    "bytes": 1183
+  },
+  {
+    "repo": "TheStageAI/edge-lm",
+    "url": "https://github.com/TheStageAI/edge-lm/blob/main/README.md",
+    "path": "docs/reference/github-stars/TheStageAI__edge-lm__README.md",
+    "sha256": "2b73ccbfdd7cfc8442c3a94f26f502fbd9ccb6c9fe8b1057e19f191569667f8f",
+    "bytes": 4539
+  },
+  {
+    "repo": "diegosouzapw/OmniRoute",
+    "url": "https://github.com/diegosouzapw/OmniRoute/blob/main/README.md",
+    "path": "docs/reference/github-stars/diegosouzapw__OmniRoute__README.md",
+    "sha256": "28dc7c5ea4fc137f2c99b73010ad61eff157e9559fa6794438f4d9437cd0c141",
+    "bytes": 73814
+  }
+]

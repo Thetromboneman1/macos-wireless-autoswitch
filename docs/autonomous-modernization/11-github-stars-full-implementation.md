@@ -103,3 +103,6 @@ Use `scripts/star-tools/star-trial-plan.sh` to print the current trial matrix.
 
 Validation commands are recorded in the final response for the commit that includes this file.
 
+## Approved Implementation Follow-up
+
+The approved execution pass is documented in [12-approved-star-implementation.md](12-approved-star-implementation.md). It created the `Boneman Projects` 1Password vault, downloaded small README/reference snapshots for the approved lightweight trial set, and added a safe shallow-clone trial helper that writes only to ignored `tmp/star-downloads/`.

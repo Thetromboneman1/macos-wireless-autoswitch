@@ -80,6 +80,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - The measured GGUF/llama.cpp coding lane is managed by `scripts/gemma4-gguf-coding-lane.sh` on `127.0.0.1:8002`.
 - AdGuard LocalDNSCrypt is documented in `docs/network/adguard-dnscrypt-setup.md`.
 - GitHub-star modernization decisions are documented in `docs/autonomous-modernization/11-github-stars-full-implementation.md`.
+- Approved GitHub-star trial helpers are documented in `docs/star-tools/approved-star-trials.md`.
 
 ## Local AI Companion Architecture
 

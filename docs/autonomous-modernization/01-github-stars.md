@@ -56,3 +56,7 @@ Deferred:
 
 - `SiliconScope`, `Understand-Anything`, `headroom`, `LEANN`, `turbovec`, `Octopoda-OS`, `osaurus`, `OpenHands`, `npcsh`, `ECC`, `gbrain`, `PonyExl3`, `edge-lm`, and `ApodexAI/AgentHarness`.
 - Reason: each requires a separate trial scope, adds another running service/framework, or overlaps the current Codex/OpenCode/Hermes/oMLX/llama.cpp stack.
+
+## 2026-06-22 Approved Execution Update
+
+The approved execution pass is documented in [12-approved-star-implementation.md](12-approved-star-implementation.md). It created `github-stars-approved-execution.json`, downloaded small README/reference snapshots under `docs/reference/github-stars/`, and added `scripts/star-tools/run-approved-star-trial.sh` for reversible shallow checkouts under ignored `tmp/star-downloads/`.
