@@ -16,6 +16,8 @@ This pass converted the installed starred tools into a coherent local-AI platfor
 | Knowledge | Added [knowledge-layer.md](../architecture/knowledge-layer.md). | LEANN, turbovec, llm-wiki, and Understand-Anything deployments are validated by existing script. |
 | Operations | Added [platform-runbook.md](../operations/platform-runbook.md). | Status script checks commands, endpoint health, Docker image, vaults, and docs. |
 | Secrets | Added [secret-inventory.md](../security/secret-inventory.md). | Inventory records retrieval methods only; no values. |
+| App configs | Wired Codex, OpenCode, Goose, Hermes, VS Code, and workspace settings to the shared policy files. | JSON/YAML/TOML parse checks and app-specific CLI checks. |
+| 1Password cleanup | Deleted empty duplicate `Boneman Projects` vault after confirming item count was zero. | `op vault get "Boneman Projects"` returns not found. |
 
 ## Tool Integration Status
 
@@ -43,9 +45,10 @@ This pass converted the installed starred tools into a coherent local-AI platfor
 - OpenHands is available for sandboxed work, not host-wide unattended operation.
 - Octopoda is useful for memory/audit experiments but should be scoped per run.
 
-## Remaining Manual Actions
+## 2026-06-22 Follow-Up Actions
 
-- Open Codex `/plugins` once if `wiki@llm-wiki` still shows pending in the UI.
-- Confirm whether to delete the empty `Boneman Projects` vault.
-- Decide whether Goose, Hermes, and OpenClaw should be edited in their own repos to consume `config/local-ai-platform/routing-policy.json`.
-- Run a longer MLX vs llama.cpp benchmark with SiliconScope active and KV-cache metrics enabled where available.
+- `wiki@llm-wiki` was installed and enabled with `codex plugin add wiki@llm-wiki`.
+- The duplicate empty `Boneman Projects` vault was deleted.
+- Goose and Hermes user configs now reference the shared platform policy.
+- VS Code user, Hermes workspace, and OpenClaw workspace settings now reference the shared platform policy.
+- Extended per-engine MLX and llama.cpp benchmark passes were run and merged into [07-benchmarks.md](07-benchmarks.md).

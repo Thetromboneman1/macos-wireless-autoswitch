@@ -1,0 +1,215 @@
+{
+  "created_at": "2026-06-22T21:24:28Z",
+  "methodology": "OpenAI-compatible operational smoke benchmark; streaming for TTFT, non-stream for usage/timing metadata, RSS deltas for KV/cache pressure proxy, moderate context, and 2-way concurrency only.",
+  "engine_filter": [
+    "omlx-mlx"
+  ],
+  "engines": [
+    {
+      "engine": "omlx-mlx",
+      "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+      "runs": [
+        {
+          "workload": "coding_patch",
+          "ttft_s": 0.033794,
+          "stream_total_s": 3.336813,
+          "stream_chunks": 21,
+          "stream_chars": 431,
+          "nonstream_total_s": 2.877471,
+          "prompt_tokens": 41,
+          "completion_tokens": 96,
+          "output_tok_s_wall": 33.363,
+          "tpot_s_wall": 0.029974,
+          "rss_before_kib": 256880,
+          "rss_after_kib": 301696,
+          "rss_delta_kib": 44816,
+          "usage": {
+            "prompt_tokens": 41,
+            "completion_tokens": 96,
+            "total_tokens": 137,
+            "input_tokens": 41,
+            "output_tokens": 96,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "total_time": 2.87
+          },
+          "timings": {}
+        },
+        {
+          "workload": "agent_plan",
+          "ttft_s": 0.004939,
+          "stream_total_s": 2.935193,
+          "stream_chunks": 20,
+          "stream_chars": 426,
+          "nonstream_total_s": 3.051536,
+          "prompt_tokens": 36,
+          "completion_tokens": 96,
+          "output_tok_s_wall": 31.46,
+          "tpot_s_wall": 0.031787,
+          "rss_before_kib": 301696,
+          "rss_after_kib": 302192,
+          "rss_delta_kib": 496,
+          "usage": {
+            "prompt_tokens": 36,
+            "completion_tokens": 96,
+            "total_tokens": 132,
+            "input_tokens": 36,
+            "output_tokens": 96,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "total_time": 3.05
+          },
+          "timings": {}
+        },
+        {
+          "workload": "context_scale",
+          "ttft_s": 0.01241,
+          "stream_total_s": 4.156528,
+          "stream_chunks": 21,
+          "stream_chars": 501,
+          "nonstream_total_s": 2.771513,
+          "prompt_tokens": 1365,
+          "completion_tokens": 96,
+          "output_tok_s_wall": 34.638,
+          "tpot_s_wall": 0.02887,
+          "rss_before_kib": 302192,
+          "rss_after_kib": 296912,
+          "rss_delta_kib": -5280,
+          "usage": {
+            "prompt_tokens": 1365,
+            "completion_tokens": 96,
+            "total_tokens": 1461,
+            "input_tokens": 1365,
+            "output_tokens": 96,
+            "prompt_tokens_details": {
+              "cached_tokens": 1024
+            },
+            "total_time": 2.77
+          },
+          "timings": {}
+        }
+      ],
+      "context_scaling": [
+        {
+          "workload": "context_moderate",
+          "ttft_s": 0.008096,
+          "stream_total_s": 3.281114,
+          "stream_chunks": 17,
+          "stream_chars": 470,
+          "nonstream_total_s": 3.245973,
+          "prompt_tokens": 3587,
+          "completion_tokens": 96,
+          "output_tok_s_wall": 29.575,
+          "tpot_s_wall": 0.033812,
+          "rss_before_kib": 296912,
+          "rss_after_kib": 278656,
+          "rss_delta_kib": -18256,
+          "usage": {
+            "prompt_tokens": 3587,
+            "completion_tokens": 96,
+            "total_tokens": 3683,
+            "input_tokens": 3587,
+            "output_tokens": 96,
+            "prompt_tokens_details": {
+              "cached_tokens": 3072
+            },
+            "total_time": 3.24
+          },
+          "timings": {}
+        }
+      ],
+      "concurrency": [
+        {
+          "concurrency": 2,
+          "wall_s": 5.411797,
+          "aggregate_completion_tokens": 128,
+          "aggregate_output_tok_s_wall": 23.652,
+          "rss_before_kib": 278624,
+          "rss_after_kib": 239520,
+          "rss_delta_kib": -39104,
+          "runs": [
+            {
+              "workload": "concurrency_2_0",
+              "ttft_s": 0.011043,
+              "stream_total_s": 2.605054,
+              "stream_chunks": 25,
+              "stream_chars": 322,
+              "nonstream_total_s": 2.489076,
+              "prompt_tokens": 41,
+              "completion_tokens": 64,
+              "output_tok_s_wall": 25.712,
+              "tpot_s_wall": 0.038892,
+              "rss_before_kib": 278608,
+              "rss_after_kib": 239456,
+              "rss_delta_kib": -39152,
+              "usage": {
+                "prompt_tokens": 41,
+                "completion_tokens": 64,
+                "total_tokens": 105,
+                "input_tokens": 41,
+                "output_tokens": 64,
+                "prompt_tokens_details": {
+                  "cached_tokens": 0
+                },
+                "total_time": 2.48
+              },
+              "timings": {}
+            },
+            {
+              "workload": "concurrency_2_1",
+              "ttft_s": 0.010138,
+              "stream_total_s": 2.631666,
+              "stream_chunks": 26,
+              "stream_chars": 321,
+              "nonstream_total_s": 2.490385,
+              "prompt_tokens": 41,
+              "completion_tokens": 64,
+              "output_tok_s_wall": 25.699,
+              "tpot_s_wall": 0.038912,
+              "rss_before_kib": 278608,
+              "rss_after_kib": 239520,
+              "rss_delta_kib": -39088,
+              "usage": {
+                "prompt_tokens": 41,
+                "completion_tokens": 64,
+                "total_tokens": 105,
+                "input_tokens": 41,
+                "output_tokens": 64,
+                "prompt_tokens_details": {
+                  "cached_tokens": 0
+                },
+                "total_time": 2.49
+              },
+              "timings": {}
+            }
+          ]
+        }
+      ],
+      "process_snapshot": [
+        {
+          "pid": "53385",
+          "rss_kib": 944,
+          "cpu_percent": "0.0",
+          "etime": "11-08:41:11",
+          "command": "bash /Users/corn/.omlx/bin/omlx-power-watch.sh"
+        },
+        {
+          "pid": "77220",
+          "rss_kib": 25696,
+          "cpu_percent": "0.0",
+          "etime": "10:17:59",
+          "command": "/Applications/oMLX.app/Contents/MacOS/oMLX"
+        },
+        {
+          "pid": "77252",
+          "rss_kib": 212880,
+          "cpu_percent": "38.6",
+          "etime": "10:17:55",
+          "command": "omlx-server       "
+        }
+      ]
+    }
+  ]
+}

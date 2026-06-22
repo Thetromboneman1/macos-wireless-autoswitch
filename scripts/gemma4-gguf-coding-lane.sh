@@ -4,12 +4,10 @@ set -euo pipefail
 ROOT="${GEMMA4_GGUF_ROOT:-$HOME/Developer/ML-Models/Gemma4}"
 LLAMA_SERVER="${LLAMA_SERVER:-$ROOT/repos/llama.cpp/build/bin/llama-server}"
 MODEL="${GEMMA4_GGUF_MODEL:-$ROOT/models/unsloth-gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf}"
-DRAFT_MODEL="${GEMMA4_GGUF_DRAFT_MODEL:-$ROOT/models/unsloth-gemma-4-26B-A4B-it-GGUF/MTP/gemma-4-26B-A4B-it-Q8_0-MTP.gguf}"
 MMPROJ="${GEMMA4_GGUF_MMPROJ:-$ROOT/models/unsloth-gemma-4-26B-A4B-it-GGUF/mmproj-BF16.gguf}"
 HOST="${GEMMA4_GGUF_HOST:-127.0.0.1}"
 PORT="${GEMMA4_GGUF_PORT:-8002}"
 CTX_SIZE="${GEMMA4_GGUF_CTX_SIZE:-65536}"
-DRAFT_N="${GEMMA4_GGUF_DRAFT_N:-4}"
 PARALLEL="${GEMMA4_GGUF_PARALLEL:-1}"
 PID_FILE="${GEMMA4_GGUF_PID_FILE:-$HOME/.local/state/gemma4-gguf-coding-lane.pid}"
 LOG_FILE="${GEMMA4_GGUF_LOG_FILE:-$HOME/.local/state/gemma4-gguf-coding-lane.log}"
@@ -21,7 +19,7 @@ usage() {
 Usage: scripts/gemma4-gguf-coding-lane.sh <command>
 
 Commands:
-  start      Start the host-side llama.cpp GGUF/MTP coding lane on 127.0.0.1:8002
+  start      Start the host-side llama.cpp no-MTP GGUF coding lane on 127.0.0.1:8002
   stop       Stop the coding lane
   restart    Restart the coding lane
   status     Show PID, endpoint, model registry, and recent log tail
@@ -29,8 +27,8 @@ Commands:
   bench      Run a 128-token coding benchmark against the lane
 
 Environment overrides:
-  GEMMA4_GGUF_ROOT, LLAMA_SERVER, GEMMA4_GGUF_MODEL, GEMMA4_GGUF_DRAFT_MODEL
-  GEMMA4_GGUF_MMPROJ, GEMMA4_GGUF_HOST, GEMMA4_GGUF_PORT, GEMMA4_GGUF_DRAFT_N
+  GEMMA4_GGUF_ROOT, LLAMA_SERVER, GEMMA4_GGUF_MODEL, GEMMA4_GGUF_MMPROJ
+  GEMMA4_GGUF_HOST, GEMMA4_GGUF_PORT, GEMMA4_GGUF_CTX_SIZE, GEMMA4_GGUF_PARALLEL
 USAGE
 }
 
@@ -39,7 +37,7 @@ endpoint() {
 }
 
 ensure_files() {
-  for path in "$LLAMA_SERVER" "$MODEL" "$DRAFT_MODEL" "$MMPROJ"; do
+  for path in "$LLAMA_SERVER" "$MODEL" "$MMPROJ"; do
     if [ ! -e "$path" ]; then
       echo "Missing required file: $path" >&2
       return 1
@@ -79,15 +77,12 @@ start_lane() {
   fi
   if command -v tmux >/dev/null 2>&1; then
     tmux new-session -d -s "$TMUX_SESSION" \
-      "exec '$LLAMA_SERVER' -m '$MODEL' --model-draft '$DRAFT_MODEL' --mmproj '$MMPROJ' --spec-type draft-mtp --spec-draft-n-max '$DRAFT_N' -ngl 999 -fa on -c '$CTX_SIZE' --parallel '$PARALLEL' --host '$HOST' --port '$PORT' --no-ui >'$LOG_FILE' 2>&1"
+      "exec '$LLAMA_SERVER' -m '$MODEL' --mmproj '$MMPROJ' -ngl 999 -fa on -c '$CTX_SIZE' --parallel '$PARALLEL' --host '$HOST' --port '$PORT' --no-ui >'$LOG_FILE' 2>&1"
     tmux list-panes -t "$TMUX_SESSION" -F '#{pane_pid}' > "$PID_FILE"
   else
     nohup "$LLAMA_SERVER" \
       -m "$MODEL" \
-      --model-draft "$DRAFT_MODEL" \
       --mmproj "$MMPROJ" \
-      --spec-type draft-mtp \
-      --spec-draft-n-max "$DRAFT_N" \
       -ngl 999 \
       -fa on \
       -c "$CTX_SIZE" \
@@ -99,7 +94,7 @@ start_lane() {
     echo $! > "$PID_FILE"
   fi
   wait_ready
-  echo "Coding lane ready at $(endpoint) with $MODEL_ID and draft_n=$DRAFT_N"
+  echo "Coding lane ready at $(endpoint) with $MODEL_ID in no-MTP mode"
 }
 
 stop_lane() {
@@ -133,7 +128,7 @@ stop_lane() {
 status_lane() {
   echo "Endpoint: $(endpoint)"
   echo "Model: $MODEL_ID"
-  echo "Draft n max: $DRAFT_N"
+  echo "Mode: no-MTP Apple Silicon lane"
   if pid_running; then
     if command -v tmux >/dev/null 2>&1 && tmux has-session -t "$TMUX_SESSION" 2>/dev/null; then
       echo "tmux session: $TMUX_SESSION"

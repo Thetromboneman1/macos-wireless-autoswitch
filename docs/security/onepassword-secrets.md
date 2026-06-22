@@ -20,7 +20,7 @@ Observed CLI state on 2026-06-22:
 - Signed-in account is visible.
 - The canonical vault is `Boneman`.
 - A previous run created `Boneman Projects`, but the user has corrected the target to `Boneman`.
-- `Boneman Projects` is currently an empty duplicate and should not receive new items.
+- `Boneman Projects` was an empty duplicate and was removed on 2026-06-22.
 
 No 1Password items were created in this pass because no implemented star required a secret.
 
@@ -59,10 +59,10 @@ Inspect any hits manually. Documentation that names secret handling policy is ac
 
 ## Duplicate Vault Handling
 
-`Boneman Projects` exists but was empty when audited. Do not hard-delete it from automation. The safe cleanup path is:
+`Boneman Projects` was empty when audited and was deleted on 2026-06-22. The safe validation path is:
 
 ```bash
-op item list --vault "Boneman Projects" --format json
+op vault get "Boneman Projects" --format json
 ```
 
-If the result is still an empty list, remove or archive the duplicate vault manually in 1Password after confirming no other machine or teammate depends on it.
+The command should fail after deletion. Keep using `Boneman` for all new local AI, agent, and star-tool secrets.

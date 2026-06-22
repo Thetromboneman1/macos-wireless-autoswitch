@@ -32,10 +32,32 @@ scripts/star-tools/start-openhands-docker.sh
 - GGUF coding lane: `http://127.0.0.1:8002/v1`.
 - Do not route routine work through OmniRoute or headroom until their lab reviews pass.
 
+## Config Consumers
+
+These user and workspace configs are wired to the shared policy files:
+
+| Consumer | Config |
+|---|---|
+| Codex | `~/.codex/config.toml` |
+| OpenCode | `~/.config/opencode/opencode.json` |
+| Goose | `~/.config/goose/config.yaml` |
+| Hermes | `~/.hermes/config.yaml` |
+| Hermes WebUI | `~/.hermes/webui/settings.json` |
+| Hermes WebUI MVP | `~/.hermes/webui-mvp/settings.json` |
+| VS Code user settings | `~/Library/Application Support/Code/User/settings.json` |
+| Hermes workspace VS Code | `~/Documents/Hermes/.vscode/settings.json` |
+| OpenClaw workspace VS Code | `~/Documents/Openclaw/.vscode/settings.json` |
+
+Backups from the 2026-06-22 platform wiring pass are stored under:
+
+```text
+~/.local/share/codex-star-tools/backups/20260622-161103-platform-configs/
+```
+
 ## Secret Handling
 
 - Canonical vault: `Boneman`.
-- Do not use `Boneman Projects`.
+- The duplicate `Boneman Projects` vault was empty and removed on 2026-06-22.
 - Do not paste secrets into docs, scripts, `.env.example`, or git commits.
 - Prefer runtime env vars populated from 1Password or existing local settings.
 

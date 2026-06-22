@@ -11,7 +11,7 @@ All local AI, star-tool, DNS, provider, and agent secrets belong in 1Password va
 | Vault | State | Action |
 |---|---|---|
 | `Boneman` | Present and contains local AI/service items. | Canonical target for all new platform secrets. |
-| `Boneman Projects` | Present but empty during this audit. | Do not use. Delete manually only after confirming it remains empty. |
+| `Boneman Projects` | Empty duplicate, removed on 2026-06-22. | No longer available; do not recreate. |
 | `BonemanP Projects` | Not observed. | No action. |
 | `Bonema Project Vault` | Not observed. | No action. |
 
@@ -47,7 +47,7 @@ All local AI, star-tool, DNS, provider, and agent secrets belong in 1Password va
 
 ```bash
 op vault get Boneman --format json >/dev/null
-op item list --vault "Boneman Projects" --format json
+op vault get "Boneman Projects" --format json
 git diff | grep -Ei 'secret|token|password|apikey|api_key|private_key|BEGIN RSA|BEGIN OPENSSH' || true
 ```
 

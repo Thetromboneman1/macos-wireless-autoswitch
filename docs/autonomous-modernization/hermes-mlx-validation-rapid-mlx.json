@@ -1,0 +1,59 @@
+{
+  "created_at": "2026-06-22T21:17:45Z",
+  "endpoint": {
+    "name": "rapid-mlx-qwen36",
+    "base_url": "http://127.0.0.1:8010/v1",
+    "model": "qwen3.6-35b-4bit",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "checks": [
+    {
+      "name": "models",
+      "ok": true,
+      "seconds": 0.041663,
+      "detail": {
+        "model_found": true,
+        "model_count": 1,
+        "model_ids": [
+          "qwen3.6-35b-4bit"
+        ]
+      }
+    },
+    {
+      "name": "chat_completion",
+      "ok": true,
+      "seconds": 6.467479,
+      "detail": {
+        "content": "OK",
+        "usage": {
+          "prompt_tokens": 15,
+          "completion_tokens": 4,
+          "total_tokens": 19,
+          "prompt_tokens_details": {
+            "cached_tokens": 15
+          }
+        }
+      }
+    },
+    {
+      "name": "tool_call",
+      "ok": true,
+      "seconds": 0.70264,
+      "detail": {
+        "tool_call_count": 1,
+        "content_present": false,
+        "usage": {
+          "prompt_tokens": 353,
+          "completion_tokens": 28,
+          "total_tokens": 381,
+          "prompt_tokens_details": {
+            "cached_tokens": 353
+          }
+        }
+      }
+    }
+  ],
+  "ok": true
+}

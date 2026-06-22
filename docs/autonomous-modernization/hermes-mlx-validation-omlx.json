@@ -1,0 +1,69 @@
+{
+  "created_at": "2026-06-22T21:16:51Z",
+  "endpoint": {
+    "name": "omlx-gemma26",
+    "base_url": "http://127.0.0.1:18080/v1",
+    "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer <redacted>"
+    }
+  },
+  "checks": [
+    {
+      "name": "models",
+      "ok": true,
+      "seconds": 0.032346,
+      "detail": {
+        "model_found": true,
+        "model_count": 4,
+        "model_ids": [
+          "mlx-community--gemma-4-26b-a4b-it-4bit",
+          "mlx-community--gemma-4-31b-it-4bit",
+          "mlx-community--gemma-4-e2b-it-4bit",
+          "mlx-community--gemma-4-e4b-it-4bit"
+        ]
+      }
+    },
+    {
+      "name": "chat_completion",
+      "ok": true,
+      "seconds": 0.004585,
+      "detail": {
+        "content": "OK",
+        "usage": {
+          "prompt_tokens": 18,
+          "completion_tokens": 1,
+          "total_tokens": 19,
+          "input_tokens": 18,
+          "output_tokens": 1,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_time": 0.91
+        }
+      }
+    },
+    {
+      "name": "tool_call",
+      "ok": true,
+      "seconds": 0.004285,
+      "detail": {
+        "tool_call_count": 1,
+        "content_present": false,
+        "usage": {
+          "prompt_tokens": 99,
+          "completion_tokens": 14,
+          "total_tokens": 113,
+          "input_tokens": 99,
+          "output_tokens": 14,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_time": 1.38
+        }
+      }
+    }
+  ],
+  "ok": true
+}
