@@ -77,6 +77,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Requires admin privileges for system-level network changes.
 - Optional Odysseus/Gemma companion setup is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
 - oMLX memory and battery policy is documented in `docs/OMLX_POWER_POLICY.md`.
+- The measured GGUF/llama.cpp coding lane is managed by `scripts/gemma4-gguf-coding-lane.sh` on `127.0.0.1:8002`.
 
 ## Local AI Companion Architecture
 
@@ -84,6 +85,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 flowchart LR
   subgraph Host["macOS host"]
     OMLX["oMLX 0.4.3<br/>127.0.0.1:18080/v1"]
+    GGUF["llama.cpp GGUF coding lane<br/>127.0.0.1:8002/v1"]
     Policy["com.corn.omlx-power-policy<br/>battery/normal TTLs"]
   end
   subgraph Docker["Optional companion services"]
@@ -94,6 +96,7 @@ flowchart LR
   end
   Policy --> OMLX
   Odysseus -->|"host.docker.internal:18080/v1"| OMLX
+  Odysseus -->|"coding: host.docker.internal:8002/v1"| GGUF
   Odysseus --> Chroma
   Odysseus --> Searx
   Odysseus --> Ntfy

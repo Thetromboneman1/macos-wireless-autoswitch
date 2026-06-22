@@ -39,7 +39,7 @@ The configurator creates these Odysseus model endpoints:
 | Role | Endpoint ID | Default model ID | Intended use |
 | --- | --- | --- | --- |
 | Primary | `gemma-primary` | `mlx-community--gemma-4-31b-it-4bit` | Primary chat/reasoning |
-| Coding | `gemma-coding` | `mlx-community--gemma-4-26b-a4b-it-4bit` | Coding/edit/apply |
+| Coding | `gemma-coding` | `gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf` | Coding/edit/apply via llama.cpp GGUF/MTP |
 | Fast | `gemma-fast` | `mlx-community--gemma-4-e4b-it-4bit` | Fast chat/edit/apply/autocomplete |
 | Small | `gemma-small` | `mlx-community--gemma-4-e2b-it-4bit` | Small/routing tasks |
 
@@ -58,12 +58,26 @@ Odysseus does not currently expose separate first-class settings for every "codi
 
 ## Model Server Requirement
 
-Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through an OpenAI-compatible API. The current host runtime is oMLX `0.4.3`.
+Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through OpenAI-compatible host APIs. The current default host runtime is oMLX `0.4.3`, with a measured llama.cpp GGUF/MTP lane for the coding role.
 
 Default oMLX endpoint:
 
 ```text
 http://host.docker.internal:18080/v1
+```
+
+Coding GGUF endpoint:
+
+```text
+http://host.docker.internal:8002/v1
+```
+
+Start, stop, and benchmark the host coding lane from this repo:
+
+```bash
+scripts/gemma4-gguf-coding-lane.sh start
+scripts/gemma4-gguf-coding-lane.sh status
+scripts/gemma4-gguf-coding-lane.sh bench
 ```
 
 The helper auto-detects the local oMLX API key from `~/.omlx/settings.json` when `ODYSSEUS_GEMMA_API_KEY` is blank. The key is passed into Odysseus during configuration and is not committed to Git.
@@ -85,10 +99,10 @@ ODYSSEUS_GEMMA_BASE_URL=http://host.docker.internal:18080/v1
 If the models are served on different ports, set per-role URLs:
 
 ```bash
-ODYSSEUS_GEMMA_PRIMARY_BASE_URL=http://host.docker.internal:8001/v1
+ODYSSEUS_GEMMA_PRIMARY_BASE_URL=http://host.docker.internal:18080/v1
 ODYSSEUS_GEMMA_CODING_BASE_URL=http://host.docker.internal:8002/v1
-ODYSSEUS_GEMMA_FAST_BASE_URL=http://host.docker.internal:8003/v1
-ODYSSEUS_GEMMA_SMALL_BASE_URL=http://host.docker.internal:8004/v1
+ODYSSEUS_GEMMA_FAST_BASE_URL=http://host.docker.internal:18080/v1
+ODYSSEUS_GEMMA_SMALL_BASE_URL=http://host.docker.internal:18080/v1
 ```
 
 If your serving runtime exposes different model names, update the model IDs in `odysseus/.env`, then rerun:
@@ -137,6 +151,7 @@ docker compose --env-file odysseus/.env -p odysseus-gemma -f odysseus/docker-com
   python - <<'PY'
 import httpx
 print(httpx.get("http://host.docker.internal:18080/health", timeout=5).text[:1000])
+print(httpx.get("http://host.docker.internal:8002/v1/models", timeout=5).text[:1000])
 PY
 ```
 

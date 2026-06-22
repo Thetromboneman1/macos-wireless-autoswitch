@@ -1,6 +1,6 @@
 # oMLX Power Policy
 
-This repo keeps model serving outside Docker on the host-side oMLX `0.4.3` runtime so Apple Silicon can use MLX and Metal directly. Use `scripts/omlx-power-policy.sh` to keep the four Gemma role models available without keeping every large model resident all day.
+This repo keeps model serving outside Docker so Apple Silicon can use Metal directly. oMLX `0.4.3` remains the host runtime for primary reasoning, fast, and routing roles. The coding role can use the measured host-side llama.cpp GGUF/MTP lane on `127.0.0.1:8002`; use `scripts/omlx-power-policy.sh` to manage only the oMLX-resident models.
 
 ## Architecture
 
@@ -10,8 +10,11 @@ flowchart LR
   Policy --> Settings["~/.omlx/settings.json<br/>idle_timeout"]
   Policy --> ModelSettings["~/.omlx/model_settings.json<br/>ttl_seconds + unpinned"]
   Policy --> OMLX["oMLX app<br/>127.0.0.1:18080"]
-  OMLX --> Models["Gemma 4 MLX role set"]
+  GGUF["llama.cpp GGUF coding lane<br/>127.0.0.1:8002"]
+  OMLX --> Models["Gemma 4 MLX reasoning/fast/routing"]
+  GGUF --> Coding["Gemma 4 26B A4B GGUF + MTP"]
   Containers["Docker consumers"] -->|"host.docker.internal:18080/v1"| OMLX
+  Containers -->|"coding: host.docker.internal:8002/v1"| GGUF
 ```
 
 ## Model Roles
@@ -19,11 +22,11 @@ flowchart LR
 | Role | Model ID | Normal TTL | Battery/conserve TTL |
 | --- | --- | ---: | ---: |
 | Primary reasoning | `mlx-community--gemma-4-31b-it-4bit` | 20 min | 10 min |
-| Coding/workhorse | `mlx-community--gemma-4-26b-a4b-it-4bit` | 30 min | 15 min |
+| Coding/workhorse | `gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf` via llama.cpp GGUF/MTP | managed by `scripts/gemma4-gguf-coding-lane.sh` | stop lane when conserving |
 | Fast agent | `mlx-community--gemma-4-e4b-it-4bit` | 60 min | 20 min |
 | Routing/utility | `mlx-community--gemma-4-e2b-it-4bit` | 60 min | 30 min |
 
-All four models are explicitly unpinned by the policy. Pinned oMLX models ignore TTL, so leaving the large models pinned defeats battery and heat savings.
+The oMLX role models are explicitly unpinned by the policy. The coding GGUF lane is a separate llama.cpp process and is not controlled by oMLX TTLs.
 
 ## Commands
 

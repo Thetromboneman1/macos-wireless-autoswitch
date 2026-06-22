@@ -82,11 +82,11 @@ PY
   compose exec -T \
     -e ODYSSEUS_GEMMA_BASE_URL="${ODYSSEUS_GEMMA_BASE_URL:-http://host.docker.internal:18080/v1}" \
     -e ODYSSEUS_GEMMA_PRIMARY_BASE_URL="${ODYSSEUS_GEMMA_PRIMARY_BASE_URL:-}" \
-    -e ODYSSEUS_GEMMA_CODING_BASE_URL="${ODYSSEUS_GEMMA_CODING_BASE_URL:-}" \
+    -e ODYSSEUS_GEMMA_CODING_BASE_URL="${ODYSSEUS_GEMMA_CODING_BASE_URL:-http://host.docker.internal:8002/v1}" \
     -e ODYSSEUS_GEMMA_FAST_BASE_URL="${ODYSSEUS_GEMMA_FAST_BASE_URL:-}" \
     -e ODYSSEUS_GEMMA_SMALL_BASE_URL="${ODYSSEUS_GEMMA_SMALL_BASE_URL:-}" \
     -e ODYSSEUS_GEMMA_PRIMARY_MODEL="${ODYSSEUS_GEMMA_PRIMARY_MODEL:-mlx-community--gemma-4-31b-it-4bit}" \
-    -e ODYSSEUS_GEMMA_CODING_MODEL="${ODYSSEUS_GEMMA_CODING_MODEL:-mlx-community--gemma-4-26b-a4b-it-4bit}" \
+    -e ODYSSEUS_GEMMA_CODING_MODEL="${ODYSSEUS_GEMMA_CODING_MODEL:-gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf}" \
     -e ODYSSEUS_GEMMA_FAST_MODEL="${ODYSSEUS_GEMMA_FAST_MODEL:-mlx-community--gemma-4-e4b-it-4bit}" \
     -e ODYSSEUS_GEMMA_SMALL_MODEL="${ODYSSEUS_GEMMA_SMALL_MODEL:-mlx-community--gemma-4-e2b-it-4bit}" \
     -e ODYSSEUS_GEMMA_API_KEY="$gemma_api_key" \
@@ -111,9 +111,9 @@ roles = {
     },
     "coding": {
         "id": "gemma-coding",
-        "name": "Gemma 4 26B A4B - coding/edit/apply",
+        "name": "Gemma 4 26B A4B GGUF - coding/edit/apply",
         "url": os.environ.get("ODYSSEUS_GEMMA_CODING_BASE_URL") or base,
-        "model": os.environ.get("ODYSSEUS_GEMMA_CODING_MODEL", "mlx-community--gemma-4-26b-a4b-it-4bit"),
+        "model": os.environ.get("ODYSSEUS_GEMMA_CODING_MODEL", "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf"),
         "purpose": "coding/edit/apply",
     },
     "fast": {
