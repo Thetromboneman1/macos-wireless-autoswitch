@@ -29,7 +29,8 @@ scripts/star-tools/start-openhands-docker.sh
 ## Normal Routing
 
 - Default model endpoint: `http://127.0.0.1:18080/v1`.
-- GGUF coding lane: `http://127.0.0.1:8002/v1`.
+- GGUF coding lane: `http://127.0.0.1:8002/v1`, no MTP.
+- Rapid-MLX Hermes candidate: `http://127.0.0.1:8010/v1`, start only with `scripts/local-ai/start-rapid-mlx-qwen.sh`.
 - Do not route routine work through OmniRoute or headroom until their lab reviews pass.
 
 ## Config Consumers

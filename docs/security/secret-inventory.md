@@ -24,6 +24,8 @@ All local AI, star-tool, DNS, provider, and agent secrets belong in 1Password va
 | OpenCode GGUF provider | llama.cpp provider | Current config uses local placeholder key. | User | No cloud credential in repo config. |
 | OpenClaw gateway | Local gateway auth | `Boneman` item `OpenClaw Gateway Token (localhost:18789)`. | User | Existing vault item observed by title only. |
 | Hermes env | Hermes local environment | `Boneman` items `Environment Details: .hermes/.env` and `Secrets Backup: ~/.hermes/.env`. | User | Values not read. |
+| Hermes oMLX provider | Host local model endpoint | `~/.hermes/config.yaml` points at `http://127.0.0.1:18080/v1`; API key remains a local placeholder or `Boneman` pointer. | User | No secret value committed. |
+| Rapid-MLX lab lane | Qwen3.6 Hermes candidate endpoint | No API key by default on `127.0.0.1:8010`; keep LAN exposure disabled. | User | Telemetry forced off by launcher. |
 | OpenClaw env | OpenClaw local environment | `Boneman` items `Environment Details: Documents/Openclaw/.env` and `Secrets Backup: Openclaw/.env`. | User | Values not read. |
 | Octopoda | Local dashboard/MCP auth | `OCTOPODA_API_KEY` env or future `Boneman` item `Octopoda - Local AI`. | User | Start script defaults to local placeholder; avoid exposing remotely. |
 | OmniRoute | Provider routing/OAuth/API keys | Future `Boneman` item `OmniRoute - Provider Credentials`. | User | Installed but stopped; do not enable provider routes before threat model. |

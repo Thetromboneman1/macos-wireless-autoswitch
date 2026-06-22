@@ -50,6 +50,7 @@ flowchart LR
 - Use explicit project/workspace roots for indexing and agent actions.
 - Keep `OmniRoute`, `headroom`, and `OpenHands` out of default MCP startup because they can proxy credentials or access broad filesystem surfaces.
 - Store all provider tokens in `Boneman`; pass them via environment at runtime.
+- Hermes host CLI uses the local oMLX endpoint directly; Dockerized Hermes surfaces should keep the Docker host boundary.
 
 ## Validation
 

@@ -26,7 +26,16 @@
       "model": "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
       "engine": "llama.cpp llama-server",
       "base_url": "http://127.0.0.1:8002/v1",
-      "use_for": ["GGUF benchmark lane", "portable coding lane", "llama.cpp production simulation"]
+      "use_for": ["GGUF benchmark lane", "portable coding lane", "llama.cpp production simulation"],
+      "constraints": ["no MTP on Apple Silicon"]
+    },
+    {
+      "id": "rapid-mlx-hermes-candidate",
+      "model": "qwen3.6-35b-4bit",
+      "engine": "Rapid-MLX",
+      "base_url": "http://127.0.0.1:8010/v1",
+      "use_for": ["Hermes tool-calling lab", "Qwen3.6 concurrency benchmarks"],
+      "constraints": ["manual start only", "watch memory pressure", "telemetry disabled by launcher"]
     },
     {
       "id": "fast-agent",
@@ -61,8 +70,8 @@
     }
   ],
   "policy": {
-    "avoid_default": ["Ollama"],
-    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard"],
+    "avoid_default": ["Ollama", "Lightning MLX MTP paths"],
+    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane"],
     "secret_vault": "Boneman"
   }
 }
