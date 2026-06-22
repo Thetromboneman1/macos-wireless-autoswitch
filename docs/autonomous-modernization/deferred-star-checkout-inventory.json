@@ -1,0 +1,318 @@
+[
+  {
+    "checkout": "tmp/star-downloads/Aider-AI__aider",
+    "repo": "Aider-AI/aider",
+    "head": "5dc9490",
+    "remote": "https://github.com/Aider-AI/aider.git",
+    "files": [
+      "LICENSE.txt",
+      "README.md",
+      "pyproject.toml",
+      "requirements.txt"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/Egonex-AI__Understand-Anything",
+    "repo": "Egonex-AI/Understand-Anything",
+    "head": "7f5a717",
+    "remote": "https://github.com/Egonex-AI/Understand-Anything.git",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "READMEs",
+      "package.json"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/NPC-Worldwide__incognide",
+    "repo": "NPC-Worldwide/incognide",
+    "head": "5afbdbc",
+    "remote": "https://github.com/NPC-Worldwide/incognide.git",
+    "files": [
+      "Dockerfile",
+      "LICENSE",
+      "README.md",
+      "docker-compose.yml",
+      "package.json",
+      "requirements.txt"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/OpenHands__OpenHands",
+    "repo": "OpenHands/OpenHands",
+    "head": "94eba54",
+    "remote": "https://github.com/OpenHands/OpenHands.git",
+    "files": [
+      "LICENSE",
+      "Makefile",
+      "README.md",
+      "docker-compose.yml",
+      "pyproject.toml",
+      "uv.lock"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/RyanCodrai__turbovec",
+    "repo": "RyanCodrai/turbovec",
+    "head": "1e7200c",
+    "remote": "https://github.com/RyanCodrai/turbovec.git",
+    "files": [
+      "Cargo.toml",
+      "LICENSE",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/RyjoxTechnologies__Octopoda-OS",
+    "repo": "RyjoxTechnologies/Octopoda-OS",
+    "head": "01c680e",
+    "remote": "https://github.com/RyjoxTechnologies/Octopoda-OS.git",
+    "files": [
+      "Dockerfile",
+      "LICENSE",
+      "README.md",
+      "docker-compose.yml",
+      "pyproject.toml"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/StarTrail-org__LEANN",
+    "repo": "StarTrail-org/LEANN",
+    "head": "55ff236",
+    "remote": "https://github.com/StarTrail-org/LEANN.git",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "pyproject.toml",
+      "uv.lock"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/TheStageAI__edge-lm",
+    "repo": "TheStageAI/edge-lm",
+    "head": "60f83ce",
+    "remote": "https://github.com/TheStageAI/edge-lm.git",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "pyproject.toml",
+      "requirements.txt"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/affaan-m__ECC",
+    "repo": "affaan-m/ECC",
+    "head": "71d22d0",
+    "remote": "https://github.com/affaan-m/ECC.git",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "README.zh-CN.md",
+      "package.json",
+      "pyproject.toml"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/anysphere__priompt",
+    "repo": "anysphere/priompt",
+    "head": "64321be",
+    "remote": "https://github.com/anysphere/priompt.git",
+    "files": [
+      "LICENSE",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/apple__container",
+    "repo": "apple/container",
+    "head": "3b47905",
+    "remote": "https://github.com/apple/container.git",
+    "files": [
+      "LICENSE",
+      "Makefile",
+      "Package.swift",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/beamivalice__PonyExl3",
+    "repo": "beamivalice/PonyExl3",
+    "head": "77d6846",
+    "remote": "https://github.com/beamivalice/PonyExl3.git",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "pyproject.toml",
+      "uv.lock"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/diegosouzapw__OmniRoute",
+    "repo": "diegosouzapw/OmniRoute",
+    "head": "ee24eb5",
+    "remote": "https://github.com/diegosouzapw/OmniRoute.git",
+    "files": [
+      "Dockerfile",
+      "LICENSE",
+      "README.md",
+      "docker-compose.prod.yml",
+      "docker-compose.yml",
+      "package.json"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/go-gitea__gitea",
+    "repo": "go-gitea/gitea",
+    "head": "08a18d3",
+    "remote": "https://github.com/go-gitea/gitea.git",
+    "files": [
+      "Dockerfile",
+      "LICENSE",
+      "Makefile",
+      "README.md",
+      "README.zh-cn.md",
+      "README.zh-tw.md",
+      "go.mod",
+      "package.json",
+      "pyproject.toml",
+      "uv.lock"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/google-gemma__gemma-skills",
+    "repo": "google-gemma/gemma-skills",
+    "head": "b0ad0ba",
+    "remote": "https://github.com/google-gemma/gemma-skills.git",
+    "files": [
+      "LICENSE.txt",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/headroomlabs-ai__headroom",
+    "repo": "headroomlabs-ai/headroom",
+    "head": "27d6f8e",
+    "remote": "https://github.com/headroomlabs-ai/headroom.git",
+    "files": [
+      "Cargo.toml",
+      "Dockerfile",
+      "LICENSE",
+      "Makefile",
+      "README.md",
+      "docker-compose.yml",
+      "pyproject.toml",
+      "uv.lock"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/john-rocky__coreai-model-zoo",
+    "repo": "john-rocky/coreai-model-zoo",
+    "head": "329ce58",
+    "remote": "https://github.com/john-rocky/coreai-model-zoo.git",
+    "files": [
+      "LICENSE",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/kennss__SiliconScope",
+    "repo": "kennss/SiliconScope",
+    "head": "0657caa",
+    "remote": "https://github.com/kennss/SiliconScope.git",
+    "files": [
+      "LICENSE",
+      "Package.swift",
+      "README.ja.md",
+      "README.ko.md",
+      "README.md",
+      "README.zh-CN.md",
+      "README.zh-TW.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/kyegomez__OpenMythos",
+    "repo": "kyegomez/OpenMythos",
+    "head": "155430a",
+    "remote": "https://github.com/kyegomez/OpenMythos.git",
+    "files": [
+      "LICENSE",
+      "README.md",
+      "pyproject.toml",
+      "requirements.txt"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/nvk__llm-wiki",
+    "repo": "nvk/llm-wiki",
+    "head": "75623c6",
+    "remote": "https://github.com/nvk/llm-wiki.git",
+    "files": [
+      "LICENSE",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/osaurus-ai__osaurus",
+    "repo": "osaurus-ai/osaurus",
+    "head": "262a7b5",
+    "remote": "https://github.com/osaurus-ai/osaurus.git",
+    "files": [
+      "LICENSE",
+      "Makefile",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/pewdiepie-archdaemon__odysseus",
+    "repo": "pewdiepie-archdaemon/odysseus",
+    "head": "c062c27",
+    "remote": "https://github.com/pewdiepie-archdaemon/odysseus.git",
+    "files": [
+      "Dockerfile",
+      "LICENSE",
+      "README.md",
+      "docker-compose.gpu-amd.yml",
+      "docker-compose.gpu-nvidia.yml",
+      "docker-compose.yml",
+      "package.json",
+      "pyproject.toml",
+      "requirements-optional.txt",
+      "requirements.txt",
+      "setup.py"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/skyzer__deslop-the-copy",
+    "repo": "skyzer/deslop-the-copy",
+    "head": "2fa4c56",
+    "remote": "https://github.com/skyzer/deslop-the-copy.git",
+    "files": [
+      "LICENSE",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/supertone-inc__supertonic",
+    "repo": "supertone-inc/supertonic",
+    "head": "dff55dc",
+    "remote": "https://github.com/supertone-inc/supertonic.git",
+    "files": [
+      "LICENSE",
+      "README.md"
+    ]
+  },
+  {
+    "checkout": "tmp/star-downloads/tw93__Pake",
+    "repo": "tw93/Pake",
+    "head": "ba7ff58",
+    "remote": "https://github.com/tw93/Pake.git",
+    "files": [
+      "Dockerfile",
+      "LICENSE",
+      "LICENSE-EXCEPTION",
+      "README.md",
+      "README_CN.md",
+      "package.json"
+    ]
+  }
+]
