@@ -1,0 +1,228 @@
+{
+  "created_at": "2026-06-22T15:25:48Z",
+  "methodology": "OpenAI-compatible server benchmark for operational agent paths; streaming for TTFT, non-stream for usage/timing metadata.",
+  "engines": [
+    {
+      "engine": "omlx-mlx",
+      "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+      "runs": [
+        {
+          "workload": "coding_patch",
+          "ttft_s": 0.026188,
+          "stream_total_s": 3.988565,
+          "stream_chunks": 29,
+          "stream_chars": 721,
+          "nonstream_total_s": 3.611478,
+          "prompt_tokens": 41,
+          "completion_tokens": 192,
+          "output_tok_s_wall": 53.164,
+          "tpot_s_wall": 0.01881,
+          "usage": {
+            "prompt_tokens": 41,
+            "completion_tokens": 192,
+            "total_tokens": 233,
+            "input_tokens": 41,
+            "output_tokens": 192,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "total_time": 3.61
+          },
+          "timings": {}
+        },
+        {
+          "workload": "agent_plan",
+          "ttft_s": 0.003076,
+          "stream_total_s": 3.576321,
+          "stream_chunks": 29,
+          "stream_chars": 772,
+          "nonstream_total_s": 3.593828,
+          "prompt_tokens": 36,
+          "completion_tokens": 192,
+          "output_tok_s_wall": 53.425,
+          "tpot_s_wall": 0.018718,
+          "usage": {
+            "prompt_tokens": 36,
+            "completion_tokens": 192,
+            "total_tokens": 228,
+            "input_tokens": 36,
+            "output_tokens": 192,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "total_time": 3.59
+          },
+          "timings": {}
+        },
+        {
+          "workload": "context_scale",
+          "ttft_s": 0.008319,
+          "stream_total_s": 12.183732,
+          "stream_chunks": 31,
+          "stream_chars": 963,
+          "nonstream_total_s": 12.128876,
+          "prompt_tokens": 3985,
+          "completion_tokens": 192,
+          "output_tok_s_wall": 15.83,
+          "tpot_s_wall": 0.063171,
+          "usage": {
+            "prompt_tokens": 3985,
+            "completion_tokens": 192,
+            "total_tokens": 4177,
+            "input_tokens": 3985,
+            "output_tokens": 192,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "total_time": 12.12
+          },
+          "timings": {}
+        }
+      ],
+      "process_snapshot": [
+        {
+          "pid": "53385",
+          "rss_kib": 1680,
+          "cpu_percent": "0.0",
+          "etime": "11-02:42:39",
+          "command": "bash /Users/corn/.omlx/bin/omlx-power-watch.sh"
+        },
+        {
+          "pid": "77220",
+          "rss_kib": 67952,
+          "cpu_percent": "0.5",
+          "etime": "04:19:27",
+          "command": "/Applications/oMLX.app/Contents/MacOS/oMLX"
+        },
+        {
+          "pid": "77252",
+          "rss_kib": 1992960,
+          "cpu_percent": "78.8",
+          "etime": "04:19:23",
+          "command": "omlx-server       "
+        }
+      ]
+    },
+    {
+      "engine": "llama-cpp-gguf",
+      "model": "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
+      "runs": [
+        {
+          "workload": "coding_patch",
+          "ttft_s": 0.891812,
+          "stream_total_s": 3.634417,
+          "stream_chunks": 191,
+          "stream_chars": 642,
+          "nonstream_total_s": 2.930877,
+          "prompt_tokens": 44,
+          "completion_tokens": 192,
+          "output_tok_s_wall": 65.509,
+          "tpot_s_wall": 0.015265,
+          "usage": {
+            "completion_tokens": 192,
+            "prompt_tokens": 44,
+            "total_tokens": 236,
+            "prompt_tokens_details": {
+              "cached_tokens": 7
+            }
+          },
+          "timings": {
+            "cache_n": 7,
+            "prompt_n": 37,
+            "prompt_ms": 185.737,
+            "prompt_per_token_ms": 5.019918918918918,
+            "prompt_per_second": 199.20640475511073,
+            "predicted_n": 192,
+            "predicted_ms": 2730.919,
+            "predicted_per_token_ms": 14.223536458333333,
+            "predicted_per_second": 70.306003217232,
+            "draft_n": 194,
+            "draft_n_accepted": 142
+          }
+        },
+        {
+          "workload": "agent_plan",
+          "ttft_s": 0.253651,
+          "stream_total_s": 3.676258,
+          "stream_chunks": 191,
+          "stream_chars": 713,
+          "nonstream_total_s": 3.603028,
+          "prompt_tokens": 39,
+          "completion_tokens": 192,
+          "output_tok_s_wall": 53.289,
+          "tpot_s_wall": 0.018766,
+          "usage": {
+            "completion_tokens": 192,
+            "prompt_tokens": 39,
+            "total_tokens": 231,
+            "prompt_tokens_details": {
+              "cached_tokens": 7
+            }
+          },
+          "timings": {
+            "cache_n": 7,
+            "prompt_n": 32,
+            "prompt_ms": 206.418,
+            "prompt_per_token_ms": 6.4505625,
+            "prompt_per_second": 155.02524004689514,
+            "predicted_n": 192,
+            "predicted_ms": 3387.598,
+            "predicted_per_token_ms": 17.643739583333332,
+            "predicted_per_second": 56.67732712086854,
+            "draft_n": 241,
+            "draft_n_accepted": 130
+          }
+        },
+        {
+          "workload": "context_scale",
+          "ttft_s": 6.212894,
+          "stream_total_s": 9.969421,
+          "stream_chunks": 191,
+          "stream_chars": 729,
+          "nonstream_total_s": 3.680199,
+          "prompt_tokens": 3988,
+          "completion_tokens": 192,
+          "output_tok_s_wall": 52.171,
+          "tpot_s_wall": 0.019168,
+          "usage": {
+            "completion_tokens": 192,
+            "prompt_tokens": 3988,
+            "total_tokens": 4180,
+            "prompt_tokens_details": {
+              "cached_tokens": 3987
+            }
+          },
+          "timings": {
+            "cache_n": 3987,
+            "prompt_n": 1,
+            "prompt_ms": 21.033,
+            "prompt_per_token_ms": 21.033,
+            "prompt_per_second": 47.54433509247373,
+            "predicted_n": 192,
+            "predicted_ms": 3653.143,
+            "predicted_per_token_ms": 19.026786458333333,
+            "predicted_per_second": 52.55748269366953,
+            "draft_n": 237,
+            "draft_n_accepted": 130
+          }
+        }
+      ],
+      "process_snapshot": [
+        {
+          "pid": "11083",
+          "rss_kib": 576,
+          "cpu_percent": "0.0",
+          "etime": "09-19:34:06",
+          "command": "tmux new-session -d -s gemma4-gguf-coding-lane exec '/Users/corn/Developer/ML-Models/Gemma4/repos/llama.cpp/build/bin/llama-server' -m '/Users/corn/Developer/ML-Models/Gemma4/models/unsloth-gemma-4-26B-A4B-it-GGUF/gemma-"
+        },
+        {
+          "pid": "11084",
+          "rss_kib": 3736256,
+          "cpu_percent": "6.8",
+          "etime": "09-19:34:06",
+          "command": "/Users/corn/Developer/ML-Models/Gemma4/repos/llama.cpp/build/bin/llama-server -m /Users/corn/Developer/ML-Models/Gemma4/models/unsloth-gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf --model-draft /Users/corn/"
+        }
+      ]
+    }
+  ]
+}
