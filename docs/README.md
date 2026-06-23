@@ -11,6 +11,9 @@ Date: 2026-06-23
 | Apple Container discovery | `docs/apple-container/current-platform-discovery.md` |
 | Apple Container architecture | `docs/apple-container/side-by-side-architecture.md` |
 | Apple Container compatibility | `docs/apple-container/workload-compatibility-matrix.md` |
+| Apple Container pilot workloads | `docs/apple-container/pilot-workloads.md` |
+| Apple Container runtime profiles | `docs/apple-container/runtime-profiles.md` |
+| OpenClaw runtime compatibility | `docs/apple-container/openclaw-runtime-compatibility.md` |
 | Apple Container ports | `docs/apple-container/port-and-service-map.md` |
 | Apple Container rollback | `docs/disaster-recovery/apple-container-pilot-rollback.md` |
 | Operations center | `docs/operations/platform-operations-center.md` |
@@ -86,6 +89,7 @@ Date: 2026-06-23
 | Hermes cost source review | `docs/autonomous-modernization/27-hermes-cost-token-optimization-source-review.md` |
 | Hermes cost final report | `docs/autonomous-modernization/28-hermes-cost-token-context-optimization.md` |
 | Repository consolidation and Actions modernization | `docs/autonomous-modernization/29-repository-consolidation-and-actions-modernization.md` |
+| Dual-runtime operational deployment | `docs/autonomous-modernization/33-dual-runtime-operational-deployment.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |

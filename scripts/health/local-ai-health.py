@@ -218,6 +218,7 @@ def check_apple_container(port_map: Path | None = None) -> dict[str, Any]:
                 "name": item["name"],
                 "host": item.get("host"),
                 "host_port": port,
+                "enabled": bool(item.get("enabled", False)),
                 "status": item.get("status"),
                 "listening": bool(observed_by_port.get(port, {}).get("listening")),
                 "health_url": item.get("health_url"),
@@ -231,9 +232,35 @@ def check_apple_container(port_map: Path | None = None) -> dict[str, Any]:
             findings.append(f"duplicate pilot port {port}")
         if port in production_ports:
             findings.append(f"pilot port {port} reuses a production port")
+        if item.get("enabled") is True and not bool(observed_by_port.get(port, {}).get("listening")):
+            findings.append(f"enabled service {item.get('name')} is not listening on {port}")
         seen_ports.add(port)
     result["findings"] = findings
     result["ok"] = bool(result["ok"] and not findings)
+    return result
+
+
+def check_docker() -> dict[str, Any]:
+    result: dict[str, Any] = {"installed": False, "ok": False}
+    docker = shutil.which("docker")
+    result["installed"] = bool(docker)
+    result["docker_path"] = docker or ""
+    if not docker:
+        result["error"] = "docker CLI is not installed"
+        return result
+    version_ok, version = command_output([docker, "version", "--format", "{{json .}}"])
+    ps_ok, ps_output = command_output([docker, "ps", "--format", "{{.Names}}\t{{.Status}}\t{{.Ports}}"])
+    result.update(
+        {
+            "version_ok": version_ok,
+            "version": version,
+            "services_ok": ps_ok,
+            "services": [line for line in ps_output.splitlines() if line.strip()] if ps_ok else [],
+            "ok": version_ok and ps_ok,
+        }
+    )
+    if not ps_ok:
+        result["error"] = ps_output
     return result
 
 
@@ -396,6 +423,7 @@ def main() -> int:
     parser.add_argument("--json", type=Path, help="Write JSON report to this path.")
     parser.add_argument("--skip-chat", action="store_true", help="Check /v1/models without sending a chat completion.")
     parser.add_argument("--production-only", action="store_true", help="Skip Apple Container pilot checks.")
+    parser.add_argument("--docker-only", action="store_true", help="Only report Docker Desktop service state.")
     parser.add_argument("--apple-container-only", action="store_true", help="Only report Apple Container pilot checks.")
     parser.add_argument("--side-by-side", action="store_true", help="Report production lanes and Apple Container pilot state.")
     args = parser.parse_args()
@@ -406,7 +434,9 @@ def main() -> int:
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "system": vm_stat(),
     }
-    if not args.apple_container_only:
+    if args.docker_only:
+        report["docker"] = check_docker()
+    elif not args.apple_container_only:
         report.update(
             {
                 "ports": ports,
@@ -426,6 +456,7 @@ def main() -> int:
                 ],
                 "codex_skills": check_codex_skills(),
                 "vscode_recommendations": check_vscode_recommendations(),
+                "docker": check_docker(),
             }
         )
     if not args.production_only:
@@ -434,6 +465,7 @@ def main() -> int:
         all(lane.get("ok") for lane in report.get("lanes", []))
         and report.get("codex_skills", {"ok": True}).get("ok", False)
         and report.get("vscode_recommendations", {"ok": True}).get("ok", False)
+        and report.get("docker", {"ok": True}).get("ok", False)
         and report.get("apple_container", {"ok": True}).get("ok", False)
     )
     if args.json:

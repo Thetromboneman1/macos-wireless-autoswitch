@@ -1,0 +1,13 @@
+{
+  "name": "side-by-side",
+  "runtime": "docker-desktop-plus-apple-container",
+  "container_runtime": "Docker Desktop and Apple Container",
+  "model_endpoint": "http://127.0.0.1:18080/v1",
+  "coding_endpoint": "http://127.0.0.1:8002/v1",
+  "storage_root": "production plus ~/.local/share/apple-container-pilot",
+  "log_root": "production plus ~/.local/share/apple-container-pilot/logs",
+  "secrets_source": "1Password: Boneman",
+  "expected_services": ["odysseus-gemma-ntfy-1", "ac-ntfy"],
+  "health_checks": ["scripts/apple-container/compare-all.sh"],
+  "fallback_behavior": "prefer Docker Desktop when pilot is unhealthy"
+}

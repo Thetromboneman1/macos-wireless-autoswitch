@@ -34,3 +34,11 @@ Expected layout:
 ## Per-Service Draft Roots
 
 Per-service roots are declared in `config/apple-container/port-map.json` under each service's `storage` key. Those roots are placeholders until the Compose translation pass maps exact volume targets.
+
+## Active Pilot Storage
+
+| Service | Path | Purpose |
+|---|---|---|
+| `ac-ntfy` | `~/.local/share/apple-container-pilot/volumes/ac-ntfy/cache` | test-only ntfy cache mounted at `/var/cache/ntfy` |
+
+The start script rejects pilot roots outside `~/.local/share/apple-container-pilot*` and creates `data`, `volumes`, `logs`, `state`, `env`, `backups`, `benchmarks`, and `evidence` before starting enabled services.

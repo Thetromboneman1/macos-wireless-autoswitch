@@ -13,7 +13,7 @@ fi
 
 echo
 echo "== Pilot port map =="
-"$ROOT/scripts/apple-container/validate-port-map.sh" || true
+APPLE_CONTAINER_ALLOW_LISTENING=true "$ROOT/scripts/apple-container/validate-port-map.sh" || true
 
 echo
 echo "== Pilot containers =="

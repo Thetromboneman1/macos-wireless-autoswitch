@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 PORT_MAP="${1:-$ROOT/config/apple-container/port-map.json}"
+ALLOW_LISTENING="${APPLE_CONTAINER_ALLOW_LISTENING:-false}"
 
 if ! command -v jq >/dev/null 2>&1; then
   echo "jq is required to validate $PORT_MAP" >&2
@@ -31,10 +32,17 @@ jq -e '
 ' "$PORT_MAP" >/dev/null
 
 while IFS=$'\t' read -r name port; do
+  if [[ "$ALLOW_LISTENING" == "true" ]]; then
+    continue
+  fi
   if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
     echo "Pilot port $port for $name is already listening; choose a free Apple Container pilot port." >&2
     exit 1
   fi
 done < <(jq -r '.services[] | [.name, .host_port] | @tsv' "$PORT_MAP")
 
-echo "Apple Container port map is valid and all pilot ports are free."
+if [[ "$ALLOW_LISTENING" == "true" ]]; then
+  echo "Apple Container port map is valid; pilot listeners were allowed for runtime health checks."
+else
+  echo "Apple Container port map is valid and all pilot ports are free."
+fi

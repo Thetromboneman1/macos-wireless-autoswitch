@@ -33,7 +33,7 @@ else
   echo "Apple Container system service is stopped; skipping container cleanup."
 fi
 
-"$ROOT/scripts/apple-container/validate-port-map.sh" || true
+APPLE_CONTAINER_ALLOW_LISTENING=true "$ROOT/scripts/apple-container/validate-port-map.sh" || true
 
 echo "Checking production sentinels after pilot rollback..."
 curl -fsS -H "Authorization: Bearer ${OMLX_API_KEY:-mlx-local}" http://127.0.0.1:18080/health >/dev/null

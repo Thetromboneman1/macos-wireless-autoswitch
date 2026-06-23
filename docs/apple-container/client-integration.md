@@ -23,4 +23,10 @@ Date: 2026-06-23
 
 ## VS Code Tasks
 
-The governance repo exposes manual tasks for pilot status, health, rollback, and port validation in `.vscode/tasks.json`.
+The governance repo exposes manual tasks for pilot status, start, stop, health, comparison, self-heal, rollback, and port validation in `.vscode/tasks.json`.
+
+Current side-by-side endpoint:
+
+| Tooling surface | Docker current | Apple Container pilot |
+|---|---|---|
+| ntfy health | `http://127.0.0.1:8091/v1/health` | `http://127.0.0.1:19091/v1/health` |

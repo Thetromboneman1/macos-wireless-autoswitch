@@ -46,19 +46,43 @@
     {
       "label": "apple-container: status",
       "type": "shell",
-      "command": "scripts/apple-container/status.sh",
+      "command": "scripts/apple-container/status-all.sh",
       "problemMatcher": []
     },
     {
       "label": "apple-container: validate ports",
       "type": "shell",
-      "command": "scripts/apple-container/validate-port-map.sh",
+      "command": "APPLE_CONTAINER_ALLOW_LISTENING=true scripts/apple-container/validate-port-map.sh",
       "problemMatcher": []
     },
     {
       "label": "apple-container: health",
       "type": "shell",
-      "command": "scripts/apple-container/health.sh",
+      "command": "scripts/apple-container/health-all.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: start all",
+      "type": "shell",
+      "command": "scripts/apple-container/start-all.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: stop all",
+      "type": "shell",
+      "command": "scripts/apple-container/stop-all.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: compare all",
+      "type": "shell",
+      "command": "scripts/apple-container/compare-all.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: self heal",
+      "type": "shell",
+      "command": "scripts/apple-container/self-heal.sh",
       "problemMatcher": []
     },
     {

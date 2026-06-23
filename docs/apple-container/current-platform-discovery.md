@@ -18,6 +18,17 @@ This is the mandatory current-state map for the Apple Container side-by-side pil
 | Apple Container default network | `192.168.64.0/24` |
 | Apple Container containers/images/volumes | Empty at discovery time |
 
+Revalidation after deployment:
+
+| Item | Observed value |
+|---|---|
+| Apple Container image | `docker.io/binwiederhier/ntfy:latest`, `linux/arm64` |
+| Apple Container workload | `ac-ntfy`, running at `192.168.64.2/24` |
+| Apple Container published port | `127.0.0.1:19091` |
+| Pilot storage | `~/.local/share/apple-container-pilot/volumes/ac-ntfy/cache` |
+| Docker production ntfy | `odysseus-gemma-ntfy-1`, still healthy on `127.0.0.1:8091` |
+| Swap pressure at deployment | high, about 80 percent used |
+
 Official Apple Container notes used for this pilot: Apple describes `container` as an OCI image runtime for Linux containers on Apple silicon, backed by lightweight virtual machines; the project README says macOS 26 is the supported floor and documents `container system start` as the first-start service command. The local CLI matches the current 1.0.0 release.
 
 Sources:
@@ -59,7 +70,7 @@ Native MLX/Metal inference remains outside Apple Container unless a future bench
 
 The pilot must not reuse these ports: `3000`, `4096`, `4097`, `7000`, `8002`, `8010`, `8080`, `8091`, `8100`, `8787`, `18080`, `18789`, `20128`, `53530`.
 
-Apple Container pilot ports are reserved in `19000-19999`, documented in `config/apple-container/port-map.json`, and validated by `scripts/apple-container/validate-port-map.sh`.
+Apple Container pilot ports are reserved in `19000-19999`, documented in `config/apple-container/port-map.json`, and validated by `scripts/apple-container/validate-port-map.sh`. `ac-ntfy` now intentionally occupies `19091`; health/status scripts use the validator's explicit runtime mode so expected pilot listeners are allowed.
 
 ## LaunchAgents And Daemons
 
@@ -77,4 +88,4 @@ No Apple Container pilot LaunchAgent was created in this pass. Early pilot start
 
 - Apple Container can run OCI images but does not provide Docker Engine API compatibility. Workloads requiring `/var/run/docker.sock` are blocked or Docker-only until redesigned.
 - Compose stacks must be translated explicitly; no native Compose compatibility is assumed.
-- Apple Container mirror workloads have not been promoted or started. The current completed milestone is discovery plus guardrails.
+- OpenClaw remains Docker-only until its Docker socket dependency is removed, disabled, or replaced by a narrow helper.

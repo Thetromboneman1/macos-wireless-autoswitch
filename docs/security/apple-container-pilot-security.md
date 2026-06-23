@@ -17,11 +17,13 @@ Date: 2026-06-23
 | Item | Status |
 |---|---|
 | Apple Container system | installed and running |
-| Pilot ports | mapped and free |
+| Pilot ports | mapped; `19091` is occupied only by enabled `ac-ntfy` |
 | OpenClaw gateway | blocked because it mounts `/var/run/docker.sock` in production Compose |
-| Pilot secrets | no real secrets committed |
+| Pilot secrets | no real secrets committed; `ac-ntfy` uses no sensitive value for current local health path |
 | LaunchAgents | none created |
 
 ## Required Before Workload Start
 
 For each image: record source, tag, digest when practical, architecture, exposed ports, user, mounts, health check, and logs. Prefer localhost bindings and least writable storage.
+
+`ac-ntfy` image source is `docker.io/binwiederhier/ntfy:latest`, manifest digest `sha256:f8a9b104313b87cc24ae4f775f39e6328205b57dff6ede3eaf098a91e5d79f59`, platform `linux/arm64`, localhost-only pilot binding, isolated cache mount, and no Docker socket.

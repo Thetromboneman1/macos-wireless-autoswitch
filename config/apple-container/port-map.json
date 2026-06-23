@@ -120,13 +120,18 @@
       "name": "ac-ntfy",
       "source": "odysseus-gemma-docker",
       "image": "binwiederhier/ntfy:latest",
+      "enabled": true,
+      "risk": "low",
+      "selection_reason": "Small ARM64 HTTP service with no Docker socket, no production database, and isolated cache storage.",
       "host": "127.0.0.1",
       "host_port": 19091,
       "container_port": 80,
       "protocol": "tcp",
       "health_url": "http://127.0.0.1:19091/v1/health",
       "storage": "~/.local/share/apple-container-pilot/volumes/ac-ntfy",
-      "status": "candidate"
+      "docker_health_url": "http://127.0.0.1:8091/v1/health",
+      "docker_container": "odysseus-gemma-ntfy-1",
+      "status": "dual-runtime-validated"
     },
     {
       "name": "ac-ansible-controller",

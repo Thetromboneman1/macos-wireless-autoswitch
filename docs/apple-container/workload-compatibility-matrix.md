@@ -15,7 +15,7 @@ Date: 2026-06-23
 | OpenClaw OpenCode | Compatible with changes | OCI image exists; needs separate profile | translate first |
 | Odysseus | Compatible with changes | local image exists; depends on ChromaDB/ntfy/searxng | translate full dependency order |
 | ChromaDB | Compatible with changes | OCI image exists; persistence must be isolated | test persistence |
-| ntfy | Compatible with changes | OCI image exists; simple port/storage model | smoke test |
+| ntfy | Dual-runtime validated | ARM64 image runs under Docker Desktop and Apple Container with isolated cache storage | keep enabled as first pilot workload |
 | searxng | Partially compatible | image exists; network and config need review | translate after Odysseus |
 | Ansible controller/workers | Compatible with changes | local images exist; multi-container SSH topology | translate network/worker dependencies |
 | OmniRoute | Candidate build required | Dockerfile exists; current app is dev-oriented | build explicit pilot image |

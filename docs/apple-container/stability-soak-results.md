@@ -2,7 +2,7 @@
 
 Date: 2026-06-23
 
-No Apple Container workload soak has been run yet. This is intentional: the request requires current-state discovery before migration, and no mirrored workload should start until its Compose translation and isolation plan is complete.
+`ac-ntfy` has passed startup, health, restart, and self-heal smoke checks. Longer soak stages remain pending because live swap was already high, about 80 percent used, before the mirror started.
 
 ## Planned Stages
 
@@ -15,3 +15,14 @@ No Apple Container workload soak has been run yet. This is intentional: the requ
 | Overnight | 8+ hours | explicit safety review first |
 
 Stop conditions: production port collision, unexpected swap growth, production endpoint degradation, data-root violation, or repeated health failures.
+
+## Completed Smoke Checks
+
+| Check | Result |
+|---|---|
+| Start `ac-ntfy` | pass |
+| Health `http://127.0.0.1:19091/v1/health` | pass |
+| Compare Docker and Apple Container ntfy health | pass |
+| Restart `ac-ntfy` | pass |
+| Stop `ac-ntfy` and self-heal | pass |
+| Docker production ntfy after self-heal | pass |

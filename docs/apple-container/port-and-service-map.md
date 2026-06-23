@@ -25,7 +25,7 @@ The authoritative pilot map is `config/apple-container/port-map.json`.
 | OpenClaw OpenCode | `4097` | `19097` | candidate |
 | Odysseus | `7000` | `19070` | candidate |
 | ChromaDB | `8100` | `19100` | candidate |
-| ntfy | `8091` | `19091` | candidate |
+| ntfy | `8091` | `19091` | dual-runtime validated |
 | Ansible controller | `8080` | `19088` | candidate |
 | OmniRoute | `20128` | `19128` | candidate build required |
 | MCP gateway | none selected | `19085` | placeholder |
