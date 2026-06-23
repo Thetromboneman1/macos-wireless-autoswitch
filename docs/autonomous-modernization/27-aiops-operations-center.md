@@ -67,4 +67,5 @@ Observed live status:
 
 ## Commit Status
 
-To be updated after commit and push.
+- Implementation commit: `5b54d00ab2e2bbfe302bbd425346a4c300bfc35d`
+- Publication metadata commit: see final pushed history for this follow-up record.

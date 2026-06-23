@@ -97,6 +97,6 @@ scripts/health/local-ai-health.py --skip-chat
 scripts/health/drift-detection/check-platform-drift.py --health-json /tmp/local-ai-health.json
 ```
 
-- [ ] **Step 2: Commit and push**
+- [x] **Step 2: Commit and push**
 
 Use logical commits, push to `origin/main`, and confirm `main...origin/main` is clean.
