@@ -16,12 +16,12 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     # Don't fail loudly on transient GitHub-hosted runner acquisition timeouts;
-    # the next scheduled run (every 30 min) will pick up where this left off.
+    # the next scheduled daily run will pick up where this left off.
     continue-on-error: true
     timeout-minutes: 10
     steps:
       - name: Checkout fork
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ github.token }}
