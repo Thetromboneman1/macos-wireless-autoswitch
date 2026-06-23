@@ -111,6 +111,6 @@ scripts/health/drift-detection/check-platform-drift.py --health-json /tmp/local-
 scripts/operations/run-aiops-cycle.sh
 ```
 
-- [ ] **Step 2: Commit and push**
+- [x] **Step 2: Commit and push**
 
 Commit logical units, push to `origin/main`, and confirm `main...origin/main` is clean.

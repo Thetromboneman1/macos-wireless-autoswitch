@@ -87,4 +87,5 @@ Final live status:
 
 ## Commit Status
 
-To be updated after commit and push.
+- Implementation commit: `96e7e1d26209e4efe8e9b8683b82a6bfa44d57eb`
+- Publication metadata commit: see final pushed history for this follow-up record.
