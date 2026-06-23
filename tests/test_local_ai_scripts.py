@@ -88,3 +88,12 @@ def test_rollback_script_returns_to_omlx_default():
     assert "gemma4-gguf-coding-lane.sh\" stop" in script
     assert "http://127.0.0.1:18080/v1" in script
     assert "mlx-community--gemma-4-26b-a4b-it-4bit" in script
+
+
+def test_health_checker_reads_omlx_settings_without_printing_key():
+    script = (ROOT / "scripts" / "health" / "local-ai-health.py").read_text()
+
+    assert "/ \"settings.json\"" in script
+    assert "Authorization" in script
+    assert "api_key" in script
+    assert "print(api_key)" not in script

@@ -57,6 +57,21 @@ git diff --cached | grep -Ei 'secret|token|password|apikey|api_key|private_key|B
 
 Inspect any hits manually. Documentation that names secret handling policy is acceptable; real values are not.
 
+## 1Password CLI Hangs
+
+If `op` appears to hang, treat it as an authorization/session issue before retrying blindly:
+
+```bash
+timeout 20s op vault get Boneman --format json
+```
+
+Operational guidance:
+
+- keep Boneman as the only target vault for this stack;
+- do not store raw local runtime config files in docs or Git;
+- document secret locations and item names, not values;
+- retry once after unlocking 1Password, then record the blocker in the runbook if it still hangs.
+
 ## Duplicate Vault Handling
 
 `Boneman Projects` was empty when audited and was deleted on 2026-06-22. The safe validation path is:

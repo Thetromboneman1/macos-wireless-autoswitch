@@ -12,6 +12,7 @@ For deeper checks:
 
 ```bash
 scripts/star-tools/validate-star-deployments.sh
+scripts/health/local-ai-health.py
 ```
 
 ## Start Optional Services
@@ -61,6 +62,17 @@ Backups from the 2026-06-22 platform wiring pass are stored under:
 - The duplicate `Boneman Projects` vault was empty and removed on 2026-06-22.
 - Do not paste secrets into docs, scripts, `.env.example`, or git commits.
 - Prefer runtime env vars populated from 1Password or existing local settings.
+
+## Hermes Host Endpoint Rule
+
+Hermes running on the macOS host must use loopback endpoints:
+
+```text
+oMLX: http://127.0.0.1:18080/v1
+GGUF: http://127.0.0.1:8002/v1
+```
+
+Use `host.docker.internal` only for Docker consumers. The 2026-06-23 Hermes RCA found that host-side `host.docker.internal` entries caused the CLI to retry until `API call failed after 3 retries: Connection error`.
 
 ## OpenHands
 

@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-06-22T21:16:51Z",
+  "created_at": "2026-06-23T12:09:53Z",
   "endpoint": {
-    "name": "omlx-gemma26",
+    "name": "omlx",
     "base_url": "http://127.0.0.1:18080/v1",
     "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
     "headers": {
@@ -13,7 +13,7 @@
     {
       "name": "models",
       "ok": true,
-      "seconds": 0.032346,
+      "seconds": 0.034244,
       "detail": {
         "model_found": true,
         "model_count": 4,
@@ -28,7 +28,7 @@
     {
       "name": "chat_completion",
       "ok": true,
-      "seconds": 0.004585,
+      "seconds": 0.003992,
       "detail": {
         "content": "OK",
         "usage": {
@@ -40,14 +40,14 @@
           "prompt_tokens_details": {
             "cached_tokens": 0
           },
-          "total_time": 0.91
+          "total_time": 0.69
         }
       }
     },
     {
       "name": "tool_call",
       "ok": true,
-      "seconds": 0.004285,
+      "seconds": 0.002663,
       "detail": {
         "tool_call_count": 1,
         "content_present": false,
@@ -60,7 +60,7 @@
           "prompt_tokens_details": {
             "cached_tokens": 0
           },
-          "total_time": 1.38
+          "total_time": 0.86
         }
       }
     }
