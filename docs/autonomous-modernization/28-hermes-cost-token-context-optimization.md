@@ -80,7 +80,7 @@ hermes tools enable --platform cli browser vision image_gen tts cronjob messagin
 
 | Repository | Commit | Push status |
 |---|---|---|
-| `macos-wireless-autoswitch` | `58571c0` | Pending at report write; see final git status after push. |
+| `macos-wireless-autoswitch` | `58571c0`, `d216b8c` | Pushed to `origin/main`; final HEAD is recorded in the completion response. |
 
 External Hermes user config was changed through the supported `hermes tools disable --platform cli ...` command and backed up before editing. That config lives under `~/.hermes/config.yaml`, outside this repository.
 
