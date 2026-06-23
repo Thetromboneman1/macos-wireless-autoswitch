@@ -15,8 +15,11 @@ Phase-two checks found swap still high but active pressure lower than the raw sw
 | oMLX model memory before unload | 16.4 GB |
 | oMLX model memory after unload-large | 0 GB |
 | Active AI listeners after cleanup | `18080` only |
+| One-hour absolute swap delta | -448 MB |
 
 The `memory_pressure` command reported high free headroom while swap remained allocated. That means the system had historical swap usage from long-running workloads, not an active memory emergency at the time of the phase-two pass.
+
+During the one-hour endpoint-only soak, macOS reduced allocated swap from 8192 MB to 7168 MB and used swap from 6475 MB to 6027 MB. The used percentage remained high only because the total swap denominator shrank.
 
 ## Root Cause
 

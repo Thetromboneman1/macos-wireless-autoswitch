@@ -21,15 +21,30 @@ The short low-impact sample ran four endpoint-only health checks over about one 
 | Swap delta | 0.0 percentage points |
 | Chat probe | skipped to avoid reloading large models |
 
-## Partial Soak
+## One-Hour Soak
 
 Artifacts:
 
 ```text
 docs/benchmarks/stability-phase2-hour-samples.jsonl
+docs/benchmarks/stability-phase2-hour-summary.json
 ```
 
-The current soak artifact contains three five-minute samples. Treat it as partial evidence, not a completed one-hour soak. A future full soak should sample endpoint health every five minutes with `--skip-chat`, then write a summary that validates service stability, expected ports, LaunchAgent health, and swap trend without warming the large model.
+The one-hour soak sampled endpoint health every five minutes with `--skip-chat`.
+
+| Signal | Result |
+|---|---|
+| Start | 2026-06-23T13:30:51Z |
+| End | 2026-06-23T14:31:03Z |
+| Samples | 13 |
+| All health checks OK | true |
+| Expected AI ports only | true |
+| Broken LaunchAgents | false |
+| Swap used delta | -448.06 MB |
+| Swap total delta | -1024 MB |
+| Swap used percent delta | +5.1 points |
+
+The percent rose because macOS reduced the allocated swap total from 8192 MB to 7168 MB during the soak. Absolute used swap decreased.
 
 ## Interpretation
 
