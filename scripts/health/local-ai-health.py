@@ -19,6 +19,26 @@ from typing import Any
 DEFAULT_MODEL = "mlx-community--gemma-4-26b-a4b-it-4bit"
 DEFAULT_PORTS = (18080, 8002, 8010)
 PROCESS_PATTERNS = ("oMLX", "omlx-server", "llama-server", "rapid-mlx", "Docker", "LM Studio")
+EXPECTED_CODEX_SKILLS = (
+    "gh-address-comments",
+    "gh-fix-ci",
+    "migrate-to-codex",
+    "openai-docs",
+    "playwright",
+    "playwright-interactive",
+    "security-best-practices",
+    "security-ownership-map",
+    "security-threat-model",
+    "yeet",
+)
+EXPECTED_VSCODE_RECOMMENDATIONS = (
+    "charliermarsh.ruff",
+    "davidanson.vscode-markdownlint",
+    "hashicorp.terraform",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "ms-vscode.powershell",
+    "tamasfe.even-better-toml",
+)
 
 
 def read_omlx_key() -> str:
@@ -165,30 +185,32 @@ def process_snapshot() -> list[dict[str, Any]]:
     return rows
 
 
-def check_endpoint(name: str, base_url: str, model: str, api_key: str) -> dict[str, Any]:
+def check_endpoint(name: str, base_url: str, model: str, api_key: str, *, skip_chat: bool = False) -> dict[str, Any]:
     started = time.perf_counter()
     result: dict[str, Any] = {"name": name, "base_url": base_url, "model": model, "ok": False}
     try:
         models = request_json(f"{base_url.rstrip('/')}/models", api_key=api_key)
         ids = [item.get("id") for item in models.get("data", [])]
-        payload = {
-            "model": model,
-            "messages": [{"role": "user", "content": "Reply with exactly OK."}],
-            "max_tokens": 8,
-            "temperature": 0,
-        }
-        chat_started = time.perf_counter()
-        chat = request_json(f"{base_url.rstrip('/')}/chat/completions", method="POST", payload=payload, api_key=api_key)
-        content = chat.get("choices", [{}])[0].get("message", {}).get("content", "")
-        result.update(
-            {
-                "ok": model in ids and isinstance(content, str) and content.strip().rstrip(".") == "OK",
-                "model_count": len(ids),
-                "model_found": model in ids,
-                "chat_seconds": round(time.perf_counter() - chat_started, 6),
-                "usage": chat.get("usage", {}),
+        result.update({"model_count": len(ids), "model_found": model in ids})
+        if skip_chat:
+            result.update({"ok": model in ids, "chat_skipped": True})
+        else:
+            payload = {
+                "model": model,
+                "messages": [{"role": "user", "content": "Reply with exactly OK."}],
+                "max_tokens": 8,
+                "temperature": 0,
             }
-        )
+            chat_started = time.perf_counter()
+            chat = request_json(f"{base_url.rstrip('/')}/chat/completions", method="POST", payload=payload, api_key=api_key)
+            content = chat.get("choices", [{}])[0].get("message", {}).get("content", "")
+            result.update(
+                {
+                    "ok": model in ids and isinstance(content, str) and content.strip().rstrip(".") == "OK",
+                    "chat_seconds": round(time.perf_counter() - chat_started, 6),
+                    "usage": chat.get("usage", {}),
+                }
+            )
     except Exception as exc:
         result["error"] = str(exc)
         if isinstance(exc, urllib.error.HTTPError):
@@ -197,24 +219,135 @@ def check_endpoint(name: str, base_url: str, model: str, api_key: str) -> dict[s
     return result
 
 
+def port_is_listening(ports: list[dict[str, Any]], port: int) -> bool:
+    return any(row.get("port") == port and row.get("listening") for row in ports)
+
+
+def check_optional_lane(
+    name: str,
+    base_url: str,
+    model: str,
+    api_key: str,
+    port: int,
+    ports: list[dict[str, Any]],
+) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "name": name,
+        "base_url": base_url,
+        "model": model,
+        "port": port,
+        "expected": "manual",
+    }
+    if not port_is_listening(ports, port):
+        result.update({"ok": True, "state": "stopped"})
+        return result
+
+    started = time.perf_counter()
+    result["state"] = "running"
+    try:
+        models = request_json(f"{base_url.rstrip('/')}/models", api_key=api_key)
+        ids = [item.get("id") for item in models.get("data", [])]
+        result.update({"ok": bool(ids), "model_count": len(ids), "model_found": model in ids})
+    except Exception as exc:
+        result["ok"] = False
+        result["error"] = str(exc)
+        if isinstance(exc, urllib.error.HTTPError):
+            result["status"] = exc.code
+    result["seconds"] = round(time.perf_counter() - started, 6)
+    return result
+
+
+def skill_has_metadata(path: Path, expected_name: str) -> bool:
+    try:
+        lines = path.read_text().splitlines()
+    except Exception:
+        return False
+    if not lines or lines[0].strip() != "---":
+        return False
+    try:
+        end = lines[1:].index("---") + 1
+    except ValueError:
+        return False
+    metadata = {}
+    for line in lines[1:end]:
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        metadata[key.strip()] = value.strip().strip('"').strip("'")
+    return metadata.get("name") == expected_name and bool(metadata.get("description"))
+
+
+def check_codex_skills(
+    skills_root: Path | None = None,
+    expected_skills: tuple[str, ...] | list[str] = EXPECTED_CODEX_SKILLS,
+) -> dict[str, Any]:
+    root = skills_root or (Path.home() / ".codex" / "skills")
+    skills = {}
+    for name in expected_skills:
+        skill_file = root / name / "SKILL.md"
+        exists = skill_file.is_file()
+        has_metadata = skill_has_metadata(skill_file, name) if exists else False
+        skills[name] = {
+            "path": str(skill_file),
+            "exists": exists,
+            "has_metadata": has_metadata,
+            "ok": exists and has_metadata,
+        }
+    return {"root": str(root), "ok": all(item["ok"] for item in skills.values()), "skills": skills}
+
+
+def check_vscode_recommendations(
+    extensions_json: Path | None = None,
+    expected_extensions: tuple[str, ...] | list[str] = EXPECTED_VSCODE_RECOMMENDATIONS,
+) -> dict[str, Any]:
+    path = extensions_json or (Path.cwd() / ".vscode" / "extensions.json")
+    try:
+        data = json.loads(path.read_text())
+        recommendations = {str(item).lower() for item in data.get("recommendations", [])}
+    except Exception as exc:
+        return {"path": str(path), "ok": False, "error": str(exc), "extensions": {}}
+
+    extensions = {}
+    for extension in expected_extensions:
+        recommended = extension.lower() in recommendations
+        extensions[extension] = {"recommended": recommended, "ok": recommended}
+    return {"path": str(path), "ok": all(item["ok"] for item in extensions.values()), "extensions": extensions}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json", type=Path, help="Write JSON report to this path.")
-    parser.add_argument("--skip-chat", action="store_true", help="Reserved for future endpoint-only mode.")
+    parser.add_argument("--skip-chat", action="store_true", help="Check /v1/models without sending a chat completion.")
     args = parser.parse_args()
 
     api_key = read_omlx_key()
+    ports = check_ports()
     report = {
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "system": vm_stat(),
-        "ports": check_ports(),
+        "ports": ports,
         "processes": process_snapshot(),
         "launchagents": check_launchagents(),
         "lanes": [
-            check_endpoint("omlx-production", "http://127.0.0.1:18080/v1", DEFAULT_MODEL, api_key),
+            check_endpoint("omlx-production", "http://127.0.0.1:18080/v1", DEFAULT_MODEL, api_key, skip_chat=args.skip_chat),
+            check_optional_lane(
+                "llama-cpp-gguf",
+                "http://127.0.0.1:8002/v1",
+                "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
+                "",
+                8002,
+                ports,
+            ),
+            check_optional_lane("rapid-mlx", "http://127.0.0.1:8010/v1", "qwen3.6-35b-4bit", "", 8010, ports),
         ],
+        "codex_skills": check_codex_skills(),
+        "vscode_recommendations": check_vscode_recommendations(),
     }
-    report["ok"] = all(lane.get("ok") for lane in report["lanes"])
+    report["ok"] = (
+        all(lane.get("ok") for lane in report["lanes"])
+        and report["codex_skills"].get("ok", False)
+        and report["vscode_recommendations"].get("ok", False)
+    )
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(report, indent=2) + "\n")

@@ -21,8 +21,10 @@ The high swap state is not from active Rapid-MLX or llama.cpp lab lanes in this 
 ## Safe Remediation
 
 - Keep Rapid-MLX and llama.cpp manual-only.
-- Keep `com.corn.vllm-mlx` disabled; it is broken and outside the approved lanes.
+- Keep `com.corn.vllm-mlx` archived; it is obsolete and outside the approved lanes.
 - Before long benchmarks, close or stop Docker Desktop, LM Studio, Sideloadly, and Razer tooling when not needed.
 - Reboot or log out after long high-memory sessions if swap remains high after closing apps.
 
 No stable AI lane was stopped in this pass.
+
+Phase-two remediation is tracked in [swap-pressure-remediation-phase2.md](swap-pressure-remediation-phase2.md).

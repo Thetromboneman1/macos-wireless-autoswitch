@@ -37,10 +37,13 @@ Date: 2026-06-23
 | Carteakey optimization audit | `docs/autonomous-modernization/23-carteakey-optimization-audit.md` |
 | Actions and LaunchAgent remediation | `docs/autonomous-modernization/24-github-actions-and-launchagent-remediation.md` |
 | Skills installation | `docs/autonomous-modernization/25-skills-installation-and-integration.md` |
+| Post-skills cleanup | `docs/autonomous-modernization/26-post-skills-cleanup-and-drift-reconciliation.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |
+| Codex skill activation | `docs/skills/codex-skill-activation.md` |
 | VS Code skills and extensions | `docs/skills/vscode-skills-and-extensions.md` |
+| VS Code extension validation | `docs/skills/vscode-extension-validation.md` |
 | Shared skills library | `docs/skills/shared-skills-library.md` |
 | Secret handling | `docs/security/onepassword-secrets.md` |
 | Secret inventory | `docs/security/secret-inventory.md` |

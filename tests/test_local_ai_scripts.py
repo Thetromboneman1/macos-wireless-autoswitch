@@ -121,6 +121,102 @@ def test_health_checker_parses_swap_usage():
     assert parsed["pressure"] == "high"
 
 
+def test_health_checker_skip_chat_avoids_completion_probe(monkeypatch):
+    health = load_health_module()
+    calls = []
+
+    def fake_request_json(url, **kwargs):
+        calls.append((url, kwargs.get("method", "GET")))
+        return {"data": [{"id": "local-model"}]}
+
+    monkeypatch.setattr(health, "request_json", fake_request_json)
+
+    result = health.check_endpoint("local", "http://example.test/v1", "local-model", "", skip_chat=True)
+
+    assert result["ok"] is True
+    assert result["model_found"] is True
+    assert result["chat_skipped"] is True
+    assert calls == [("http://example.test/v1/models", "GET")]
+
+
+def test_health_checker_marks_optional_lane_stopped_as_ok():
+    health = load_health_module()
+
+    ports = [{"port": 8010, "listening": False, "listeners": []}]
+    result = health.check_optional_lane(
+        "rapid-mlx",
+        "http://127.0.0.1:8010/v1",
+        "qwen3.6-35b-4bit",
+        "",
+        8010,
+        ports,
+    )
+
+    assert result["ok"] is True
+    assert result["state"] == "stopped"
+    assert result["expected"] == "manual"
+
+
+def test_health_checker_checks_optional_lane_when_port_is_listening(monkeypatch):
+    health = load_health_module()
+    calls = []
+
+    def fake_request_json(url, **kwargs):
+        calls.append(url)
+        return {"data": [{"id": "qwen3.6-35b-4bit"}]}
+
+    monkeypatch.setattr(health, "request_json", fake_request_json)
+
+    ports = [{"port": 8010, "listening": True, "listeners": ["rapid-mlx"]}]
+    result = health.check_optional_lane(
+        "rapid-mlx",
+        "http://127.0.0.1:8010/v1",
+        "qwen3.6-35b-4bit",
+        "",
+        8010,
+        ports,
+    )
+
+    assert result["ok"] is True
+    assert result["state"] == "running"
+    assert result["model_found"] is True
+    assert calls == ["http://127.0.0.1:8010/v1/models"]
+
+
+def test_health_checker_reports_codex_skill_metadata(tmp_path):
+    health = load_health_module()
+    skill_dir = tmp_path / "gh-fix-ci"
+    skill_dir.mkdir()
+    (skill_dir / "SKILL.md").write_text("---\nname: gh-fix-ci\ndescription: Fix CI\n---\n")
+
+    result = health.check_codex_skills(tmp_path, ["gh-fix-ci", "missing-skill"])
+
+    assert result["ok"] is False
+    assert result["skills"]["gh-fix-ci"]["ok"] is True
+    assert result["skills"]["gh-fix-ci"]["has_metadata"] is True
+    assert result["skills"]["missing-skill"]["ok"] is False
+
+
+def test_health_checker_accepts_quoted_skill_name_metadata(tmp_path):
+    health = load_health_module()
+    skill_file = tmp_path / "SKILL.md"
+    skill_file.write_text('---\nname: "gh-fix-ci"\ndescription: "Fix CI"\n---\n')
+
+    assert health.skill_has_metadata(skill_file, "gh-fix-ci") is True
+
+
+def test_health_checker_reports_vscode_recommendation_health(tmp_path):
+    health = load_health_module()
+    extensions = tmp_path / "extensions.json"
+    extensions.write_text('{"recommendations":["charliermarsh.ruff"]}\n')
+
+    result = health.check_vscode_recommendations(extensions, ["charliermarsh.ruff", "ms-vscode.powershell"])
+
+    assert result["ok"] is False
+    assert result["extensions"]["charliermarsh.ruff"]["recommended"] is True
+    assert result["extensions"]["ms-vscode.powershell"]["recommended"] is False
+
+
 def test_launchagent_check_reports_missing_program(tmp_path):
     health = load_health_module()
     plist = tmp_path / "local.test.missing.plist"

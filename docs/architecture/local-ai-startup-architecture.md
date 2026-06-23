@@ -17,7 +17,7 @@ flowchart TD
 
 - oMLX power policy may start at login.
 - llama.cpp and Rapid-MLX remain manual lab lanes.
-- `com.corn.vllm-mlx` is not part of the approved startup architecture.
+- `com.corn.vllm-mlx` is archived and no longer part of active startup.
 - Host tools use `127.0.0.1`.
 - Docker consumers use `host.docker.internal`.
 
@@ -28,3 +28,5 @@ flowchart TD
 | 18080 | oMLX production | listening |
 | 8002 | llama.cpp GGUF lab | not listening |
 | 8010 | Rapid-MLX lab | not listening |
+
+For the current startup policy, use [startup-orchestration-v2.md](startup-orchestration-v2.md).

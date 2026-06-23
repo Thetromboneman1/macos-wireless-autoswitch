@@ -13,7 +13,6 @@ Date: 2026-06-23
 | `com.boneman.magic-mouse-scroll-reverser` | Mouse scroll setting enforcement | RunAtLoad, 5s | healthy but noisy | Very frequent interval. |
 | `com.boneman.steam-auto-updater` | Steam game updates | RunAtLoad, 14400s | healthy | Script exists. |
 | `com.corn.omlx-power-policy` | oMLX power policy | RunAtLoad, KeepAlive | healthy | Approved AI LaunchAgent. |
-| `com.corn.vllm-mlx` | legacy vLLM/MLX startup | RunAtLoad, KeepAlive | broken/disabled | Program path missing. Keep disabled; archive plist after manual confirmation. |
 | `com.razer.gms` | Razer service | RunAtLoad | third-party | High background footprint family. |
 | `homebrew.mxcl.dnscrypt-proxy` | DNSCrypt listener | RunAtLoad | healthy | Required for AdGuard LocalDNSCrypt. |
 | `io.sideloadly.daemon` | Sideloadly daemon | RunAtLoad | third-party | Largest observed RSS among listed agents. |
@@ -21,6 +20,8 @@ Date: 2026-06-23
 
 ## Health Findings
 
-- `com.corn.vllm-mlx` is disabled and points to a missing script under `Boneman_Projects/mlx-native-bench`.
+- `com.corn.vllm-mlx` was disabled, pointed to a missing script under `Boneman_Projects/mlx-native-bench`, and has now been archived out of active LaunchAgents.
 - `com.corn.omlx-power-policy` is the current approved AI platform LaunchAgent and should remain enabled.
 - High swap pressure is not caused by loaded Rapid-MLX or llama.cpp lanes in the captured state; only oMLX was listening on `18080`.
+
+See [launchagent-legacy-cleanup.md](launchagent-legacy-cleanup.md) for the archive path and rollback notes.

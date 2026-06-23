@@ -16,6 +16,12 @@ The monitor now reports:
 - local AI and Docker process snapshot;
 - LaunchAgent plist and executable validation.
 
+Use `--skip-chat` for routine checks that should not load large models:
+
+```bash
+scripts/health/local-ai-health.py --skip-chat
+```
+
 ## Watch Items
 
 | Area | Signal | Action |
@@ -31,5 +37,7 @@ Run after automation changes:
 
 ```bash
 scripts/health/local-ai-health.py
+scripts/health/local-ai-health.py --skip-chat --json /tmp/local-ai-health.json
+scripts/health/drift-detection/check-platform-drift.py --health-json /tmp/local-ai-health.json
 plutil -lint ~/Library/LaunchAgents/*.plist
 ```

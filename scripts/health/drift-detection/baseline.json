@@ -1,0 +1,41 @@
+{
+  "ports": {
+    "18080": {
+      "expected": "listening",
+      "owner": "oMLX production"
+    },
+    "8002": {
+      "expected": "stopped",
+      "owner": "llama.cpp manual lab lane"
+    },
+    "8010": {
+      "expected": "stopped",
+      "owner": "Rapid-MLX manual lab lane"
+    }
+  },
+  "launchagents": {
+    "com.corn.omlx-power-policy": {
+      "expected": "healthy"
+    },
+    "com.corn.vllm-mlx": {
+      "expected": "absent"
+    }
+  },
+  "workflow_actions": {
+    "actions/checkout": "v4",
+    "softprops/action-gh-release": "v2"
+  },
+  "config_paths": {
+    ".github/workflows/release.yml": "file",
+    ".github/workflows/validate.yml": "file",
+    "scripts/health/local-ai-health.py": "file",
+    "scripts/local-ai/benchmark-engine-bakeoff.py": "file",
+    "scripts/gemma4-gguf-coding-lane.sh": "file"
+  },
+  "binaries": {
+    "gitleaks": "required",
+    "actionlint": "required",
+    "yamllint": "required",
+    "shellcheck": "required"
+  }
+}
