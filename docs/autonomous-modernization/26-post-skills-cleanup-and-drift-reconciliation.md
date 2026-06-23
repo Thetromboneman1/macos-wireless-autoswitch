@@ -129,6 +129,22 @@ scripts/health/local-ai-health.py --skip-chat
 oMLX /health and authenticated /v1/models
 ```
 
+## Commit and Push Status
+
+Cleanup implementation commit:
+
+```text
+300f25c Harden skill activation and platform drift documentation
+```
+
+Push target:
+
+```text
+origin/main
+```
+
+Push result: succeeded.
+
 ## Remaining Manual Actions
 
 - Restart Codex manually if old sessions do not show newly installed skills.
