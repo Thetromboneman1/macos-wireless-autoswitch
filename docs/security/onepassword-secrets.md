@@ -1,5 +1,8 @@
 # 1Password Secret Handling
 
+Date: 2026-06-23
+Owner: Platform Operations
+
 ## Policy
 
 Secrets for local AI, DNS, GitHub-star trials, and agent integrations must not be committed to this repository.

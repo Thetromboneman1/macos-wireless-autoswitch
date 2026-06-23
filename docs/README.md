@@ -7,13 +7,19 @@ Date: 2026-06-23
 | Area | Document |
 |---|---|
 | Operations | `docs/operations/platform-runbook.md` |
+| Operations center | `docs/operations/platform-operations-center.md` |
 | Automation monitoring | `docs/operations/automation-monitoring.md` |
+| Platform reporting | `docs/operations/platform-reporting.md` |
 | Maintenance | `docs/operations/platform-maintenance-plan.md` |
 | Maintenance v2 | `docs/operations/platform-maintenance-v2.md` |
+| Dependency governance | `docs/operations/dependency-governance.md` |
+| Benchmark governance | `docs/operations/benchmark-governance.md` |
+| Model lifecycle | `docs/operations/model-lifecycle-management.md` |
 | OnePassword operations | `docs/operations/onepassword-runbook.md` |
 | Swap pressure | `docs/operations/swap-pressure-analysis.md` |
 | Swap pressure phase 2 | `docs/operations/swap-pressure-remediation-phase2.md` |
 | Drift detection | `docs/operations/platform-drift-detection.md` |
+| Drift governance | `docs/operations/drift-governance.md` |
 | Routing | `docs/architecture/model-routing.md` |
 | Routing decision engine | `docs/architecture/model-routing-decision-engine.md` |
 | Local AI startup | `docs/architecture/local-ai-startup-architecture.md` |
@@ -33,11 +39,16 @@ Date: 2026-06-23
 | LaunchAgent legacy cleanup | `docs/macos/launchagent-legacy-cleanup.md` |
 | LaunchAgent security | `docs/security/launchagent-security-audit.md` |
 | Documentation governance | `docs/governance/documentation-governance.md` |
+| Documentation review policy | `docs/governance/documentation-review-policy.md` |
+| Platform audit framework | `docs/governance/platform-audit-framework.md` |
+| Executive summary | `docs/executive/ai-platform-executive-summary.md` |
+| Platform roadmap | `docs/roadmap/ai-platform-roadmap.md` |
 | Hermes root cause | `docs/autonomous-modernization/22-hermes-root-cause-analysis.md` |
 | Carteakey optimization audit | `docs/autonomous-modernization/23-carteakey-optimization-audit.md` |
 | Actions and LaunchAgent remediation | `docs/autonomous-modernization/24-github-actions-and-launchagent-remediation.md` |
 | Skills installation | `docs/autonomous-modernization/25-skills-installation-and-integration.md` |
 | Post-skills cleanup | `docs/autonomous-modernization/26-post-skills-cleanup-and-drift-reconciliation.md` |
+| AIOps operations center | `docs/autonomous-modernization/27-aiops-operations-center.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |
