@@ -1,0 +1,38 @@
+{
+  "files.associations": {
+    "*.plist": "xml",
+    "*.jsonc": "jsonc",
+    "*.toml": "toml"
+  },
+  "python.defaultInterpreterPath": "/usr/bin/python3",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.analysis.typeCheckingMode": "basic",
+  "ruff.nativeServer": "on",
+  "ruff.organizeImports": true,
+  "shellcheck.enable": true,
+  "shellcheck.useWorkspaceRootAsCwd": true,
+  "yaml.validate": true,
+  "yaml.schemaStore.enable": true,
+  "markdownlint.config": {
+    "default": true,
+    "MD013": false
+  },
+  "ansible.validation.enabled": true,
+  "ansible.validation.lint.enabled": true,
+  "ansible.ansible.path": "/Users/corn/Documents/Ansible/ansible-dev/bin/ansible",
+  "ansible.validation.lint.path": "/Users/corn/Documents/Ansible/ansible-dev/bin/ansible-lint",
+  "terraform.languageServer.enable": true,
+  "terminal.integrated.env.osx": {
+    "LOCAL_AI_BASE_URL": "http://127.0.0.1:18080/v1",
+    "LOCAL_AI_CODING_BASE_URL": "http://127.0.0.1:8002/v1",
+    "LOCAL_AI_LAB_BASE_URL": "http://127.0.0.1:8010/v1",
+    "LOCAL_AI_SECRET_VAULT": "Boneman"
+  },
+  "localAiPlatform.routingPolicy": "${workspaceFolder}/config/local-ai-platform/routing-policy.json",
+  "localAiPlatform.mcpTopology": "${workspaceFolder}/config/local-ai-platform/mcp-topology.json",
+  "localAiPlatform.runbook": "${workspaceFolder}/docs/operations/platform-runbook.md",
+  "localAiPlatform.secretVault": "Boneman"
+}

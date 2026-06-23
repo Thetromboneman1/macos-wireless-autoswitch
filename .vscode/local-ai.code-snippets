@@ -1,0 +1,25 @@
+{
+  "oMLX chat completion curl": {
+    "scope": "shellscript,markdown",
+    "prefix": "omlx-chat-curl",
+    "body": [
+      "curl -sS http://127.0.0.1:18080/v1/chat/completions \\",
+      "  -H \"Authorization: Bearer ${OMLX_API_KEY}\" \\",
+      "  -H \"Content-Type: application/json\" \\",
+      "  -d '{\"model\":\"mlx-community--gemma-4-26b-a4b-it-4bit\",\"messages\":[{\"role\":\"user\",\"content\":\"Reply OK.\"}],\"max_tokens\":16}' | jq ."
+    ],
+    "description": "Call the local oMLX routing model without embedding the secret."
+  },
+  "Boneman secret pointer": {
+    "scope": "markdown",
+    "prefix": "boneman-secret-pointer",
+    "body": [
+      "1Password vault: Boneman",
+      "Item: ${1:Tool Name - API Token}",
+      "Field: credential",
+      "Used by: ${2:path-or-runtime}",
+      "Runtime env var: ${3:ENV_VAR_NAME}"
+    ],
+    "description": "Document a required secret location without copying the value."
+  }
+}

@@ -111,6 +111,8 @@ The canonical cross-repo local AI map is maintained in `/Users/corn/Documents/Bo
 
 The repo-local integration map for the GitHub-star platform layer is maintained in `docs/architecture/`, with the operational runbook at `docs/operations/platform-runbook.md`.
 
+Codex, VS Code, and shared skill integration is documented in `docs/autonomous-modernization/25-skills-installation-and-integration.md` and `docs/skills/`.
+
 ## License
 
 MIT. See `LICENSE`.

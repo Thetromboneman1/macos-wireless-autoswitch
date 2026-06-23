@@ -24,6 +24,8 @@ Observed CLI state on 2026-06-22:
 
 No 1Password items were created in this pass because no implemented star required a secret.
 
+The 2026-06-23 skills and VS Code integration pass also created no new 1Password items. Newly installed editor extensions and Codex skills either use existing local sessions, no credentials, or are documented as deferred/manual approval when they would require external tokens.
+
 ## Current Vault
 
 ```text
@@ -73,6 +75,18 @@ Operational guidance:
 - do not store raw local runtime config files in docs or Git;
 - document secret locations and item names, not values;
 - retry once after unlocking 1Password, then record the blocker in the runbook if it still hangs.
+
+## Tooling Added on 2026-06-23
+
+The following installed tooling may need secrets only when live external integrations are enabled:
+
+| Tool | Secret status |
+|---|---|
+| Codex `gh-address-comments`, `gh-fix-ci`, `yeet` skills | Uses existing `gh` auth; no repo secret. |
+| VS Code Kubernetes Tools | Uses local kubeconfig/keychain; store cluster credentials in `Boneman` if created. |
+| VS Code Terraform | Store Terraform Cloud token in `Boneman` only if cloud features are enabled. |
+| VS Code PowerShell | Store remote Windows/Linux administration credentials in `Boneman` only if needed. |
+| Sentry, Notion, deployment skills | Deferred/manual approval; store tokens in `Boneman` before use. |
 
 ## Duplicate Vault Handling
 

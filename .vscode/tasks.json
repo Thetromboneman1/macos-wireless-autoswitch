@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "local-ai: health",
+      "type": "shell",
+      "command": "scripts/local-ai/healthcheck.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "platform: status",
+      "type": "shell",
+      "command": "scripts/star-tools/platform-status.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "test: pytest",
+      "type": "shell",
+      "command": "uvx pytest",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint: shellcheck",
+      "type": "shell",
+      "command": "shellcheck install.sh wireless.sh scripts/**/*.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint: markdown",
+      "type": "shell",
+      "command": "markdownlint README.md docs/**/*.md",
+      "problemMatcher": []
+    },
+    {
+      "label": "validate: config",
+      "type": "shell",
+      "command": "jq empty config/local-ai-platform/*.json .vscode/*.json && taplo check /Users/corn/.codex/config.toml",
+      "problemMatcher": []
+    },
+    {
+      "label": "security: gitleaks",
+      "type": "shell",
+      "command": "gitleaks detect --no-banner --redact --source .",
+      "problemMatcher": []
+    }
+  ]
+}

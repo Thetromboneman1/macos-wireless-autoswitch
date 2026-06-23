@@ -36,6 +36,12 @@ All local AI, star-tool, DNS, provider, and agent secrets belong in 1Password va
 | Hugging Face | Model downloads and gated models | `hf` token or `Boneman` item `Hugging Face - API Token`. | User | Required only for gated model terms/downloads. |
 | GitHub CLI | Star export and repo operations | Existing `gh` auth/session. | User | Do not print token. |
 | Docker | Pulling/running local containers | Docker Desktop credentials/keychain, if any. | User | Do not store registry tokens in repo. |
+| Codex GitHub skills | PR review, CI triage, commit/push/PR workflow | Existing `gh` authenticated session. | User | No GitHub token value is stored in repo; use `gh auth status` for validation. |
+| VS Code Kubernetes Tools | Kubernetes authoring and diagnostics | Local kubeconfig/keychain or future `Boneman` item for cluster credentials. | User | Extension installed; no cluster secret added. |
+| VS Code Terraform | Terraform authoring and optional Terraform Cloud integration | Future `Boneman` item `Terraform Cloud - API Token` if cloud features are enabled. | User | Editor support installed; no cloud token added. |
+| VS Code PowerShell | Windows and PowerShell administration | Future `Boneman` item for remoting credentials if used. | User | Extension installed; no remote credentials added. |
+| Sentry Codex skill/plugin | Issue triage and production diagnostics | Future `Boneman` item `Sentry - API Token` if enabled for a project. | User | Deferred/manual approval required. |
+| Notion Codex skills | Knowledge capture and workspace automation | Future `Boneman` item `Notion - Integration Token` if installed. | User | Deferred/manual approval required. |
 
 ## Secret Surfaces Found
 
@@ -44,6 +50,8 @@ All local AI, star-tool, DNS, provider, and agent secrets belong in 1Password va
 - `scripts/omlx-power-policy.sh` reads `OMLX_API_KEY` or `~/.omlx/settings.json`.
 - `scripts/star-tools/start-omniroute-local.sh` exposes `REQUIRE_API_KEY` and `ALLOW_API_KEY_REVEAL` flags; keep `ALLOW_API_KEY_REVEAL=false`.
 - `scripts/star-tools/start-octopoda-local.sh` sets `OCTOPODA_API_KEY` to a local placeholder unless provided.
+- `.vscode/settings.json` and VS Code user settings contain non-secret local endpoint hints only.
+- `~/.agents/skills/*/SKILL.md` contains workflow pointers and no credential values.
 
 ## Validation Commands
 

@@ -9,13 +9,20 @@ Date: 2026-06-23
 | Operations | `docs/operations/platform-runbook.md` |
 | Automation monitoring | `docs/operations/automation-monitoring.md` |
 | Maintenance | `docs/operations/platform-maintenance-plan.md` |
+| Maintenance v2 | `docs/operations/platform-maintenance-v2.md` |
 | OnePassword operations | `docs/operations/onepassword-runbook.md` |
 | Swap pressure | `docs/operations/swap-pressure-analysis.md` |
+| Swap pressure phase 2 | `docs/operations/swap-pressure-remediation-phase2.md` |
+| Drift detection | `docs/operations/platform-drift-detection.md` |
 | Routing | `docs/architecture/model-routing.md` |
 | Routing decision engine | `docs/architecture/model-routing-decision-engine.md` |
 | Local AI startup | `docs/architecture/local-ai-startup-architecture.md` |
+| AI service catalog | `docs/architecture/ai-service-catalog.md` |
+| Startup orchestration v2 | `docs/architecture/startup-orchestration-v2.md` |
 | Model catalog | `docs/benchmarks/production-model-catalog.md` |
 | Long-duration stability | `docs/benchmarks/long-duration-stability.md` |
+| Post-cleanup benchmark validation | `docs/benchmarks/post-cleanup-validation.md` |
+| Stability validation phase 2 | `docs/benchmarks/stability-validation-phase2.md` |
 | GitHub Actions inventory | `docs/github-actions/repository-inventory.md` |
 | GitHub Actions audit | `docs/github-actions/workflow-audit.md` |
 | Reusable workflow strategy | `docs/github-actions/reusable-workflow-strategy.md` |
@@ -23,10 +30,18 @@ Date: 2026-06-23
 | GitHub Actions secrets | `docs/security/github-actions-secrets.md` |
 | Gitleaks remediation | `docs/security/gitleaks-remediation.md` |
 | LaunchAgent inventory | `docs/macos/launchagent-inventory.md` |
+| LaunchAgent legacy cleanup | `docs/macos/launchagent-legacy-cleanup.md` |
 | LaunchAgent security | `docs/security/launchagent-security-audit.md` |
+| Documentation governance | `docs/governance/documentation-governance.md` |
 | Hermes root cause | `docs/autonomous-modernization/22-hermes-root-cause-analysis.md` |
 | Carteakey optimization audit | `docs/autonomous-modernization/23-carteakey-optimization-audit.md` |
 | Actions and LaunchAgent remediation | `docs/autonomous-modernization/24-github-actions-and-launchagent-remediation.md` |
+| Skills installation | `docs/autonomous-modernization/25-skills-installation-and-integration.md` |
+| Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
+| Installed skills | `docs/skills/installed-skills.md` |
+| Codex skills | `docs/skills/codex-skills.md` |
+| VS Code skills and extensions | `docs/skills/vscode-skills-and-extensions.md` |
+| Shared skills library | `docs/skills/shared-skills-library.md` |
 | Secret handling | `docs/security/onepassword-secrets.md` |
 | Secret inventory | `docs/security/secret-inventory.md` |
 
