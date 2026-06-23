@@ -37,6 +37,12 @@ Expected artifact: <artifact type>.
 
 | Dependency | Use |
 |---|---|
+| `docs/agents/operationalization-plan.md` | Operational run pattern, runtime mapping, tool dependencies, and validation strategy for every copilot. |
+| `docs/agents/agent-evaluation-framework.md` | Reusable scoring rubric for operational agent outputs. |
+| `docs/agents/agent-memory-architecture.md` | Short-term, project, knowledge, evaluation, and business value memory rules. |
+| `docs/agents/agent-orchestration.md` | Handoffs between agents for daily, weekly, monthly, quarterly, and event-driven workflows. |
+| `docs/agents/business-value-framework.md` | Measurement model for time saved, opportunities found, reporting effort reduced, and operational efficiency. |
+| `docs/knowledge/` | Domain knowledge-base definitions for TAP Lite, AAP, Satellite, enterprise knowledge, and Red Hat Summit workflows. |
 | `config/local-ai-platform/routing-policy.json` | Model lane and endpoint source of truth. |
 | `config/local-ai-platform/mcp-topology.json` | Tool and knowledge integration source of truth. |
 | `docs/architecture/model-routing.md` | Human-readable model lane policy. |
@@ -62,9 +68,11 @@ Expected artifact: <artifact type>.
 1. Update the relevant agent file.
 2. Confirm the prompt contract still includes role, inputs, rules, and output schema.
 3. Confirm runtime mapping still matches `config/local-ai-platform/routing-policy.json`.
-4. Run documentation validation.
-5. Capture a sample run in the agent file or in a linked operating artifact.
-6. Commit the change with the related agent or catalog update.
+4. Confirm the operationalization plan still names runtime, prompts, tools, MCP dependencies, required knowledge, and validation strategy.
+5. Run documentation and agent regression validation.
+6. Capture a sample run in the agent file or in a linked operating artifact.
+7. Record measurable value when the run supports a daily workflow.
+8. Commit the change with the related agent or catalog update.
 
 ## Sample Agent Selection
 
@@ -87,4 +95,9 @@ The catalog is valid when every listed agent has:
 - dependencies and runtime integration;
 - owner and maintenance cadence;
 - validation checklist;
-- at least one sample run.
+- at least one sample run;
+- an operationalization entry;
+- an evaluation rubric;
+- a knowledge source;
+- an orchestration path;
+- a business value metric.

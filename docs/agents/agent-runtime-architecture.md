@@ -52,6 +52,11 @@ flowchart LR
 | Goose | Operator-facing agent client for stable workflows after prompt validation. |
 | OpenClaw | Broader agent workbench for approved workflows with Boneman-backed secrets. |
 | Shared skills library | Domain routing through `enterprise-automation`, `documentation`, `devops`, `security`, and `local-ai`. |
+| Agent operationalization plan | Execution contract for runtime, prompts, tools, knowledge, and validation. |
+| Knowledge bases | Retrieval contract for TAP Lite, AAP, Satellite, Summit, and enterprise knowledge. |
+| Agent evaluation framework | Quality gate before owner handoff. |
+| Agent memory architecture | Rules for short-term, project, knowledge, evaluation, and business value memory. |
+| Agent orchestration | Handoff pattern for multi-agent workflows. |
 
 ## Agent-to-Skill Routing
 
@@ -83,6 +88,23 @@ flowchart LR
 | Weekly | Automation Discovery Copilot and AAP Platform Copilot | Candidate backlog, playbook reviews, automation ROI notes. |
 | Monthly | Satellite Platform Copilot and Operational Review Copilot | Patch/lifecycle review and operational health review. |
 | Quarterly | Enterprise Architecture, Executive Communications, Operational Review | TAP Lite packages, quarterly review, executive summary. |
+| Event-driven | Red Hat Summit Assistant, Enterprise Architecture, Executive Communications | Announcement implication brief, architecture update, executive narrative. |
+
+## Operational Artifacts
+
+| Artifact | Runtime role |
+|---|---|
+| `docs/agents/operationalization-plan.md` | Converts documented agents into executable run contracts. |
+| `docs/knowledge/enterprise-knowledge-architecture.md` | Defines ingestion, indexing, retrieval, and maintenance. |
+| `docs/knowledge/tap-lite-knowledge-base.md` | Supports TAP Lite, architecture review, risk, ADR, and executive summaries. |
+| `docs/knowledge/aap-knowledge-base.md` | Supports automation recommendations, playbook review, upgrade guidance, ROI, and reporting. |
+| `docs/knowledge/satellite-knowledge-base.md` | Supports lifecycle, content views, compliance, upgrades, and governance. |
+| `docs/agents/agent-evaluation-framework.md` | Scores operational outputs before handoff. |
+| `docs/agents/agent-memory-architecture.md` | Defines memory types and retrieval precedence. |
+| `docs/agents/agent-orchestration.md` | Defines agent handoff workflows. |
+| `docs/agents/executive-automation-workflows.md` | Operationalizes executive communications. |
+| `docs/knowledge/redhat-summit-assistant.md` | Converts Summit evidence into platform and executive implications. |
+| `docs/agents/business-value-framework.md` | Measures daily business value. |
 
 ## Validation Requirements
 
@@ -92,7 +114,10 @@ For every agent run:
 - output quality: the output is directly usable by its target owner;
 - documentation quality: the output cites or names evidence and identifies missing evidence;
 - integration path: runtime surface and model lane are recorded when relevant;
-- operational workflow: owner, next action, validation, and review cadence are clear.
+- operational workflow: owner, next action, validation, and review cadence are clear;
+- knowledge path: the relevant `docs/knowledge/` source is named;
+- evaluation path: the output is scored or explicitly marked as a draft;
+- value path: the business value metric is recorded when the run supports daily operations.
 
 ## Change Control
 
