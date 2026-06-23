@@ -7,6 +7,12 @@ Date: 2026-06-23
 | Area | Document |
 |---|---|
 | Operations | `docs/operations/platform-runbook.md` |
+| Apple Container pilot | `docs/autonomous-modernization/32-apple-container-side-by-side-pilot.md` |
+| Apple Container discovery | `docs/apple-container/current-platform-discovery.md` |
+| Apple Container architecture | `docs/apple-container/side-by-side-architecture.md` |
+| Apple Container compatibility | `docs/apple-container/workload-compatibility-matrix.md` |
+| Apple Container ports | `docs/apple-container/port-and-service-map.md` |
+| Apple Container rollback | `docs/disaster-recovery/apple-container-pilot-rollback.md` |
 | Operations center | `docs/operations/platform-operations-center.md` |
 | Automation monitoring | `docs/operations/automation-monitoring.md` |
 | Platform reporting | `docs/operations/platform-reporting.md` |

@@ -42,6 +42,36 @@
       "type": "shell",
       "command": "gitleaks detect --no-banner --redact --source .",
       "problemMatcher": []
+    },
+    {
+      "label": "apple-container: status",
+      "type": "shell",
+      "command": "scripts/apple-container/status.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: validate ports",
+      "type": "shell",
+      "command": "scripts/apple-container/validate-port-map.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: health",
+      "type": "shell",
+      "command": "scripts/apple-container/health.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "apple-container: rollback",
+      "type": "shell",
+      "command": "scripts/apple-container/rollback-all.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "local-ai: side-by-side health",
+      "type": "shell",
+      "command": "scripts/health/local-ai-health.py --side-by-side --skip-chat",
+      "problemMatcher": []
     }
   ]
 }

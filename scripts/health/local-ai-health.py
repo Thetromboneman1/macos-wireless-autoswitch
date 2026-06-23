@@ -8,6 +8,7 @@ import json
 import os
 import plistlib
 import re
+import shutil
 import subprocess
 import time
 import urllib.error
@@ -18,6 +19,7 @@ from typing import Any
 
 DEFAULT_MODEL = "mlx-community--gemma-4-26b-a4b-it-4bit"
 DEFAULT_PORTS = (18080, 8002, 8010)
+APPLE_CONTAINER_PORT_MAP = Path.cwd() / "config" / "apple-container" / "port-map.json"
 PROCESS_PATTERNS = ("oMLX", "omlx-server", "llama-server", "rapid-mlx", "Docker", "LM Studio")
 EXPECTED_CODEX_SKILLS = (
     "gh-address-comments",
@@ -158,6 +160,81 @@ def check_ports(ports: tuple[int, ...] = DEFAULT_PORTS) -> list[dict[str, Any]]:
         except subprocess.CalledProcessError:
             rows.append({"port": port, "listening": False, "listeners": []})
     return rows
+
+
+def command_output(args: list[str], timeout: int = 15) -> tuple[bool, str]:
+    try:
+        out = subprocess.check_output(args, text=True, stderr=subprocess.STDOUT, timeout=timeout)
+        return True, out.strip()
+    except Exception as exc:
+        output = getattr(exc, "output", "")
+        message = str(exc)
+        if output:
+            message = f"{message}: {output.strip()}"
+        return False, message
+
+
+def check_apple_container(port_map: Path | None = None) -> dict[str, Any]:
+    path = port_map or APPLE_CONTAINER_PORT_MAP
+    result: dict[str, Any] = {
+        "installed": False,
+        "system_running": False,
+        "port_map": str(path),
+        "ok": True,
+        "services": [],
+    }
+    container = shutil.which("container")
+    result["installed"] = bool(container)
+    result["container_path"] = container or ""
+    if not container:
+        result.update({"ok": False, "error": "container CLI is not installed"})
+        return result
+
+    version_ok, version = command_output([container, "--version"])
+    result["version"] = version
+    status_ok, status = command_output([container, "system", "status"])
+    result["system_running"] = status_ok
+    result["system_status"] = status
+    if not version_ok:
+        result["ok"] = False
+
+    try:
+        data = json.loads(path.read_text())
+    except Exception as exc:
+        result.update({"ok": False, "error": f"cannot read port map: {exc}"})
+        return result
+
+    service_ports = tuple(int(item["host_port"]) for item in data.get("services", []))
+    observed_ports = check_ports(service_ports)
+    observed_by_port = {row["port"]: row for row in observed_ports}
+    production_ports = {int(port) for port in data.get("policy", {}).get("production_ports", [])}
+    prefix = data.get("policy", {}).get("pilot_prefix", "ac-")
+    seen_ports: set[int] = set()
+    findings = []
+    for item in data.get("services", []):
+        port = int(item["host_port"])
+        result["services"].append(
+            {
+                "name": item["name"],
+                "host": item.get("host"),
+                "host_port": port,
+                "status": item.get("status"),
+                "listening": bool(observed_by_port.get(port, {}).get("listening")),
+                "health_url": item.get("health_url"),
+            }
+        )
+        if not str(item.get("name", "")).startswith(prefix):
+            findings.append(f"{item.get('name')} does not use the pilot prefix")
+        if item.get("host") != "127.0.0.1":
+            findings.append(f"{item.get('name')} does not bind to 127.0.0.1")
+        if port in seen_ports:
+            findings.append(f"duplicate pilot port {port}")
+        if port in production_ports:
+            findings.append(f"pilot port {port} reuses a production port")
+        seen_ports.add(port)
+    result["findings"] = findings
+    result["ok"] = bool(result["ok"] and not findings)
+    return result
 
 
 def process_snapshot() -> list[dict[str, Any]]:
@@ -318,35 +395,46 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json", type=Path, help="Write JSON report to this path.")
     parser.add_argument("--skip-chat", action="store_true", help="Check /v1/models without sending a chat completion.")
+    parser.add_argument("--production-only", action="store_true", help="Skip Apple Container pilot checks.")
+    parser.add_argument("--apple-container-only", action="store_true", help="Only report Apple Container pilot checks.")
+    parser.add_argument("--side-by-side", action="store_true", help="Report production lanes and Apple Container pilot state.")
     args = parser.parse_args()
 
     api_key = read_omlx_key()
     ports = check_ports()
-    report = {
+    report: dict[str, Any] = {
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "system": vm_stat(),
-        "ports": ports,
-        "processes": process_snapshot(),
-        "launchagents": check_launchagents(),
-        "lanes": [
-            check_endpoint("omlx-production", "http://127.0.0.1:18080/v1", DEFAULT_MODEL, api_key, skip_chat=args.skip_chat),
-            check_optional_lane(
-                "llama-cpp-gguf",
-                "http://127.0.0.1:8002/v1",
-                "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
-                "",
-                8002,
-                ports,
-            ),
-            check_optional_lane("rapid-mlx", "http://127.0.0.1:8010/v1", "qwen3.6-35b-4bit", "", 8010, ports),
-        ],
-        "codex_skills": check_codex_skills(),
-        "vscode_recommendations": check_vscode_recommendations(),
     }
+    if not args.apple_container_only:
+        report.update(
+            {
+                "ports": ports,
+                "processes": process_snapshot(),
+                "launchagents": check_launchagents(),
+                "lanes": [
+                    check_endpoint("omlx-production", "http://127.0.0.1:18080/v1", DEFAULT_MODEL, api_key, skip_chat=args.skip_chat),
+                    check_optional_lane(
+                        "llama-cpp-gguf",
+                        "http://127.0.0.1:8002/v1",
+                        "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
+                        "",
+                        8002,
+                        ports,
+                    ),
+                    check_optional_lane("rapid-mlx", "http://127.0.0.1:8010/v1", "qwen3.6-35b-4bit", "", 8010, ports),
+                ],
+                "codex_skills": check_codex_skills(),
+                "vscode_recommendations": check_vscode_recommendations(),
+            }
+        )
+    if not args.production_only:
+        report["apple_container"] = check_apple_container()
     report["ok"] = (
-        all(lane.get("ok") for lane in report["lanes"])
-        and report["codex_skills"].get("ok", False)
-        and report["vscode_recommendations"].get("ok", False)
+        all(lane.get("ok") for lane in report.get("lanes", []))
+        and report.get("codex_skills", {"ok": True}).get("ok", False)
+        and report.get("vscode_recommendations", {"ok": True}).get("ok", False)
+        and report.get("apple_container", {"ok": True}).get("ok", False)
     )
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)

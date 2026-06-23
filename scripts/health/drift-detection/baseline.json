@@ -30,7 +30,19 @@
     ".github/workflows/validate.yml": "file",
     "scripts/health/local-ai-health.py": "file",
     "scripts/local-ai/benchmark-engine-bakeoff.py": "file",
-    "scripts/gemma4-gguf-coding-lane.sh": "file"
+    "scripts/gemma4-gguf-coding-lane.sh": "file",
+    "config/apple-container/port-map.json": "file",
+    "scripts/apple-container/validate-port-map.sh": "file",
+    "scripts/apple-container/status.sh": "file",
+    "scripts/apple-container/health.sh": "file",
+    "scripts/apple-container/build.sh": "file",
+    "scripts/apple-container/start.sh": "file",
+    "scripts/apple-container/stop.sh": "file",
+    "scripts/apple-container/logs.sh": "file",
+    "scripts/apple-container/reset-test-data.sh": "file",
+    "scripts/apple-container/rollback-all.sh": "file",
+    "docs/apple-container/current-platform-discovery.md": "file",
+    "docs/apple-container/workload-compatibility-matrix.md": "file"
   },
   "binaries": {
     "gitleaks": "required",
