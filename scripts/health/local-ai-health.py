@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import plistlib
+import re
 import subprocess
 import time
 import urllib.error
@@ -15,6 +17,8 @@ from typing import Any
 
 
 DEFAULT_MODEL = "mlx-community--gemma-4-26b-a4b-it-4bit"
+DEFAULT_PORTS = (18080, 8002, 8010)
+PROCESS_PATTERNS = ("oMLX", "omlx-server", "llama-server", "rapid-mlx", "Docker", "LM Studio")
 
 
 def read_omlx_key() -> str:
@@ -41,9 +45,124 @@ def request_json(url: str, *, method: str = "GET", payload: dict[str, Any] | Non
 def vm_stat() -> dict[str, Any]:
     try:
         out = subprocess.check_output(["sysctl", "-n", "vm.swapusage"], text=True).strip()
-        return {"swapusage": out}
+        return {"swapusage": out, "swap": parse_swapusage(out)}
     except Exception as exc:
         return {"error": str(exc)}
+
+
+def parse_swapusage(value: str) -> dict[str, Any]:
+    fields = {}
+    for name in ("total", "used", "free"):
+        match = re.search(rf"{name}\s*=\s*([0-9.]+)M", value)
+        fields[f"{name}_mb"] = float(match.group(1)) if match else None
+    total = fields.get("total_mb") or 0
+    used = fields.get("used_mb") or 0
+    used_percent = round((used / total) * 100, 1) if total else None
+    if used_percent is None:
+        pressure = "unknown"
+    elif used_percent >= 75:
+        pressure = "high"
+    elif used_percent >= 40:
+        pressure = "elevated"
+    else:
+        pressure = "normal"
+    fields["used_percent"] = used_percent
+    fields["pressure"] = pressure
+    return fields
+
+
+def check_launchagent_plist(path: Path) -> dict[str, Any]:
+    result: dict[str, Any] = {"path": str(path), "ok": False}
+    try:
+        data = load_plist(path)
+    except Exception as exc:
+        result.update({"label": path.stem, "error": str(exc), "classification": "broken"})
+        return result
+
+    label = str(data.get("Label") or path.stem)
+    args = data.get("ProgramArguments")
+    program = data.get("Program")
+    if isinstance(args, list) and args:
+        program = str(args[0])
+    elif program:
+        program = str(program)
+    else:
+        program = ""
+    program_exists = bool(program and Path(program).exists())
+    logs = {
+        "stdout": data.get("StandardOutPath", ""),
+        "stderr": data.get("StandardErrorPath", ""),
+    }
+    classification = "healthy" if program_exists else "broken"
+    result.update(
+        {
+            "label": label,
+            "program": program,
+            "program_exists": program_exists,
+            "run_at_load": bool(data.get("RunAtLoad", False)),
+            "start_interval": data.get("StartInterval"),
+            "logs": logs,
+            "classification": classification,
+            "ok": program_exists,
+        }
+    )
+    return result
+
+
+def load_plist(path: Path) -> dict[str, Any]:
+    try:
+        data = plistlib.loads(path.read_bytes())
+        if isinstance(data, dict):
+            return data
+    except Exception:
+        pass
+    out = subprocess.check_output(["plutil", "-convert", "json", "-o", "-", str(path)], text=True)
+    data = json.loads(out)
+    if not isinstance(data, dict):
+        raise ValueError("plist root is not a dictionary")
+    return data
+
+
+def check_launchagents(directory: Path | None = None) -> list[dict[str, Any]]:
+    launch_dir = directory or (Path.home() / "Library" / "LaunchAgents")
+    return [check_launchagent_plist(path) for path in sorted(launch_dir.glob("*.plist"))]
+
+
+def check_ports(ports: tuple[int, ...] = DEFAULT_PORTS) -> list[dict[str, Any]]:
+    rows = []
+    for port in ports:
+        try:
+            out = subprocess.check_output(["lsof", "-nP", f"-iTCP:{port}", "-sTCP:LISTEN"], text=True, stderr=subprocess.DEVNULL)
+            listeners = [line for line in out.splitlines()[1:] if line.strip()]
+            rows.append({"port": port, "listening": bool(listeners), "listeners": listeners[:5]})
+        except subprocess.CalledProcessError:
+            rows.append({"port": port, "listening": False, "listeners": []})
+    return rows
+
+
+def process_snapshot() -> list[dict[str, Any]]:
+    try:
+        out = subprocess.check_output(["ps", "-axo", "pid,rss,%mem,%cpu,etime,command"], text=True, stderr=subprocess.DEVNULL)
+    except Exception:
+        return []
+    rows = []
+    for line in out.splitlines()[1:]:
+        if not any(pattern.lower() in line.lower() for pattern in PROCESS_PATTERNS):
+            continue
+        parts = line.split(None, 5)
+        if len(parts) != 6:
+            continue
+        rows.append(
+            {
+                "pid": int(parts[0]),
+                "rss_kib": int(parts[1]),
+                "mem_percent": parts[2],
+                "cpu_percent": parts[3],
+                "etime": parts[4],
+                "command": parts[5][:220],
+            }
+        )
+    return rows
 
 
 def check_endpoint(name: str, base_url: str, model: str, api_key: str) -> dict[str, Any]:
@@ -88,6 +207,9 @@ def main() -> int:
     report = {
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "system": vm_stat(),
+        "ports": check_ports(),
+        "processes": process_snapshot(),
+        "launchagents": check_launchagents(),
         "lanes": [
             check_endpoint("omlx-production", "http://127.0.0.1:18080/v1", DEFAULT_MODEL, api_key),
         ],

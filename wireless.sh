@@ -46,8 +46,10 @@ get_os_version() {
 # Returns: Space-separated list of interface names
 #
 get_wired_interfaces() {
+    local adapter_regex="$SUPPORTED_ADAPTERS"
+
     /usr/sbin/networksetup -listnetworkserviceorder | \
-        awk -F ": " '/Hardware Port/ && $0 ~ /(Ethernet|LAN|Thunderbolt|AX88179A|VLAN)/ {gsub(/\)/, "", $3); if ($3 !~ /bridge/) printf "%s ", $3}' | \
+        awk -F ": " -v pattern="$adapter_regex" '/Hardware Port/ && $0 ~ pattern {gsub(/\)/, "", $3); if ($3 !~ /bridge/) printf "%s ", $3}' | \
         sed 's/[[:space:]]*$//'
 }
 
@@ -70,15 +72,18 @@ get_vlan_interfaces() {
 #
 merge_interfaces() {
     local merged=""
+    local list
     local token
 
-    for token in $*; do
-        if [[ -z "$token" ]]; then
-            continue
-        fi
-        if [[ " $merged " != *" $token "* ]]; then
-            merged+="$token "
-        fi
+    for list in "$@"; do
+        for token in $list; do
+            if [[ -z "$token" ]]; then
+                continue
+            fi
+            if [[ " $merged " != *" $token "* ]]; then
+                merged+="$token "
+            fi
+        done
     done
 
     echo "${merged% }"

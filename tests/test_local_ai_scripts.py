@@ -18,6 +18,16 @@ def load_validator_module():
     return module
 
 
+def load_health_module():
+    path = ROOT / "scripts" / "health" / "local-ai-health.py"
+    spec = importlib.util.spec_from_file_location("local_ai_health", path)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 def test_gguf_coding_lane_does_not_enable_mtp_on_apple_silicon():
     script = (ROOT / "scripts" / "gemma4-gguf-coding-lane.sh").read_text()
 
@@ -97,3 +107,36 @@ def test_health_checker_reads_omlx_settings_without_printing_key():
     assert "Authorization" in script
     assert "api_key" in script
     assert "print(api_key)" not in script
+
+
+def test_health_checker_parses_swap_usage():
+    health = load_health_module()
+
+    parsed = health.parse_swapusage("total = 8192.00M  used = 6627.12M  free = 1564.88M  (encrypted)")
+
+    assert parsed["total_mb"] == 8192.0
+    assert parsed["used_mb"] == 6627.12
+    assert parsed["free_mb"] == 1564.88
+    assert parsed["used_percent"] == 80.9
+    assert parsed["pressure"] == "high"
+
+
+def test_launchagent_check_reports_missing_program(tmp_path):
+    health = load_health_module()
+    plist = tmp_path / "local.test.missing.plist"
+    plist.write_text(
+        """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>Label</key><string>local.test.missing</string>
+<key>ProgramArguments</key><array><string>/no/such/script.sh</string></array>
+</dict></plist>
+"""
+    )
+
+    result = health.check_launchagent_plist(plist)
+
+    assert result["label"] == "local.test.missing"
+    assert result["ok"] is False
+    assert result["program_exists"] is False
+    assert result["classification"] == "broken"

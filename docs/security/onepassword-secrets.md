@@ -32,6 +32,8 @@ Status: available and already contains local AI/service items
 Items created by this repo pass: none
 ```
 
+Operational runbook: [onepassword-runbook.md](../operations/onepassword-runbook.md).
+
 ## Documentation Pattern
 
 When a future integration needs a secret, document it like this:
