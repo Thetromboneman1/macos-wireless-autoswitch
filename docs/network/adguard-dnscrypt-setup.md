@@ -64,4 +64,3 @@ brew services restart dnscrypt-proxy
 ```
 
 If AdGuard DNS fails, switch AdGuard DNS Protection back to a known-good provider or temporarily disable DNS Protection from the AdGuard UI.
-

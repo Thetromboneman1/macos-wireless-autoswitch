@@ -30,14 +30,54 @@ def prompt_overhead(path: Path) -> dict[str, Any]:
     total_units = system_chars + skills_chars + memory_chars + user_chars + tool_bytes
     return {
         "path": str(path),
+        "measurement_scope": "hermes_prompt_size_reported_static_overhead",
+        "cost_claim_status": "reported_not_observed_usage",
         "model": data.get("model"),
         "tool_count": int(data.get("tools", {}).get("count") or 0),
+        "reported_tool_count": int(data.get("tools", {}).get("count") or 0),
         "estimated_system_tokens": estimate_tokens(system_chars),
         "estimated_skills_tokens": estimate_tokens(skills_chars),
         "estimated_memory_tokens": estimate_tokens(memory_chars),
         "estimated_user_profile_tokens": estimate_tokens(user_chars),
         "estimated_tool_schema_tokens": estimate_tokens(tool_bytes),
+        "reported_tool_schema_tokens": estimate_tokens(tool_bytes),
         "estimated_total_tokens": estimate_tokens(total_units),
+        "reported_total_tokens": estimate_tokens(total_units),
+    }
+
+
+def parse_hermes_tools_list(path: Path) -> dict[str, Any]:
+    """Parse `hermes tools list --platform <name>` output without recording secrets."""
+    enabled: list[str] = []
+    disabled: list[str] = []
+    mcp_servers: list[str] = []
+    section = "built_in"
+    for raw_line in path.read_text().splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        if line == "MCP servers:":
+            section = "mcp"
+            continue
+        if section == "mcp":
+            parts = line.split()
+            if parts:
+                mcp_servers.append(parts[0])
+            continue
+        parts = line.split()
+        if len(parts) >= 3 and parts[1] in {"enabled", "disabled"}:
+            name = parts[2]
+            if parts[1] == "enabled":
+                enabled.append(name)
+            else:
+                disabled.append(name)
+    return {
+        "path": str(path),
+        "enabled_count": len(enabled),
+        "disabled_count": len(disabled),
+        "enabled": enabled,
+        "disabled": disabled,
+        "mcp_servers": mcp_servers,
     }
 
 
@@ -105,10 +145,12 @@ def aggregate_usage(paths: list[Path]) -> dict[str, Any]:
 def build_cost_report(
     *,
     prompt_size_paths: list[Path] | None = None,
+    tools_list_paths: list[Path] | None = None,
     session_paths: list[Path] | None = None,
     health_path: Path | None = None,
 ) -> dict[str, Any]:
     prompt_size_paths = prompt_size_paths or []
+    tools_list_paths = tools_list_paths or []
     session_paths = session_paths or []
     platforms = {}
     for path in prompt_size_paths:
@@ -116,8 +158,13 @@ def build_cost_report(
         platform = str(data.get("platform") or path.stem)
         platforms[platform] = prompt_overhead(path)
 
+    runtime_toolsets = {}
+    for path in tools_list_paths:
+        runtime_toolsets[path.stem] = parse_hermes_tools_list(path)
+
     sections: dict[str, Any] = {
         "fixed_prompt_overhead": {"platforms": platforms},
+        "runtime_toolsets": runtime_toolsets,
         "usage": aggregate_usage(session_paths),
     }
     if health_path:
@@ -146,6 +193,7 @@ def build_cost_report(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prompt-size-json", type=Path, action="append", default=[])
+    parser.add_argument("--tools-list-text", type=Path, action="append", default=[])
     parser.add_argument("--session-json", type=Path, action="append", default=[])
     parser.add_argument("--health-json", type=Path)
     parser.add_argument("--json", type=Path, help="Write report JSON to this path.")
@@ -153,6 +201,7 @@ def main(argv: list[str] | None = None) -> int:
 
     report = build_cost_report(
         prompt_size_paths=args.prompt_size_json,
+        tools_list_paths=args.tools_list_text,
         session_paths=args.session_json,
         health_path=args.health_json,
     )

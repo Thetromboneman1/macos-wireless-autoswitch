@@ -1,0 +1,11 @@
+# Historical implementation reports are retained as dated evidence, not current style-managed docs.
+docs/autonomous-modernization/**
+
+# June 2026 sweep notes are archival evidence with captured external snippets and dated run output.
+docs/local-ai-star-sweep-2026-06-22/**
+
+# Downloaded GitHub README snapshots are third-party/reference content and should not be rewritten for local style.
+docs/reference/**
+
+# Legacy third-party implementation plan retained as historical project material.
+docs/IMPLEMENTATION_PLAN.md

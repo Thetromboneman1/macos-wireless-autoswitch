@@ -37,10 +37,23 @@ Date: 2026-06-23
 | Long-duration stability | `docs/benchmarks/long-duration-stability.md` |
 | Post-cleanup benchmark validation | `docs/benchmarks/post-cleanup-validation.md` |
 | Stability validation phase 2 | `docs/benchmarks/stability-validation-phase2.md` |
+| Local repository inventory | `docs/repository-governance/local-repository-inventory.md` |
+| Repository health audit | `docs/repository-governance/repository-health-audit.md` |
+| Documentation consolidation map | `docs/repository-governance/documentation-consolidation-map.md` |
+| Markdownlint policy | `docs/repository-governance/markdownlint-scope-and-policy.md` |
+| Repository cleanup log | `docs/repository-governance/repository-cleanup-log.md` |
+| Cross-repository consolidation | `docs/repository-governance/cross-repository-consolidation.md` |
+| Repository standards | `docs/repository-governance/repository-standards.md` |
+| Document status register | `docs/governance/document-status-register.md` |
 | GitHub Actions inventory | `docs/github-actions/repository-inventory.md` |
+| GitHub Actions estate inventory | `docs/github-actions/actions-estate-inventory.md` |
 | GitHub Actions audit | `docs/github-actions/workflow-audit.md` |
 | Reusable workflow strategy | `docs/github-actions/reusable-workflow-strategy.md` |
+| New workflow recommendations | `docs/github-actions/new-workflow-recommendations.md` |
+| Dependency update strategy | `docs/github-actions/dependency-update-strategy.md` |
 | GitHub Actions security | `docs/security/github-actions-security-audit.md` |
+| GitHub Actions threat model | `docs/security/github-actions-threat-model.md` |
+| GitHub Actions operations | `docs/operations/github-actions-operations-runbook.md` |
 | GitHub Actions secrets | `docs/security/github-actions-secrets.md` |
 | Gitleaks remediation | `docs/security/gitleaks-remediation.md` |
 | LaunchAgent inventory | `docs/macos/launchagent-inventory.md` |
@@ -57,6 +70,7 @@ Date: 2026-06-23
 | Executive summary | `docs/executive/ai-platform-executive-summary.md` |
 | Platform roadmap | `docs/roadmap/ai-platform-roadmap.md` |
 | Hermes root cause | `docs/autonomous-modernization/22-hermes-root-cause-analysis.md` |
+| Hermes prompt-size discrepancy | `docs/hermes/prompt-size-toolset-discrepancy.md` |
 | Carteakey optimization audit | `docs/autonomous-modernization/23-carteakey-optimization-audit.md` |
 | Actions and LaunchAgent remediation | `docs/autonomous-modernization/24-github-actions-and-launchagent-remediation.md` |
 | Skills installation | `docs/autonomous-modernization/25-skills-installation-and-integration.md` |
@@ -65,6 +79,7 @@ Date: 2026-06-23
 | Capacity resiliency governance | `docs/autonomous-modernization/28-capacity-resiliency-governance.md` |
 | Hermes cost source review | `docs/autonomous-modernization/27-hermes-cost-token-optimization-source-review.md` |
 | Hermes cost final report | `docs/autonomous-modernization/28-hermes-cost-token-context-optimization.md` |
+| Repository consolidation and Actions modernization | `docs/autonomous-modernization/29-repository-consolidation-and-actions-modernization.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |

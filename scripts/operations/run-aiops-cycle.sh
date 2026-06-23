@@ -12,6 +12,7 @@ drift_json="$OUT_DIR/drift-$STAMP.json"
 dependency_json="$OUT_DIR/dependencies-$STAMP.json"
 doc_json="$OUT_DIR/documentation-$STAMP.json"
 prompt_size_json="$OUT_DIR/hermes-prompt-size-$STAMP.json"
+tools_list_text="$OUT_DIR/hermes-tools-list-$STAMP.txt"
 hermes_cost_json="$OUT_DIR/hermes-cost-$STAMP.json"
 platform_json="$OUT_DIR/platform-report-$STAMP.json"
 
@@ -23,8 +24,10 @@ scripts/operations/dependency-report.py --json "$dependency_json" >/dev/null
 doc_status=0
 scripts/operations/documentation-review.py docs/operations docs/governance docs/architecture docs/macos docs/security docs/skills docs/executive docs/roadmap docs/capacity docs/disaster-recovery --json "$doc_json" >/dev/null || doc_status=$?
 hermes prompt-size --json > "$prompt_size_json"
+hermes tools list --platform cli > "$tools_list_text"
 scripts/operations/hermes-cost-report.py \
   --prompt-size-json "$prompt_size_json" \
+  --tools-list-text "$tools_list_text" \
   --health-json "$health_json" \
   --json "$hermes_cost_json" >/dev/null
 scripts/operations/generate-platform-report.py \

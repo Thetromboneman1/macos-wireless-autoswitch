@@ -49,6 +49,7 @@ def test_platform_report_combines_health_and_drift(tmp_path):
             "sections": {
                 "usage": {"input_tokens": 150, "output_tokens": 30, "cache_hit_percent": 26.7},
                 "fixed_prompt_overhead": {"platforms": {"cli": {"estimated_total_tokens": 1795}}},
+                "runtime_toolsets": {"tools-cli": {"enabled_count": 10, "disabled_count": 15}},
             },
         },
     )
@@ -63,6 +64,7 @@ def test_platform_report_combines_health_and_drift(tmp_path):
     assert result["sections"]["lanes"]["manual_stopped"] == ["rapid-mlx"]
     assert result["sections"]["hermes_cost"]["usage"]["input_tokens"] == 150
     assert result["sections"]["hermes_cost"]["fixed_prompt_overhead"]["cli_estimated_total_tokens"] == 1795
+    assert result["sections"]["hermes_cost"]["runtime_toolsets"]["tools-cli"]["enabled_count"] == 10
 
 
 def test_hermes_cost_report_summarizes_prompt_overhead(tmp_path):
@@ -85,8 +87,41 @@ def test_hermes_cost_report_summarizes_prompt_overhead(tmp_path):
     assert result["ok"] is True
     fixed = result["sections"]["fixed_prompt_overhead"]
     assert fixed["platforms"]["cli"]["tool_count"] == 10
+    assert fixed["platforms"]["cli"]["reported_tool_count"] == 10
+    assert fixed["platforms"]["cli"]["measurement_scope"] == "hermes_prompt_size_reported_static_overhead"
+    assert fixed["platforms"]["cli"]["cost_claim_status"] == "reported_not_observed_usage"
     assert fixed["platforms"]["cli"]["estimated_total_tokens"] == 1795
+    assert fixed["platforms"]["cli"]["reported_total_tokens"] == 1795
     assert fixed["platforms"]["cli"]["estimated_tool_schema_tokens"] == 1000
+    assert fixed["platforms"]["cli"]["reported_tool_schema_tokens"] == 1000
+
+
+def test_hermes_cost_report_records_runtime_toolsets(tmp_path):
+    costs = load_script("hermes-cost-report.py")
+    tools_path = tmp_path / "tools-cli.txt"
+    tools_path.write_text(
+        "\n".join(
+            [
+                "Built-in toolsets (cli):",
+                "  ✓ enabled  web  Web Search & Scraping",
+                "  ✗ disabled  browser  Browser Automation",
+                "  ✓ enabled  terminal  Terminal & Processes",
+                "",
+                "MCP servers:",
+                "  octopoda  all tools enabled",
+            ]
+        )
+        + "\n"
+    )
+
+    result = costs.build_cost_report(tools_list_paths=[tools_path])
+
+    runtime = result["sections"]["runtime_toolsets"]["tools-cli"]
+    assert runtime["enabled"] == ["web", "terminal"]
+    assert runtime["disabled"] == ["browser"]
+    assert runtime["enabled_count"] == 2
+    assert runtime["disabled_count"] == 1
+    assert runtime["mcp_servers"] == ["octopoda"]
 
 
 def test_hermes_cost_report_aggregates_usage_records(tmp_path):

@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     if: github.event.pull_request.merged == true
@@ -19,6 +23,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code

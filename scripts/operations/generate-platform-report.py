@@ -43,6 +43,7 @@ def build_report(
     hermes_cost = load_json(hermes_cost_path) if hermes_cost_path else {"ok": None, "sections": {}}
     cost_sections = hermes_cost.get("sections", {})
     fixed_platforms = cost_sections.get("fixed_prompt_overhead", {}).get("platforms", {})
+    runtime_toolsets = cost_sections.get("runtime_toolsets", {})
     sections = {
         "health": {
             "ok": bool(health.get("ok")),
@@ -78,6 +79,13 @@ def build_report(
             "fixed_prompt_overhead": {
                 f"{platform}_estimated_total_tokens": details.get("estimated_total_tokens")
                 for platform, details in fixed_platforms.items()
+            },
+            "runtime_toolsets": {
+                platform: {
+                    "enabled_count": details.get("enabled_count"),
+                    "disabled_count": details.get("disabled_count"),
+                }
+                for platform, details in runtime_toolsets.items()
             },
         },
     }

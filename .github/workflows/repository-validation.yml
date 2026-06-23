@@ -1,0 +1,75 @@
+name: Repository Validation
+
+on:
+  push:
+    paths:
+      - ".github/workflows/**"
+      - ".markdownlint*"
+      - ".yamllint"
+      - "config/**"
+      - "docs/**"
+      - "scripts/**"
+      - "tests/**"
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - ".markdownlint*"
+      - ".yamllint"
+      - "config/**"
+      - "docs/**"
+      - "scripts/**"
+      - "tests/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validation tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y jq shellcheck
+          python -m pip install --upgrade pip
+          python -m pip install pytest yamllint
+
+      - name: Python tests
+        shell: bash
+        run: pytest
+
+      - name: Shell scripts
+        shell: bash
+        run: shellcheck install.sh wireless.sh scripts/**/*.sh
+
+      - name: Markdown documentation
+        shell: bash
+        run: npx --yes markdownlint-cli@0.45.0 README.md docs/**/*.md
+
+      - name: JSON configuration
+        shell: bash
+        run: jq empty config/local-ai-platform/*.json .vscode/*.json
+
+      - name: YAML configuration
+        shell: bash
+        run: yamllint .github/workflows/*.yml .yamllint
+
+      - name: GitHub Actions syntax
+        uses: rhysd/actionlint@v1.7.12

@@ -2,11 +2,15 @@ name: Sync Fork From Upstream
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "17 11 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: fork-sync-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   sync:
