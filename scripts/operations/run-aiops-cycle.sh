@@ -19,7 +19,7 @@ scripts/health/local-ai-health.py --skip-chat --json "$health_json" >/dev/null
 scripts/health/drift-detection/check-platform-drift.py --health-json "$health_json" --json "$drift_json" >/dev/null
 scripts/operations/dependency-report.py --json "$dependency_json" >/dev/null
 doc_status=0
-scripts/operations/documentation-review.py docs/operations docs/governance docs/architecture docs/macos docs/security docs/skills docs/executive docs/roadmap --json "$doc_json" >/dev/null || doc_status=$?
+scripts/operations/documentation-review.py docs/operations docs/governance docs/architecture docs/macos docs/security docs/skills docs/executive docs/roadmap docs/capacity docs/disaster-recovery --json "$doc_json" >/dev/null || doc_status=$?
 scripts/operations/generate-platform-report.py \
   --health-json "$health_json" \
   --drift-json "$drift_json" \

@@ -12,9 +12,14 @@ Date: 2026-06-23
 | Platform reporting | `docs/operations/platform-reporting.md` |
 | Maintenance | `docs/operations/platform-maintenance-plan.md` |
 | Maintenance v2 | `docs/operations/platform-maintenance-v2.md` |
+| Capacity plan | `docs/capacity/platform-capacity-plan.md` |
+| Resource forecast | `docs/capacity/resource-forecast.md` |
 | Dependency governance | `docs/operations/dependency-governance.md` |
 | Benchmark governance | `docs/operations/benchmark-governance.md` |
+| Benchmark trend analysis | `docs/operations/benchmark-trend-analysis.md` |
 | Model lifecycle | `docs/operations/model-lifecycle-management.md` |
+| Model promotion framework | `docs/governance/model-promotion-framework.md` |
+| Model governance automation | `docs/governance/model-governance-automation.md` |
 | OnePassword operations | `docs/operations/onepassword-runbook.md` |
 | Swap pressure | `docs/operations/swap-pressure-analysis.md` |
 | Swap pressure phase 2 | `docs/operations/swap-pressure-remediation-phase2.md` |
@@ -41,6 +46,11 @@ Date: 2026-06-23
 | Documentation governance | `docs/governance/documentation-governance.md` |
 | Documentation review policy | `docs/governance/documentation-review-policy.md` |
 | Platform audit framework | `docs/governance/platform-audit-framework.md` |
+| Platform SLO framework | `docs/governance/platform-slo-framework.md` |
+| Platform risk register | `docs/governance/platform-risk-register.md` |
+| Disaster recovery plan | `docs/disaster-recovery/platform-dr-plan.md` |
+| Backup validation | `docs/disaster-recovery/backup-validation.md` |
+| Restore testing | `docs/disaster-recovery/restore-testing.md` |
 | Executive summary | `docs/executive/ai-platform-executive-summary.md` |
 | Platform roadmap | `docs/roadmap/ai-platform-roadmap.md` |
 | Hermes root cause | `docs/autonomous-modernization/22-hermes-root-cause-analysis.md` |
@@ -49,6 +59,7 @@ Date: 2026-06-23
 | Skills installation | `docs/autonomous-modernization/25-skills-installation-and-integration.md` |
 | Post-skills cleanup | `docs/autonomous-modernization/26-post-skills-cleanup-and-drift-reconciliation.md` |
 | AIOps operations center | `docs/autonomous-modernization/27-aiops-operations-center.md` |
+| Capacity resiliency governance | `docs/autonomous-modernization/28-capacity-resiliency-governance.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |

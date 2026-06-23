@@ -11,7 +11,7 @@ Documentation governance prevents stale operational instructions from becoming p
 
 ```bash
 scripts/operations/documentation-review.py \
-  docs/operations docs/governance docs/architecture docs/macos docs/security docs/skills docs/executive docs/roadmap \
+  docs/operations docs/governance docs/architecture docs/macos docs/security docs/skills docs/executive docs/roadmap docs/capacity docs/disaster-recovery \
   --json /tmp/documentation-review.json
 ```
 

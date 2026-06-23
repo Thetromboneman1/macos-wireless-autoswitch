@@ -105,3 +105,104 @@ def test_dependency_report_extracts_workflow_actions(tmp_path):
     assert result["ok"] is True
     assert result["sections"]["github_actions"] == [{"action": "actions/checkout", "version": "v4", "path": str(workflow)}]
     assert "python" in result["sections"]
+
+
+def test_model_promotion_gate_rejects_high_swap(tmp_path):
+    gates = load_script("model-governance/evaluate-promotion.py")
+    benchmark_path = write_json(tmp_path / "benchmark.json", {"ok": True, "summary": {"finding_count": 0}})
+    stability_path = write_json(tmp_path / "stability.json", {"ok": True, "failure_count": 0})
+    health_path = write_json(
+        tmp_path / "health.json",
+        {
+            "ok": True,
+            "system": {"swap": {"pressure": "high", "used_percent": 84.0}},
+            "lanes": [{"name": "omlx-production", "ok": True}],
+        },
+    )
+    tool_path = write_json(tmp_path / "tool.json", {"ok": True})
+    docs_path = write_json(tmp_path / "documentation.json", {"ok": True, "finding_count": 0})
+
+    result = gates.evaluate_model_promotion(
+        benchmark_path=benchmark_path,
+        stability_path=stability_path,
+        health_path=health_path,
+        tool_call_path=tool_path,
+        documentation_path=docs_path,
+        max_swap_used_percent=75.0,
+    )
+
+    assert result["ok"] is False
+    assert result["summary"]["gate_count"] == 6
+    assert result["summary"]["failed_gate_count"] == 1
+    assert result["findings"][0]["id"] == "swap-threshold-exceeded"
+
+
+def test_model_promotion_gate_accepts_complete_evidence(tmp_path):
+    gates = load_script("model-governance/evaluate-promotion.py")
+    benchmark_path = write_json(tmp_path / "benchmark.json", {"ok": True, "summary": {"finding_count": 0}})
+    stability_path = write_json(tmp_path / "stability.json", {"ok": True, "failure_count": 0})
+    health_path = write_json(
+        tmp_path / "health.json",
+        {
+            "ok": True,
+            "system": {"swap": {"pressure": "elevated", "used_percent": 42.0}},
+            "lanes": [{"name": "omlx-production", "ok": True}],
+        },
+    )
+    tool_path = write_json(tmp_path / "tool.json", {"ok": True})
+    docs_path = write_json(tmp_path / "documentation.json", {"ok": True, "finding_count": 0})
+
+    result = gates.evaluate_model_promotion(
+        benchmark_path=benchmark_path,
+        stability_path=stability_path,
+        health_path=health_path,
+        tool_call_path=tool_path,
+        documentation_path=docs_path,
+    )
+
+    assert result["ok"] is True
+    assert result["findings"] == []
+    assert {gate["name"] for gate in result["gates"]} == {
+        "benchmark",
+        "stability",
+        "health",
+        "swap",
+        "tool_calling",
+        "documentation",
+    }
+
+
+def test_benchmark_trend_analysis_flags_ttft_degradation(tmp_path):
+    trends = load_script("benchmark-trend-analysis.py")
+    first = write_json(
+        tmp_path / "bench-1.json",
+        {
+            "created_at": "2026-06-01T00:00:00Z",
+            "engines": [
+                {
+                    "engine": "omlx-mlx",
+                    "runs": [{"workload": "coding_patch", "ttft_s": 0.05, "output_tok_s_wall": 50.0, "reliability": 1.0}],
+                }
+            ],
+        },
+    )
+    second = write_json(
+        tmp_path / "bench-2.json",
+        {
+            "created_at": "2026-06-23T00:00:00Z",
+            "engines": [
+                {
+                    "engine": "omlx-mlx",
+                    "runs": [{"workload": "coding_patch", "ttft_s": 0.09, "output_tok_s_wall": 49.0, "reliability": 1.0}],
+                }
+            ],
+        },
+    )
+
+    result = trends.analyze_trends([first, second], ttft_degradation_pct=50.0)
+
+    assert result["ok"] is False
+    assert result["summary"]["series_count"] == 1
+    assert result["findings"][0]["id"] == "ttft-degradation"
+    assert result["series"][0]["engine"] == "omlx-mlx"
+    assert result["series"][0]["workload"] == "coding_patch"
