@@ -20,6 +20,20 @@ Shared agent skills were added under:
 | `documentation` | Markdown, runbooks, architecture docs, and OpenAI docs workflow |
 | `enterprise-automation` | Ansible, AAP, Satellite, Linux, Windows, compliance, and patching workflows |
 
+## Enterprise Agent Portfolio
+
+Reusable enterprise copilots are documented in `docs/agents/agent-catalog.md` and integrated through `.github/prompts/enterprise-agent-workforce.prompt.md`.
+
+| Agent | Primary skill route |
+|---|---|
+| Enterprise Architecture Copilot | `documentation`, `enterprise-automation`, `security` |
+| AAP Platform Copilot | `enterprise-automation`, `devops`, `security` |
+| Satellite Platform Copilot | `enterprise-automation`, `devops`, `security` |
+| Server Engineering Copilot | `devops`, `enterprise-automation`, `security` |
+| Executive Communications Copilot | `documentation` plus the relevant domain skill |
+| Automation Discovery Copilot | `enterprise-automation`, `documentation` |
+| Operational Review Copilot | `devops`, `documentation`, `local-ai`, `security` |
+
 ## Design
 
 The shared skills are lightweight routing skills. They do not duplicate full Codex skill bodies and they do not contain secrets. Their job is to keep local agents aligned on:

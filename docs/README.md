@@ -58,6 +58,16 @@ Date: 2026-06-23
 | Shared skills library | `docs/skills/shared-skills-library.md` |
 | Secret handling | `docs/security/onepassword-secrets.md` |
 | Secret inventory | `docs/security/secret-inventory.md` |
+| Agent portfolio assessment | `docs/agents/agent-portfolio-assessment.md` |
+| Agent catalog | `docs/agents/agent-catalog.md` |
+| Agent runtime architecture | `docs/agents/agent-runtime-architecture.md` |
+| Enterprise Architecture Copilot | `docs/agents/enterprise-architecture-agent.md` |
+| AAP Platform Copilot | `docs/agents/aap-platform-agent.md` |
+| Satellite Platform Copilot | `docs/agents/satellite-platform-agent.md` |
+| Server Engineering Copilot | `docs/agents/server-engineering-agent.md` |
+| Executive Communications Copilot | `docs/agents/executive-briefing-agent.md` |
+| Automation Discovery Copilot | `docs/agents/automation-discovery-agent.md` |
+| Operational Review Copilot | `docs/agents/operational-review-agent.md` |
 
 ## Historical But Still Useful
 
