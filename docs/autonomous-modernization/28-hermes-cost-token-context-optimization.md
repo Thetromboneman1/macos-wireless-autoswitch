@@ -76,6 +76,14 @@ hermes tools enable --platform cli browser vision image_gen tts cronjob messagin
 - `scripts/health/local-ai-health.py --json ...` passed after trim.
 - `hermes -z 'Reply with exactly OK.' -t terminal,file,web,skills,memory,todo,clarify ...` returned `OK.`
 
+## Commit And Push Status
+
+| Repository | Commit | Push status |
+|---|---|---|
+| `macos-wireless-autoswitch` | `58571c0` | Pending at report write; see final git status after push. |
+
+External Hermes user config was changed through the supported `hermes tools disable --platform cli ...` command and backed up before editing. That config lives under `~/.hermes/config.yaml`, outside this repository.
+
 ## Remaining Manual Actions
 
 - Run a long-session compression test before changing compression thresholds.
