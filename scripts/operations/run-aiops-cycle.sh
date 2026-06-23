@@ -11,6 +11,8 @@ health_json="$OUT_DIR/health-$STAMP.json"
 drift_json="$OUT_DIR/drift-$STAMP.json"
 dependency_json="$OUT_DIR/dependencies-$STAMP.json"
 doc_json="$OUT_DIR/documentation-$STAMP.json"
+prompt_size_json="$OUT_DIR/hermes-prompt-size-$STAMP.json"
+hermes_cost_json="$OUT_DIR/hermes-cost-$STAMP.json"
 platform_json="$OUT_DIR/platform-report-$STAMP.json"
 
 cd "$ROOT"
@@ -20,11 +22,17 @@ scripts/health/drift-detection/check-platform-drift.py --health-json "$health_js
 scripts/operations/dependency-report.py --json "$dependency_json" >/dev/null
 doc_status=0
 scripts/operations/documentation-review.py docs/operations docs/governance docs/architecture docs/macos docs/security docs/skills docs/executive docs/roadmap docs/capacity docs/disaster-recovery --json "$doc_json" >/dev/null || doc_status=$?
+hermes prompt-size --json > "$prompt_size_json"
+scripts/operations/hermes-cost-report.py \
+  --prompt-size-json "$prompt_size_json" \
+  --health-json "$health_json" \
+  --json "$hermes_cost_json" >/dev/null
 scripts/operations/generate-platform-report.py \
   --health-json "$health_json" \
   --drift-json "$drift_json" \
   --dependency-json "$dependency_json" \
   --documentation-json "$doc_json" \
+  --hermes-cost-json "$hermes_cost_json" \
   --json "$platform_json" >/dev/null
 
 if [[ -n "${AIOPS_BENCH_BASELINE:-}" && -n "${AIOPS_BENCH_CURRENT:-}" ]]; then

@@ -42,8 +42,18 @@ def test_platform_report_combines_health_and_drift(tmp_path):
     )
     drift_path = write_json(tmp_path / "drift.json", {"ok": True, "finding_count": 0, "findings": []})
     doc_path = write_json(tmp_path / "documentation.json", {"ok": True, "reviewed_count": 3, "finding_count": 0, "findings": []})
+    cost_path = write_json(
+        tmp_path / "hermes-cost.json",
+        {
+            "ok": True,
+            "sections": {
+                "usage": {"input_tokens": 150, "output_tokens": 30, "cache_hit_percent": 26.7},
+                "fixed_prompt_overhead": {"platforms": {"cli": {"estimated_total_tokens": 1795}}},
+            },
+        },
+    )
 
-    result = report.build_report(health_path, drift_path, documentation_path=doc_path)
+    result = report.build_report(health_path, drift_path, documentation_path=doc_path, hermes_cost_path=cost_path)
 
     assert result["ok"] is True
     assert result["sections"]["health"]["ok"] is True
@@ -51,6 +61,55 @@ def test_platform_report_combines_health_and_drift(tmp_path):
     assert result["sections"]["documentation"]["reviewed_count"] == 3
     assert result["sections"]["lanes"]["running"] == ["omlx-production"]
     assert result["sections"]["lanes"]["manual_stopped"] == ["rapid-mlx"]
+    assert result["sections"]["hermes_cost"]["usage"]["input_tokens"] == 150
+    assert result["sections"]["hermes_cost"]["fixed_prompt_overhead"]["cli_estimated_total_tokens"] == 1795
+
+
+def test_hermes_cost_report_summarizes_prompt_overhead(tmp_path):
+    costs = load_script("hermes-cost-report.py")
+    prompt_path = write_json(
+        tmp_path / "prompt-size.json",
+        {
+            "platform": "cli",
+            "model": "local-model",
+            "system_prompt": {"chars": 2000, "bytes": 2100},
+            "skills_index": {"chars": 1000, "bytes": 1000},
+            "memory": {"chars": 100, "bytes": 100},
+            "user_profile": {"chars": 80, "bytes": 80},
+            "tools": {"count": 10, "json_bytes": 4000},
+        },
+    )
+
+    result = costs.build_cost_report(prompt_size_paths=[prompt_path])
+
+    assert result["ok"] is True
+    fixed = result["sections"]["fixed_prompt_overhead"]
+    assert fixed["platforms"]["cli"]["tool_count"] == 10
+    assert fixed["platforms"]["cli"]["estimated_total_tokens"] == 1795
+    assert fixed["platforms"]["cli"]["estimated_tool_schema_tokens"] == 1000
+
+
+def test_hermes_cost_report_aggregates_usage_records(tmp_path):
+    costs = load_script("hermes-cost-report.py")
+    usage_path = tmp_path / "session.jsonl"
+    usage_path.write_text(
+        "\n".join(
+            [
+                json.dumps({"usage": {"prompt_tokens": 100, "completion_tokens": 20, "prompt_tokens_details": {"cached_tokens": 40}}}),
+                json.dumps({"response": {"usage": {"input_tokens": 50, "output_tokens": 10}}}),
+            ]
+        )
+        + "\n"
+    )
+
+    result = costs.build_cost_report(session_paths=[usage_path])
+
+    usage = result["sections"]["usage"]
+    assert usage["record_count"] == 2
+    assert usage["input_tokens"] == 150
+    assert usage["output_tokens"] == 30
+    assert usage["cached_input_tokens"] == 40
+    assert usage["cache_hit_percent"] == 26.7
 
 
 def test_benchmark_governance_flags_ttft_regression(tmp_path):

@@ -34,11 +34,15 @@ def build_report(
     drift_path: Path,
     dependency_path: Path | None = None,
     documentation_path: Path | None = None,
+    hermes_cost_path: Path | None = None,
 ) -> dict[str, Any]:
     health = load_json(health_path)
     drift = load_json(drift_path)
     dependency = load_json(dependency_path) if dependency_path else {"ok": None, "finding_count": None, "findings": []}
     documentation = load_json(documentation_path) if documentation_path else {"ok": None, "finding_count": None, "findings": []}
+    hermes_cost = load_json(hermes_cost_path) if hermes_cost_path else {"ok": None, "sections": {}}
+    cost_sections = hermes_cost.get("sections", {})
+    fixed_platforms = cost_sections.get("fixed_prompt_overhead", {}).get("platforms", {})
     sections = {
         "health": {
             "ok": bool(health.get("ok")),
@@ -68,6 +72,14 @@ def build_report(
             "finding_count": documentation.get("finding_count"),
             "findings": documentation.get("findings", []),
         },
+        "hermes_cost": {
+            "ok": hermes_cost.get("ok"),
+            "usage": cost_sections.get("usage", {}),
+            "fixed_prompt_overhead": {
+                f"{platform}_estimated_total_tokens": details.get("estimated_total_tokens")
+                for platform, details in fixed_platforms.items()
+            },
+        },
     }
     optional_dependency_ok = dependency.get("ok") is not False
     optional_documentation_ok = documentation.get("ok") is not False
@@ -90,10 +102,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--drift-json", type=Path, required=True)
     parser.add_argument("--dependency-json", type=Path)
     parser.add_argument("--documentation-json", type=Path)
+    parser.add_argument("--hermes-cost-json", type=Path)
     parser.add_argument("--json", type=Path, help="Write report JSON to this path.")
     args = parser.parse_args(argv)
 
-    report = build_report(args.health_json, args.drift_json, args.dependency_json, args.documentation_json)
+    report = build_report(
+        args.health_json,
+        args.drift_json,
+        args.dependency_json,
+        args.documentation_json,
+        args.hermes_cost_json,
+    )
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(report, indent=2) + "\n")

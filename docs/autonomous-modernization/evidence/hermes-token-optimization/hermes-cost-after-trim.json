@@ -1,0 +1,63 @@
+{
+  "created_at": "2026-06-23T15:59:59Z",
+  "ok": true,
+  "sections": {
+    "fixed_prompt_overhead": {
+      "platforms": {
+        "cli": {
+          "path": "docs/autonomous-modernization/evidence/hermes-token-optimization/prompt-size-cli-after-trim.json",
+          "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+          "tool_count": 29,
+          "estimated_system_tokens": 5570,
+          "estimated_skills_tokens": 2788,
+          "estimated_memory_tokens": 38,
+          "estimated_user_profile_tokens": 40,
+          "estimated_tool_schema_tokens": 11694,
+          "estimated_total_tokens": 20130
+        }
+      }
+    },
+    "usage": {
+      "record_count": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "cached_input_tokens": 0,
+      "cache_hit_percent": 0.0
+    },
+    "local_ai_health": {
+      "ok": true,
+      "swap_pressure": "high",
+      "lanes": [
+        {
+          "name": "omlx-production",
+          "ok": true,
+          "state": "running",
+          "usage": {
+            "prompt_tokens": 18,
+            "completion_tokens": 1,
+            "total_tokens": 19,
+            "input_tokens": 18,
+            "output_tokens": 1,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "model_load_duration": 6.48,
+            "total_time": 0.77
+          }
+        },
+        {
+          "name": "llama-cpp-gguf",
+          "ok": true,
+          "state": "stopped",
+          "usage": {}
+        },
+        {
+          "name": "rapid-mlx",
+          "ok": true,
+          "state": "stopped",
+          "usage": {}
+        }
+      ]
+    }
+  }
+}

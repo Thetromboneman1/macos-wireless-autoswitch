@@ -1,0 +1,508 @@
+{
+  "created_at": "2026-06-23T16:00:15Z",
+  "system": {
+    "swapusage": "total = 7168.00M  used = 5939.00M  free = 1229.00M  (encrypted)",
+    "swap": {
+      "total_mb": 7168.0,
+      "used_mb": 5939.0,
+      "free_mb": 1229.0,
+      "used_percent": 82.9,
+      "pressure": "high"
+    }
+  },
+  "ports": [
+    {
+      "port": 18080,
+      "listening": true,
+      "listeners": [
+        "python3.1 77252 corn    4u  IPv4 0x8c6f27c710d9eb9      0t0  TCP 127.0.0.1:18080 (LISTEN)"
+      ]
+    },
+    {
+      "port": 8002,
+      "listening": false,
+      "listeners": []
+    },
+    {
+      "port": 8010,
+      "listening": false,
+      "listeners": []
+    }
+  ],
+  "processes": [
+    {
+      "pid": 540,
+      "rss_kib": 4752,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:58:06",
+      "command": "/Library/PrivilegedHelperTools/com.docker.vmnetd"
+    },
+    {
+      "pid": 836,
+      "rss_kib": 46992,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.1",
+      "etime": "13-22:58:01",
+      "command": "/Applications/LM Studio.app/Contents/MacOS/LM Studio"
+    },
+    {
+      "pid": 858,
+      "rss_kib": 5792,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:58:00",
+      "command": "/Applications/LM Studio.app/Contents/Frameworks/Electron Framework.framework/Helpers/chrome_crashpad_handler --no-rate-limit --no-upload-gzip --monitor-self-annotation=ptype=crashpad-handler --database=/Users/corn/Librar"
+    },
+    {
+      "pid": 881,
+      "rss_kib": 14496,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:58:00",
+      "command": "/Applications/LM Studio.app/Contents/Frameworks/LM Studio Helper (GPU).app/Contents/MacOS/LM Studio Helper (GPU) --type=gpu-process --user-data-dir=/Users/corn/Library/Application Support/LM Studio --gpu-preferences=SAAA"
+    },
+    {
+      "pid": 884,
+      "rss_kib": 16496,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:58:00",
+      "command": "/Applications/LM Studio.app/Contents/Frameworks/LM Studio Helper.app/Contents/MacOS/LM Studio Helper --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=network --user-data-"
+    },
+    {
+      "pid": 892,
+      "rss_kib": 13680,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:57:59",
+      "command": "/Users/corn/.lmstudio/.internal/utils/node -e \\012function connectPort(port) {\\012  const handlersMap = new Map();\\012  return {\\012    postMessage: data => process.send({ port: port, data }),\\012    on: (event, handler)"
+    },
+    {
+      "pid": 2537,
+      "rss_kib": 33872,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:51",
+      "command": "/Applications/Docker.app/Contents/MacOS/com.docker.backend"
+    },
+    {
+      "pid": 2538,
+      "rss_kib": 208064,
+      "mem_percent": "0.3",
+      "cpu_percent": "1.5",
+      "etime": "13-22:56:51",
+      "command": "/Applications/Docker.app/Contents/MacOS/com.docker.backend services"
+    },
+    {
+      "pid": 2539,
+      "rss_kib": 34640,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:51",
+      "command": "/Applications/Docker.app/Contents/MacOS/com.docker.backend fork"
+    },
+    {
+      "pid": 2581,
+      "rss_kib": 69328,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:49",
+      "command": "/Applications/Docker.app/Contents/MacOS/com.docker.build --log-no-timestamp"
+    },
+    {
+      "pid": 2582,
+      "rss_kib": 23456,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:49",
+      "command": "/Applications/Docker.app/Contents/MacOS/com.docker.virtualization --kernel /Applications/Docker.app/Contents/Resources/linuxkit/kernel --cmdline init=/initd loglevel=1 root=/dev/vdb rootfstype=erofs ro vsyscall=emulate p"
+    },
+    {
+      "pid": 2587,
+      "rss_kib": 127424,
+      "mem_percent": "0.2",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:48",
+      "command": "/Applications/Docker.app/Contents/MacOS/Docker Desktop.app/Contents/MacOS/Docker Desktop --reason=open-tray --analytics-enabled=true --name=dashboard"
+    },
+    {
+      "pid": 2588,
+      "rss_kib": 5408,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:48",
+      "command": "/Applications/Docker.app/Contents/Resources/cli-plugins/docker-sandbox daemon start"
+    },
+    {
+      "pid": 2611,
+      "rss_kib": 38368,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:48",
+      "command": "/Applications/Docker.app/Contents/Resources/cli-plugins/docker-agent serve api --listen unix:///Users/corn/Library/Containers/com.docker.docker/Data/docker-agent.sock --data-dir /Users/corn/Library/Containers/com.docker."
+    },
+    {
+      "pid": 2697,
+      "rss_kib": 34800,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:46",
+      "command": "/Applications/Docker.app/Contents/MacOS/Docker Desktop.app/Contents/Frameworks/Docker Desktop Helper.app/Contents/MacOS/Docker Desktop Helper --type=gpu-process --user-data-dir=/Users/corn/Library/Application Support/Doc"
+    },
+    {
+      "pid": 2699,
+      "rss_kib": 17840,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "13-22:56:46",
+      "command": "/Applications/Docker.app/Contents/MacOS/Docker Desktop.app/Contents/Frameworks/Docker Desktop Helper.app/Contents/MacOS/Docker Desktop Helper --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --"
+    },
+    {
+      "pid": 53385,
+      "rss_kib": 1872,
+      "mem_percent": "0.0",
+      "cpu_percent": "0.0",
+      "etime": "12-03:16:27",
+      "command": "bash /Users/corn/.omlx/bin/omlx-power-watch.sh"
+    },
+    {
+      "pid": 77220,
+      "rss_kib": 38864,
+      "mem_percent": "0.1",
+      "cpu_percent": "0.0",
+      "etime": "01-04:53:15",
+      "command": "/Applications/oMLX.app/Contents/MacOS/oMLX"
+    },
+    {
+      "pid": 77252,
+      "rss_kib": 17949632,
+      "mem_percent": "26.7",
+      "cpu_percent": "0.7",
+      "etime": "01-04:53:11",
+      "command": "omlx-server       "
+    }
+  ],
+  "launchagents": [
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.betterdisplay.internal.enforcer.plist",
+      "ok": true,
+      "label": "com.boneman.betterdisplay.internal.enforcer",
+      "program": "/Users/corn/Library/Application Support/Boneman/betterdisplay-internal-enforcer/scripts/bd-enforce-internal.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 180,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/Boneman/betterdisplay-internal-enforcer/launchd-enforcer.log",
+        "stderr": "/Users/corn/Library/Logs/Boneman/betterdisplay-internal-enforcer/launchd-enforcer.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.betterdisplay.internal.healthcheck.plist",
+      "ok": true,
+      "label": "com.boneman.betterdisplay.internal.healthcheck",
+      "program": "/Users/corn/Library/Application Support/Boneman/betterdisplay-internal-enforcer/scripts/bd-healthcheck.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 900,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/Boneman/betterdisplay-internal-enforcer/launchd-health.log",
+        "stderr": "/Users/corn/Library/Logs/Boneman/betterdisplay-internal-enforcer/launchd-health.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.citrix-auto-self-heal.plist",
+      "ok": true,
+      "label": "com.boneman.citrix-auto-self-heal",
+      "program": "/Users/corn/Library/Application Support/Boneman/scripts/citrix-auto-self-heal.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 180,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/citrix-auto-self-heal.log",
+        "stderr": "/Users/corn/Library/Logs/citrix-auto-self-heal.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.ea-auto-close.plist",
+      "ok": true,
+      "label": "com.boneman.ea-auto-close",
+      "program": "/Users/corn/Library/Application Support/Boneman/scripts/ea-auto-close.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 90,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/ea-auto-close.log",
+        "stderr": "/Users/corn/Library/Logs/ea-auto-close.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.gfn-bf6-enforcer.plist",
+      "ok": true,
+      "label": "com.boneman.gfn-bf6-enforcer",
+      "program": "/Users/corn/Library/Application Support/Boneman/gfn-bf6-enforcer/scripts/gfn-bf6-enforcer.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 60,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/Boneman/gfn-bf6-enforcer/launchd.log",
+        "stderr": "/Users/corn/Library/Logs/Boneman/gfn-bf6-enforcer/launchd.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.launcher-auto-maintenance.plist",
+      "ok": true,
+      "label": "com.boneman.launcher-auto-maintenance",
+      "program": "/Users/corn/Documents/Boneman_Projects/scripts/gaming/launcher-auto-maintenance.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 21600,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/launcher-auto-maintenance.log",
+        "stderr": "/Users/corn/Library/Logs/launcher-auto-maintenance.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.magic-mouse-scroll-reverser.plist",
+      "ok": true,
+      "label": "com.boneman.magic-mouse-scroll-reverser",
+      "program": "/Users/corn/Library/Application Support/Boneman/scripts/magic-mouse-scroll-reverser.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 5,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/magic-mouse-scroll-reverser.log",
+        "stderr": "/Users/corn/Library/Logs/magic-mouse-scroll-reverser.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.boneman.steam-auto-updater.plist",
+      "ok": true,
+      "label": "com.boneman.steam-auto-updater",
+      "program": "/Users/corn/Documents/Boneman_Projects/scripts/gaming/steam-auto-update.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": 14400,
+      "logs": {
+        "stdout": "/Users/corn/Library/Logs/steam-auto-updater.log",
+        "stderr": "/Users/corn/Library/Logs/steam-auto-updater.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.corn.omlx-power-policy.plist",
+      "ok": true,
+      "label": "com.corn.omlx-power-policy",
+      "program": "/Users/corn/.omlx/bin/omlx-power-watch.sh",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": null,
+      "logs": {
+        "stdout": "/Users/corn/.omlx/logs/power-policy.log",
+        "stderr": "/Users/corn/.omlx/logs/power-policy.log"
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/com.razer.gms.plist",
+      "ok": true,
+      "label": "com.razer.gms",
+      "program": "/Users/corn/Library/Razer/GameManagerService3/RazerGameManagerService.app/Contents/MacOS/RazerGameManagerService",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/homebrew.mxcl.dnscrypt-proxy.plist",
+      "ok": true,
+      "label": "homebrew.mxcl.dnscrypt-proxy",
+      "program": "/opt/homebrew/opt/dnscrypt-proxy/sbin/dnscrypt-proxy",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/io.sideloadly.daemon.plist",
+      "ok": true,
+      "label": "io.sideloadly.daemon",
+      "program": "/Applications/Sideloadly.app/Contents/Resources/sideloadly-daemon",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": null,
+      "logs": {
+        "stdout": "",
+        "stderr": ""
+      },
+      "classification": "healthy"
+    },
+    {
+      "path": "/Users/corn/Library/LaunchAgents/local.vscode.open-workspace.plist",
+      "ok": true,
+      "label": "local.vscode.open-workspace",
+      "program": "/usr/bin/open",
+      "program_exists": true,
+      "run_at_load": true,
+      "start_interval": null,
+      "logs": {
+        "stdout": "/tmp/vscode-open-workspace.log",
+        "stderr": "/tmp/vscode-open-workspace.err"
+      },
+      "classification": "healthy"
+    }
+  ],
+  "lanes": [
+    {
+      "name": "omlx-production",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+      "ok": true,
+      "model_count": 4,
+      "model_found": true,
+      "chat_seconds": 0.7367,
+      "usage": {
+        "prompt_tokens": 18,
+        "completion_tokens": 1,
+        "total_tokens": 19,
+        "input_tokens": 18,
+        "output_tokens": 1,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_time": 0.73
+      },
+      "seconds": 0.765293
+    },
+    {
+      "name": "llama-cpp-gguf",
+      "base_url": "http://127.0.0.1:8002/v1",
+      "model": "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
+      "port": 8002,
+      "expected": "manual",
+      "ok": true,
+      "state": "stopped"
+    },
+    {
+      "name": "rapid-mlx",
+      "base_url": "http://127.0.0.1:8010/v1",
+      "model": "qwen3.6-35b-4bit",
+      "port": 8010,
+      "expected": "manual",
+      "ok": true,
+      "state": "stopped"
+    }
+  ],
+  "codex_skills": {
+    "root": "/Users/corn/.codex/skills",
+    "ok": true,
+    "skills": {
+      "gh-address-comments": {
+        "path": "/Users/corn/.codex/skills/gh-address-comments/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "gh-fix-ci": {
+        "path": "/Users/corn/.codex/skills/gh-fix-ci/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "migrate-to-codex": {
+        "path": "/Users/corn/.codex/skills/migrate-to-codex/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "openai-docs": {
+        "path": "/Users/corn/.codex/skills/openai-docs/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "playwright": {
+        "path": "/Users/corn/.codex/skills/playwright/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "playwright-interactive": {
+        "path": "/Users/corn/.codex/skills/playwright-interactive/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "security-best-practices": {
+        "path": "/Users/corn/.codex/skills/security-best-practices/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "security-ownership-map": {
+        "path": "/Users/corn/.codex/skills/security-ownership-map/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "security-threat-model": {
+        "path": "/Users/corn/.codex/skills/security-threat-model/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      },
+      "yeet": {
+        "path": "/Users/corn/.codex/skills/yeet/SKILL.md",
+        "exists": true,
+        "has_metadata": true,
+        "ok": true
+      }
+    }
+  },
+  "vscode_recommendations": {
+    "path": "/Users/corn/Documents/Corn_Automation/macos-wireless-autoswitch/.vscode/extensions.json",
+    "ok": true,
+    "extensions": {
+      "charliermarsh.ruff": {
+        "recommended": true,
+        "ok": true
+      },
+      "davidanson.vscode-markdownlint": {
+        "recommended": true,
+        "ok": true
+      },
+      "hashicorp.terraform": {
+        "recommended": true,
+        "ok": true
+      },
+      "ms-kubernetes-tools.vscode-kubernetes-tools": {
+        "recommended": true,
+        "ok": true
+      },
+      "ms-vscode.powershell": {
+        "recommended": true,
+        "ok": true
+      },
+      "tamasfe.even-better-toml": {
+        "recommended": true,
+        "ok": true
+      }
+    }
+  },
+  "ok": true
+}

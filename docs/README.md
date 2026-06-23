@@ -10,6 +10,9 @@ Date: 2026-06-23
 | Operations center | `docs/operations/platform-operations-center.md` |
 | Automation monitoring | `docs/operations/automation-monitoring.md` |
 | Platform reporting | `docs/operations/platform-reporting.md` |
+| Hermes token cost monitoring | `docs/operations/hermes-token-cost-monitoring.md` |
+| Hermes toolset optimization | `docs/hermes/toolset-optimization.md` |
+| Hermes cost-aware routing | `docs/architecture/hermes-cost-aware-routing.md` |
 | Maintenance | `docs/operations/platform-maintenance-plan.md` |
 | Maintenance v2 | `docs/operations/platform-maintenance-v2.md` |
 | Capacity plan | `docs/capacity/platform-capacity-plan.md` |
@@ -60,6 +63,8 @@ Date: 2026-06-23
 | Post-skills cleanup | `docs/autonomous-modernization/26-post-skills-cleanup-and-drift-reconciliation.md` |
 | AIOps operations center | `docs/autonomous-modernization/27-aiops-operations-center.md` |
 | Capacity resiliency governance | `docs/autonomous-modernization/28-capacity-resiliency-governance.md` |
+| Hermes cost source review | `docs/autonomous-modernization/27-hermes-cost-token-optimization-source-review.md` |
+| Hermes cost final report | `docs/autonomous-modernization/28-hermes-cost-token-context-optimization.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |

@@ -1,0 +1,41 @@
+{
+  "platform": "cli",
+  "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+  "system_prompt": {
+    "chars": 22280,
+    "bytes": 22744
+  },
+  "skills_index": {
+    "chars": 11152,
+    "bytes": 11196
+  },
+  "memory": {
+    "chars": 152,
+    "bytes": 338
+  },
+  "user_profile": {
+    "chars": 161,
+    "bytes": 347
+  },
+  "tools": {
+    "count": 29,
+    "json_bytes": 46774
+  },
+  "sections": [
+    [
+      "stable (identity/guidance/skills)",
+      20230,
+      20322
+    ],
+    [
+      "context (AGENTS.md/cwd files)",
+      1639,
+      1639
+    ],
+    [
+      "volatile (memory/profile/timestamp)",
+      407,
+      779
+    ]
+  ]
+}

@@ -1,0 +1,597 @@
+--- Page 1 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 1 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+Cost & T oken Optimization Megathread — Hermes Agent (June2026)Megathread — Weekly help, check-ins, recurring mod threads
+LAST UPDATED: June 21, 2026Sourced from: r/hermesagent cost threads, official Hermes context compression/caching docs, provider pricingpages (DeepSeek, Anthropic, OpenAI), GitHub issue #4379 (token overhead analysis).
+TL;DR — What's This Going to Cost Me?
+DecisionCheapest OptionMonthly Est.Runner-UpMonthly Est.
+API modelDeepSeek V4 Flash$3-10/moDeepSeek V4 Pro(75% off)$8-20/mo
+Local modelQwen 3.6-27B onRTX 3090$0/mo (electricityonly) Qwen 3.5-9B on anyGPU $0/mo
+VPS + APIOracle free tier +Flash $3-10/moHetzner €4 + Flash$7-14/mo
+All-in (VPS + API +tools) ~$15-25/moReal communitybudget~$30-35/mou/Background-Remote765
+Token overhead~73% of each call isfixed Use toolsettrimming~40% after trimminghermes-token-router
+Part 1: Provider Pricing — June 2026
+!
+ DeepSeek (Best Value)
+ModelInput / 1MtokensOutput / 1MtokensContextNotes
+V4Flash$0.14 $0.28 1M18× cheaper than GPT-5.4 input. Cached:$0.014/M.
+V4 Pro$1.74 ($0.435*)$3.48 ($0.87*)1M*75% off promotional pricing. Strongestreasoning.
+V3.2$0.27 $1.10 128KLegacy but still viable.
+R1$0.55 $2.19 128KReasoning model.
+Community consensus: V4 Flash for everyday agent work. V4 Pro for complex reasoning. The 75% off Propricing makes it competitive with Flash for heavy reasoning tasks.
+Direct API vs OpenRouter: Always use DeepSeek's direct API. OpenRouter adds a markup. No benefit forsingle-provider use.
+"
+ Anthropic Claude (Best Quality, Higher Cost)
+ModelInput / 1MOutput / 1MContextCached Input / 1M
+Sonnet 4$3.00$15.00200K$0.30
+Sonnet 4.6$3.00$15.00200K$0.30
+r/hermesagent•17h agoJonathan_RiveraMOD
+ Top 1% Poster
+USER FLAIR
+Bacon896
+COMMUNITY BOOKMARKS
+Nous Research Links
+SCHEDULED POST CALENDAR
+Thursday - Showcase Post
+Friday - Weekly Usecase
+R/HERMESAGENT RULES
+r/hermesagent
+hermesagentThe unofficial community for Hermes Agentby Nous Research!
+Created Mar 14, 2026
+Public
+152KWeekly visitors
+1Respect others and be civil
+2No Spam, Soliciting, orUnapproved Selling
+3The 90/10 Self-PromotionGuideline
+4Technical Help RequiresContext
+5Keep It Relevant to HermesAgent
+6Context Required in Posts &Reports
+7Keep Politics to a Minimum
+8Cross-Post Limit
+9New Account Post Approval
+10Constructive Discussion
+Home
+Popular
+News
+Explore
+Start a community
+CUSTOM FEEDS
+Create Custom Feed
+RECENT
+COMMUNITIES
+Manage Communities
+r/ansible
+r/apple
+r/Battlefield
+r/Battlefield6
+r/CFB
+r/GeForceNOW
+r/hermesagent
+r/LLM
+r/LLMDevs
+r/LLMStudio
+r/LocalLLaMA
+r/LocalLLM
+r/MacOS
+r/Minecraft
+r/NCAAW
+r/openclaw
+r/opencodeCLI
+r/Piracy
+r/SecOpsDaily
+r/Stremio
+r/hermesagentSearch in r/hermesagent
+
+--- Page 2 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 2 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+Sonnet 4.6$3.00$15.00200K$0.30
+Opus 4.7$15.00$75.00200K$1.50
+Prompt caching is critical with Claude: Hermes automatically caches the system prompt + rolling 3-messagewindow. Cache hits cost 90% less on input tokens. In practice, multi-turn conversations with Claude can see 50-70% effective input cost reduction.
+When Claude is worth it: Complex multi-step coding, security-sensitive work, tasks where tool-calling reliabilityis paramount. "The boring model that follows schema for 6+ tool calls beats the spicy one that talks itself into aditch."
+#
+ OpenAI (Wide Ecosystem)
+ModelInput / 1MOutput / 1MContext
+GPT-5.4$2.50$10.00128K
+GPT-5.5$5.00$20.00272K (Codex) / 1.05M (direct)
+GPT-4o$2.50$10.00128K
+Local Models (Zero API Cost)
+Setup Hardware CostRunning CostReal-World Tok/s
+Qwen 3.6-27B Q4RTX 3090 ($700 used)~$15/mo electricity25-40 tok/s
+Qwen 3.5-9BRTX 3060 ($200 used)~$5/mo electricity40-60 tok/s
+Qwen 3.6-35B-A3BM1 Max 64GBLaptop you own61 tok/s (MLX)
+DeepSeek V4-Flash local2× RTX 5090~$30/mo electricityProduction speed
+When local breaks even: If you spend >$20/mo on API tokens, a used RTX 3090 pays for itself in ~35 monthson electricity alone. Add VPS savings (no VPS needed) and it's faster.
+Free Tier Options
+ProviderWhat YouGet Limits Community Verdict
+OpenRouterfree models
+Multiplemodels, nocredit card
+Rate limited,inconsistent toolcalling Test/fallback only
+Nous Portalfree tier
+BundledHermesLimited contextSolid for light use
+WELCOME TO THE SUB
+Welcome to the unofficial community forHermes Agent — the powerful, open-sourceAI assistant created by Nous Research.
+Whether you are migrating from OpenClaw,tinkering with local LLMs, or just want an AIthat actually gets stuff done, you are in theright place.
+What Hermes Agent can do:
+$
+ Omnichannel: Chat seamlessly onTelegram, Discord, WhatsApp, Signal, or
+email.
+%
+ Action-Oriented: Runs code, executesterminal commands, browses the web, andmanages local files.
+&
+ Context Aware: Features persistentmemory across all your conversations.
+'
+ Highly Customizable: Comes with 20+built-in tools and fully customizablepersonalities.
+POST FLAIR
+HELP - setups, install, config,docker,WSL, VPS, first-run issues
+HELP - Integrations - Apps, APIs, webhooks, auth, external svcs
+HELP - Troubleshooting - Broken,errors,crashes,debug, recovery
+HELP - Automation, Cron, Kanban,scripts,triggers,agent workflow
+MODELS - model choice, routing, pricing, local vs cloud, VRAM
+MEMORY & Context — Providers, context window, forgetting issues
+INTEGRATIONS — App connections, webhooks, API workflows
+Infra / Hosting - VPS, Docker, Coolify, Proxmox, Remote, uptime
+Discussion - Workflows, habits, setup, best practices
+Discussion-Strategy, tradeoffs, opinions, comparisons, structure
+USE CASE - Real-world tasks, business uses, personal workflows
+SHOWCASE — Projects, tools, builds, demos, GitHub repos
+Guide - Tutorials, walkthroughs, writeups, repeatable how-to's
+NEWS & UPDATES - Releases, announcements, major changes, Nous
+Meta - Subreddit, wiki, rules, moderation, community feedback
+OTHER - Fallback if nothing else fits
+r/StremioAddons
+r/Strong_8K
+r/sysadmin
+r/Team_8K
+r/Ubiquiti
+r/AbsoluteUnits
+r/activedirectory
+r/AndroidTV
+r/announcements
+r/antiwork
+r/AppleWatch
+r/aww
+r/Awww
+r/AZURE
+r/BeAmazed
+r/blunderyears
+r/CatastrophicFa…
+r/Codeweavers_…
+r/CollegeBasket…
+r/ContagiousLau…
+r/CrazyFuckingV…
+r/cybersecurity
+r/Damnthatsinter…
+r/dataisbeautiful
+r/discordVideos
+r/docker
+r/exchangeserver
+r/facepalm
+r/Fios
+r/frontierfios
+r/funny
+r/FunnyAnimals
+r/Funnymemes
+r/funnyvideos
+r/Futurology
+
+
+--- Page 3 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 3 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+free tierHermesmodelsLimited contextSolid for light use
+DeepSeek$5 freecredit (newaccounts)One-timeGood starter
+GoogleGeminiFree tieravailableRate limits, 503errors
+"Nearly destroyed my entire hermes" —u/Simple_Tune2882. Multiple users report 503s even onpaid tier.
+OpencodeGo
+$10/mo →$60 in APIcredits
+6x credit multiplier;Kimi 2.6, Mimo,etc.
+Top recommendation. "I've been using Kimi 2.6 prettyhard and in 5 days only managed to use 11% of mymonthly allowance."
+Minimax$10/mo planMinimax 2.7, M3("as good as GPT5.5-low")"Most overlooked model" — multiple users
+NanoGPT$8/mo60M tokens/weekwith GLM 5.1Extremely cheap if GLM works for you
+OllamaCloud$20/mo flatNo usage caps"Not even getting close to hitting the limits"; some speedcomplaints
+Plan vs API: The Decision Framework
+From u/getstackfax — the clearest framework on the subreddit:
+Use a plan when:
+You're doing heavy daily interactive use
+You want predictable billing (no $54 surprises)
+The plan covers models you actually use
+You're not disciplined enough to audit your API usage weekly
+Use raw API when:
+You route carefully between cheap models
+You keep context small and caching tight
+You've set budget caps and loop guards
+You actually check your provider dashboard weekly
+The golden rule: "API is dangerous if the agent is allowed to wander." Plans cap your downside. API requiresdiscipline.
+The dashboard audit checklist (weekly):
+Model actually used vs default
+Cache hit rate (not just "caching supported" — verify hits)
+Input/output token split
+Fallback/ escalation events
+Background/heartbeat costs
+Total cost per useful task
+"'Caching supported' and 'your workflow is actually getting cache hits' are different things." —u/getstackfax
+Part 2: The Token Overhead Problem73% of every Hermes API call is fixed overhead that doesn't change between requests.
+From GitHub issue #4379 — community analysis of 6 request dumps from a Telegram + WhatsApp + Crondeployment:
+System prompt: ~3,000-8,000 tokens
+Tool definitions: ~2,000-15,000 tokens (depends on enabled toolsets)
+Megathread — Weekly help, check-ins, recurring mod threads
+Featured — Mod-highlighted community work
+(
+[HIGH ENERGY MOD FLAIR] 
+⚡
+Workshop
+MODERATORS
+View all moderators
+INSTALLED APPS
+Reddit RulesPrivacy Policy
+Your Privacy Choices
+Reddit, Inc. © 2026. All rights reserved.
+u/smolpotat0_x
+u/Jonathan_RiveraJR
+u/SelectionCalm70selectioncalm
+u/NousResearch 
+u/AutoModerator
+u/bot-bouncer
+u/PracticlySpeaking 
+u/xeeff floory
+Bot Bouncer
+r/Futurology
+r/gaming
+r/GSP
+r/HolUp
+r/HumansBeingB…
+r/iamatotalpiece…
+r/IdiotsInCars
+r/indianafever
+r/interestingasfu…
+r/inthenews
+r/Intune
+r/iosgaming
+r/Justrolledintot…
+r/KidsAreFuckin…
+r/kubernetes
+r/linuxadmin
+r/macgaming
+r/macsysadmin
+r/MadeMeSmile
+r/MapPorn
+r/meme
+r/mildlyinfuriating
+r/mildlyinteresting
+r/Millennials
+r/MLXLLM
+r/Money
+r/movies
+r/MurderedByW…
+r/NASCAR
+r/NatureIsFuckin…
+r/natureismetal
+r/news
+r/nextfuckinglevel
+r/NonPoliticalTwi…
+r/oddlysatisfying
+
+
+--- Page 4 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 4 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+Tool definitions: ~2,000-15,000 tokens (depends on enabled toolsets)
+Memory injection: variable (grows over time)
+SOUL.md / USER.md: ~500-2,000 tokens
+Actual conversation: only ~27% of the call
+Where Your Tokens Actually Go
+ComponentApproximate TokensVariable?Can You Trim It?
+System prompt3,000-8,000SomewhatNo — core functionality
+Tool definitions2,000-15,000YesYes — disable unused toolsets
+Memory500-5,000+Yes, growsYes — trim old memories
+SOUL.md200-2,000YesYes — keep it compact
+USER.md200-1,500YesYes — keep it compact
+Skills context200-3,000YesYes — fewer loaded skills
+Conversation history1,000-50,000+Yes, growsCompression handles this
+How to Cut Overhead by 40-50%
+1. Toolset trimming (biggest win):
+Every disabled toolset removes its entire JSON schema from every API call. The browser toolset alone can add1,500+ tokens.
+2. Compact SOUL.md and USER.md:
+Target 500-1,000 tokens each
+Remove examples, verbose instructions
+Use bullet points, not paragraphs
+Test: does the agent still behave correctly? If yes, you haven't lost anything.
+3. Memory hygiene:
+Run hermes memory stats to see memory size
+Remove stale/duplicate memories
+Memory grows with every session — prune periodically
+4. Use the hermes-tool-router plugin (in development): Predicts which toolsets are needed before each turnand only sends those definitions. Can cut tool overhead by 60-80% per turn. Currently in testing.
+Part 3: Context Compression — How Hermes Saves TokensHermes has a dual compression system that fires automatically:
+Layer 1: Agent Compressor (50% threshold)
+Fires when prompt tokens reach 50% of the model's context window:
+1. Prunes old tool results (>200 chars are replaced with a placeholder)
+2. Summarizes middle conversation turns into a structured summary
+3. Preserves last N messages (tail) unmodified
+4. On subsequent compressions, updates the existing summary instead of re-summarizing
+# See what's enabledhermes tools
+# Disable toolsets you never usehermes config set toolsets.enabled "['terminal','file','web','skills']"# NOT: "['terminal','file','web','skills','browser','computer_use','vision','image_gen','tts','discord','spotify','homeassistant','kanban','todo','cronjob','delegation']"
+r/oddlysatisfying
+r/oddlyterrifying
+r/Office365
+r/OnnStreamingTV
+r/openshift
+r/pcmasterrace
+r/pics
+r/popping
+r/PrequelMemes
+r/Proxmox
+r/PublicFreakout
+r/rareinsults
+r/razer
+r/realms
+r/redhat
+r/Roms
+r/Satisfyingasfuck
+r/SCCM
+r/science
+r/shitposting
+r/ShittySysadmin
+r/sideloaded
+r/spaceporn
+r/StarWars
+r/Tailscale
+r/technews
+r/technology
+r/therewasanatt…
+r/TiviMate
+r/todayilearned
+r/toptalent
+r/TorBoxApp
+r/tornado
+r/uhf_app
+r/Unexpected
+
+
+--- Page 5 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 5 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+4. On subsequent compressions, updates the existing summary instead of re-summarizing
+Layer 2: Gateway Session Hygiene (85% threshold)
+Safety net for long-running gateway sessions (Telegram/Discord). Catches sessions that escaped the agent'sown compressor.
+Tuning Compression
+compression:  enabled: true  threshold: 0.50          # Fire at 50% of context (default)  target_ratio: 0.20       # Tail gets 20% of threshold budget  protect_last_n: 20       # Minimum tail messages preserved
+Lower threshold = more aggressive compression = lower costs but more context loss. Default 0.50 is well-tuned. Don't go below 0.30 — you'll lose too much context.
+The Summary Model Matters
+The summary is generated by a separate LLM call. If the summary model's context window is smaller than themain model's, compression fails silently and you lose conversation context with no warning. Always ensureyour auxiliary/compression model has at least as large a context window as your main model.
+Part 4: Prompt Caching — Anthropic's 90% DiscountWhen using Claude models, Hermes automatically uses Anthropic's prompt caching:
+System prompt — cached across all turns (breakpoint 1)
+Last 3 messages — rolling cache window (breakpoints 2-4)
+Cache hit savings: 90% reduction on input tokens
+Real-world impact: 50-70% effective input cost reduction in multi-turn conversations
+Cache-aware tips:
+Don't modify SOUL.md mid-conversation — it invalidates the system prompt cache
+The rolling 3-message window re-establishes within 1-2 turns after compression
+TTL configurable: prompt_caching.cache_ttl: "5m" (default) or "1h" for slow conversations
+prompt_caching:  cache_ttl: "1h"    # Better for Telegram where turns have gaps
+Part 5: Community Cost-Saving Strategies
+Strategy 1: Cheap Model for Easy Tasks, Expensive for Hard
+The "router" pattern — most-recommended across all cost threads:
+# config.yaml — main modelmodel:  default: deepseek/deepseek-v4-flash
+# For complex tasks, switch mid-session:/model anthropic/claude-sonnet-4
+Use DeepSeek Flash for 80% of agent work. Switch to Claude only when tool-calling reliability matters or you hita task Flash can't handle.
+Community consensus on model tiers for agent work:
+!
+ Daily driver: DeepSeek V4 Flash, Minimax 2.7, Qwen 3.6-27B (local)
+"
+ Complex reasoning: DeepSeek V4 Pro, Claude Sonnet 4, Kimi K2.6
+#
+ Budget/light: GLM 4.7 Flash, Gemma 4 26B, Granite 4.1 8B
+⚠
+ Avoid for Hermes: Gemma 4 ("bugged with Hermes — tool call issues" confirmed by multiple users),
+Reddit, Inc. © 2026. All rights reserved.
+r/UNIFI
+r/UpliftingNews
+r/vermont
+r/Visible
+r/vmware
+r/WatchPeopleDi…
+r/Whatcouldgow…
+r/WindowsServer
+r/wnba
+r/worldnews
+r/WTF
+r/YoutubePlusSi…
+RESOURCES
+About Reddit
+Advertise
+Developer Platform
+Reddit ProBETA
+Help
+Blog
+Careers
+Press
+Best of Reddit
+Best of Reddit in Port…
+Best of Reddit in Ger…
+Reddit Rules
+Privacy Policy
+User Agreement
+Your Privacy Choices
+Accessibility
+
+--- Page 6 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 6 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+⚠
+ Avoid for Hermes: Gemma 4 ("bugged with Hermes — tool call issues" confirmed by multiple users),Gemini (503 errors, "nearly destroyed my entire hermes")
+Strategy 2: Local Inference + Cloud Fallback
+Run a local model (Qwen, Llama) as primary. Fall back to DeepSeek API when the local model struggles:
+providers:  custom:    local-qwen:      base_url: http://localhost:1234/v1      api_key: not-needed      models: [qwen3.6-27b]
+model:  default: custom:local-qwen/qwen3.6-27b  fallback: deepseek/deepseek-v4-flash
+Strategy 3: Subagent Delegation for Cost Isolation
+Delegate expensive reasoning to short-lived subagents that use cheaper models:
+Parent agent uses DeepSeek Flash (cheap)
+Research subagent uses DeepSeek Flash (cheap, isolated context)
+Only the summary comes back — no token history contamination
+Strategy 4: API Direct, Not OpenRouter
+OpenRouter adds markup. If you use primarily one provider:
+DeepSeek: use direct deepseek provider
+Anthropic: use direct anthropic provider
+OpenAI Codex: use direct openai-codex provider
+Only use OpenRouter if you genuinely need multi-provider routing.
+Strategy 5: Disable Browser Automation
+Browser tools are the single biggest token and cost sink:
+Each browser action = screenshots processed by vision models = thousands of tokens
+Use APIs instead: Exa for search, Himalaya for email, CLI tools for everything
+"Agents speak and read text way better than puppeting a browser and screenshotting" — u/Starrwulfe
+Strategy 6: cronjob Timing
+Don't run heavy processing during peak hours. Schedule daily briefs, research, and maintenance tasks for off-peak when you're not actively chatting:
+Part 6: Real Community Budgets
+Budget Build (~$15-25/month)
+Oracle Cloud free tier VPS (or Hetzner €4)
+DeepSeek V4 Flash API: $5-15/month
+No browser tools
+Toolset trimming enabled
+Compression at 50% default
+Mid-Range (~$30-35/month) — u/Background-Remote765's actual setup
+Netcup VPS: $10-13/month
+cronjob create --schedule "0 3 * * *" --prompt "Generate daily brief from yesterday's activity"
+
+--- Page 7 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 7 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+Hetzner Storage Share: $4/month
+DeepSeek API: $5-10/month
+Tailscale: Free
+Replaces: Spotify, Google ecosystem, AI subscriptions, streaming services
+Local-First (~$5-15/month electricity)
+Used RTX 3090 ($700 one-time)
+Qwen 3.6-27B local inference
+DeepSeek Flash as fallback only
+No VPS needed
+Breaks even vs $30/mo cloud in ~2 years
+Part 7: FAQ
+Q: What's the absolute cheapest way to run Hermes?A: Local inference on hardware you already own. Qwen 3.5-9B runs on any GPU with 8GB+ VRAM. Zero API cost.Second cheapest: DeepSeek V4 Flash at $0.14/M input — most users spend $3-10/month.
+Q: Why am I burning through $20+/month on DeepSeek?A: Check your enabled toolsets. A full toolset load adds 10,000-15,000 tokens to every API call — even for "hello."Disable unused toolsets, trim SOUL.md, and check compression is enabled.
+Q: Is Claude worth 20× the price of DeepSeek Flash?A: For everyday agent work, no. For complex multi-step coding, security audits, or tasks where tool-calling errorscascade — yes. Use Flash as default, switch to Claude when needed.
+Q: Does prompt caching work with non-Anthropic models?A: No. Prompt caching is Anthropic-specific. DeepSeek has its own caching ($0.014/M cached input — 90% off).OpenAI doesn't offer comparable caching for the API tier.
+Q: How do I know how much I'm spending?A: Check your provider's dashboard. DeepSeek shows usage in real-time. For Anthropic/OpenAI, check the billingconsole. Hermes logs token counts per turn in session files.
+Q: Should I use OpenRouter to save money?A: Generally no. OpenRouter adds markup. Direct provider APIs are cheaper for single-provider use.OpenRouter's value is multi-provider access and fallback routing — not cost savings.
+Q: Will local models actually work for agentic tasks?A: Yes. Qwen 3.6-27B handles tool calling reliably for most tasks. Uncensored variants (Heretic, HauhauCS) maybe better at creative problem-solving but can be less reliable at schema-following. Test before relying on them.
+Q: What's eating my tokens when I'm not even chatting?A: Gateway sessions accumulate context. Overnight, a Telegram thread can grow to thousands of tokens justfrom idle system checks. The gateway session hygiene compressor (85% threshold) handles this. Make surecompression is enabled.
+Q: Can I set a hard budget limit?A: Set budget alerts on your provider's dashboard. Hermes doesn't have built-in budget caps yet. Most providerslet you set spending limits or hard caps.
+Part 8: Provider Comparison — June 2026
+ProviderModelInput $/MOutput $/MContextCached InputBest For
+DeepSeekV4 Flash$0.14$0.281M $0.014Default agent work
+DeepSeekV4 Pro*$0.435$0.871M $0.044Complex reasoning
+AnthropicSonnet 4$3.00$15.00200K$0.30Reliable tool calling
+AnthropicOpus 4.7$15.00$75.00200K$1.50Critical/security work
+Skip to main content
+
+--- Page 8 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 8 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+OpenAIGPT-5.4$2.50$10.00128K— Ecosystem integration
+OpenAIGPT-5.5$5.00$20.00272K-1.05M— Max context tasks
+LocalQwen 3.6-27B$0 $0 ~64K$0 Privacy, zero API cost
+LocalQwen 3.5-9B$0 $0 ~32K$0 Low-VRAM setups
+*DeepSeek V4 Pro 75% promotional discount — subject to change
+Part 9: The Bottom LineHermes is as expensive as you let it be. The defaults are generous — full toolsets, verbose system prompts,growing memory. Trimming these to what you actually use cuts costs by 40-50% with zero quality loss.
+The three highest-impact moves:
+1. Switch to DeepSeek V4 Flash if you're on Claude/OpenAI for everyday work (10-50× cheaper)
+2. Disable unused toolsets (saves 2,000-10,000 tokens per call)
+3. Make sure compression is enabled (saves context from growing unbounded)
+A well-tuned Hermes on DeepSeek Flash costs $3-15/month for active daily use. Add a VPS and you're at $15-30/month all-in. That's less than a ChatGPT Plus subscription and infinitely more capable.
+Sourced from: r/hermesagent cost threads (65+ comments across 3 dedicated threads), official Hermescompression/caching documentation, provider pricing pages (June 2026), GitHub issue #4379 token overheadanalysis, and community-reported monthly budgets.
+74 25
+Share
+Join the conversation
+Sort by:Best Search Comments
+roverowl•12h ago
+[--]
+Mimo2.5 family is better than Deepseek
+ReplyAward6 Share
+zer0evolution•11h ago
+[--]
+price? have many option if more expensive than deepseek .
+ReplyAward2 Share
+roverowl•10h ago•Edited 10h ago
+[--]
+go straight to the source: . I got 11bilion tokens plan for~$15/month . Self plug: using my code AEX9XY for $2 API credits + 10% off your plan.
+ReplyAward
+https://platform.xiaomimimo.com/
+1 Share
+zer0evolution•3h ago
+[--]
+i think my usage is under 4.1 B, so thanks for the suggestion, after payday i consider to trythis
+djseto•14h ago
+[--]
+
+--- Page 9 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 9 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+djseto•14h ago
+Where is qwen3.5 35B a4b mtp in all of this? I find its performance pretty snappy on a m4 max with 64B.27B does work but the dog slow. Would love to know the delta between the two as local LLMs
+Jonathan_RiveraOP•14h ago
+ Top 1% Poster
+[--]
+You have your own mac megathread u/djseto , don't be greedy lol
+https://www.reddit.com/r/hermesagent/comments/1uc7rw5/mac_mlx_megathread_hermes_agent_on_apple_silicon/
+djseto•13h ago
+[--]
+Haha. I totally missed that thread. Going over there now!
+alphaQ314•11h ago
+[--]
+Deepseek is hot trash imo. I don't get all the fascination with it. I set the model to the pro, and asked it tochange my hermes model to opus. It just changed one line from deepseek to opus, without the underlyingchanges to everything else. Lost all trust in it instantly.
+SirJohnSmythe•17h ago
+[--]
+The cost estimate for DeepSeek seems high IMHO
+Jonathan_RiveraOP•16h ago
+ Top 1% Poster
+[--]
+It depends on use of the person or people that made the comment that was scraped. I had deepseekpro for primary and flash for sub-agents and spent about $2.00 for the research on 4 megathreads.Today I used deepseek pro and it did not delegate and cost $6.50.
+avadreams•16h ago
+[--]
+Is deepseek still "75% off" promotion or did they make that the permanent API price? Also I'musing Mimo because it was same price but better results. Noticable degredation of Deepseek
+intelligence after the first two weeks of v4
+Jonathan_RiveraOP•16h ago
+ Top 1% Poster
+[--]
+Permanent now.
+bullyliit•4h ago
+[--]
+Did you use the sub or direct API? Planning to swap Deepseek Pro with Mimo Pro
+avadreams•3h ago
+[--]
+Api
+SirJohnSmythe•15h ago
+[--]
+I meant more the $3-10 monthly estimate for Flash.
+ricorick•16h ago
+[--]
+Have you tried an ollama local or llama cpp for compression I’m usually small local model to do
+
+--- Page 10 ---
+6/23/26, 10:49 AMCost & Token Optimization Megathread — Hermes Agent (June 2026) : r/hermesagent
+Page 10 of 10https://www.reddit.com/r/hermesagent/comments/1ud03si/cost _token_optimization_megathread_hermes_agent/
+Have you tried an ollama local or llama cpp for compression I’m usually small local model to docompression at 90k and it keeps my cost down also lowered keep last 20 to 10 or 8 and it works
+Jonathan_RiveraOP•15h ago
+ Top 1% Poster
+[--]
+I am using qwen3.5-9b-uncensored-hauhaucs-aggressive for compression on LM studio. If I'm usinga cloud model for primary i move Aux to Deepseek flash.
+throwRAa100•15h ago
+[--]
+for running local models why were 3090, 3060, m1 max 64gb, and 2x 5090 chosen? Just wondering whatthe optimal model would be if someone was running a 4090 or 5090?
+Jonathan_RiveraOP•15h ago
+ Top 1% Poster
+[--]
+The initial prompt was suggest 3 megathreads based off community questions over the last 45 days.These edge cases were the most vocal across that timeline.
+haltingpoint•14h ago
+[--]
+If you go direct with Deepseek be aware your data is being sent to China.
+Worried_Corner_8541•8h ago
+[--]
+instead send it to claude and gpt in America, right? unless you run locally someone else sees yourdata anyway.
+Momsbestboy•6h ago
+[--]
+Which is the reason I find the following aspect above, well, .....
+When Claude is worth it: Complex multi-step coding, security-sensitive work,
+Alan1900•10h ago•Edited 10h ago
+[--]
+That doesn't make any practical difference re. privacy

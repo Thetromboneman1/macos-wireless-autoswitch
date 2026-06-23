@@ -29,6 +29,8 @@ No 1Password items were created in this pass because no implemented star require
 
 The 2026-06-23 skills and VS Code integration pass also created no new 1Password items. Newly installed editor extensions and Codex skills either use existing local sessions, no credentials, or are documented as deferred/manual approval when they would require external tokens.
 
+The 2026-06-23 Hermes cost/token pass created no new 1Password items and configured no paid cloud providers. Any future Hermes cloud fallback must store provider credentials in `Boneman` and document only the item name, field name, retrieval path, and rotation guidance.
+
 ## Current Vault
 
 ```text

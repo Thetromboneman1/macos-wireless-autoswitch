@@ -23,6 +23,7 @@ scripts/operations/generate-platform-report.py \
   --drift-json /tmp/platform-drift.json \
   --dependency-json /tmp/dependency-report.json \
   --documentation-json /tmp/documentation-review.json \
+  --hermes-cost-json /tmp/hermes-cost.json \
   --json /tmp/platform-report.json
 ```
 
@@ -37,6 +38,13 @@ scripts/operations/generate-platform-report.py \
 | Dependency status | `scripts/operations/dependency-report.py` |
 | LaunchAgent health | health script launchagent section |
 | GitHub Actions health | `actionlint`, drift baseline, dependency report |
+| Hermes token and cost status | `scripts/operations/hermes-cost-report.py` |
+
+## Hermes Cost Report
+
+The AIOps cycle captures `hermes prompt-size --json`, writes `hermes-cost-<timestamp>.json`, and folds the result into the platform report under `sections.hermes_cost`.
+
+The report is count-only. It must not include prompt text, secret values, token prefixes, cookies, private keys, or raw credential files.
 
 ## Retention
 
