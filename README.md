@@ -82,6 +82,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Approved GitHub-star trial helpers are documented in `docs/star-tools/approved-star-trials.md`.
 - Unified local-AI platform architecture is documented in `docs/autonomous-modernization/16-unified-ai-platform-architecture.md`.
 - Daily platform status can be checked with `scripts/star-tools/platform-status.sh`.
+- Weekly AI repository review records are canonical in `/Users/corn/Documents/Boneman_Projects/docs/ai-trending-repos/`.
 
 ## Local AI Companion Architecture
 
