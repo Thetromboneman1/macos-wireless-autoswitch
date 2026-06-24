@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-24",
+  "limits": {
+    "max_new_services_per_batch": 1,
+    "memory_pressure_allowed": [
+      "normal"
+    ],
+    "minimum_free_pages": 250000,
+    "maximum_swap_growth_mb_per_batch": 512,
+    "maximum_docker_cpu_percent": 250,
+    "maximum_apple_container_cpu_percent": 150,
+    "post_start_observation_seconds": 20,
+    "health_timeout_seconds": 60
+  },
+  "policy": {
+    "docker_production": "preserve",
+    "production_data_mounts": "read-only-or-none",
+    "start_heavy_workloads_simultaneously": false,
+    "rollback_on_pressure": true,
+    "evidence_root": "~/.local/share/apple-container-pilot/evidence"
+  }
+}
