@@ -1,11 +1,9 @@
-# Canonical Repository Ownership
+# canonical-repository-ownership
 
-Updated: 2026-06-24
+Status: Redirect
+Canonical location: [canonical-repository-ownership.md](https://github.com/Thetromboneman1/Boneman_Projects/blob/main/docs/repository-governance/canonical-repository-ownership.md)
+Owning repository: Boneman_Projects
+Migrated on: 2026-06-24
+Reason: Repository-governance content moved out of macos-wireless-autoswitch.
 
-- macos-wireless-autoswitch: wireless switching, dock/undock network behavior, related LaunchAgents, project CI, and project-specific tests.
-- Boneman_Projects: local AI platform architecture, Apple Container governance, AIOps, drift detection, capacity, benchmarks, skills integration, and cross-repository standards.
-- Hermes and subrepositories: Hermes providers, UI, agents, model provider configuration, cost controls, and Hermes-specific tests.
-- OpenClaw: OpenClaw gateway, Docker socket constraints, runtime compatibility, and OpenClaw-specific compose/configuration.
-- odysseus-gemma-docker: Docker Compose stacks, ntfy production definition, ChromaDB and model-supporting services.
-
-The default destination for cross-repository governance is Boneman_Projects unless a product repository has a clearer lifecycle owner. macos-wireless-autoswitch remains the source of record only for wireless automation.
+This macos-wireless-autoswitch path is retained only as a small compatibility redirect. Use the canonical Boneman_Projects document for current repository governance.

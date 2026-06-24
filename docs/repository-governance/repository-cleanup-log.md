@@ -1,17 +1,9 @@
-# Repository Cleanup Log
+# repository-cleanup-log
 
-Date: 2026-06-23
+Status: Redirect
+Canonical location: [repository-cleanup-log.md](https://github.com/Thetromboneman1/Boneman_Projects/blob/main/docs/repository-governance/repository-cleanup-log.md)
+Owning repository: Boneman_Projects
+Migrated on: 2026-06-24
+Reason: Repository-governance content moved out of macos-wireless-autoswitch.
 
-## Decisions
-
-| Artifact | Classification | Action | Evidence |
-|---|---|---|---|
-| `/.DS_Store` | macOS generated metadata | Removed from version control | `.gitignore` already ignores `.DS_Store`. |
-| `docs/.DS_Store` | macOS generated metadata | Left untracked and ignored | Not committed. |
-| `.pytest_cache/` | generated test cache | Left ignored | Not required for recovery. |
-| `scripts/**/__pycache__/`, `tests/**/__pycache__/` | generated Python caches | Left ignored | Rebuilt by tests. |
-| `backups/hermes-cost-token-optimization-20260623T155950Z/` | local rollback backup | Left ignored | Only local recovery copy; not committed. |
-| `docs/operations/reports/*.json` | generated AIOps reports | Left ignored | `docs/operations/reports/.gitignore` is tracked. |
-| `odysseus/data/`, `odysseus/.env` | local runtime and secrets-adjacent state | Left ignored | Must not be committed. |
-
-No model files were deleted.
+This macos-wireless-autoswitch path is retained only as a small compatibility redirect. Use the canonical Boneman_Projects document for current repository governance.

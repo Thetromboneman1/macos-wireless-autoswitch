@@ -7,9 +7,8 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - `wireless.sh`: core detection and Wi-Fi toggle logic.
 - `com.computernetworkbasics.wifionoff.plist`: launchd daemon that watches macOS network state.
 - `install.sh`: install, update, and uninstall helper.
-- `odysseus/`: companion Docker setup for Odysseus wired to local Gemma model endpoints.
 - `scripts/omlx-power-policy.sh`: host oMLX memory/battery policy for Gemma model TTLs and unload/load actions.
-- `docs/`: implementation and architecture notes.
+- `docs/`: wireless automation notes plus redirects for platform content that moved to Boneman_Projects.
 
 ## Supported Platforms
 
@@ -108,6 +107,9 @@ flowchart LR
 ```
 
 The canonical cross-repo local AI map is maintained in `/Users/corn/Documents/Boneman_Projects/local-ai-platform/ARCHITECTURE.md`.
+
+Repository-governance and platform migration records are canonical in
+[`Boneman_Projects`](https://github.com/Thetromboneman1/Boneman_Projects/tree/main/docs/repository-governance).
 
 The repo-local integration map for the GitHub-star platform layer is maintained in `docs/architecture/`, with the operational runbook at `docs/operations/platform-runbook.md`.
 

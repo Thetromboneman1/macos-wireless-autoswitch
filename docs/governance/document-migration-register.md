@@ -1,17 +1,9 @@
-# Document Migration Register
+# document-migration-register
 
-Updated: 2026-06-24
+Status: Redirect
+Canonical location: [document-migration-register.md](https://github.com/Thetromboneman1/Boneman_Projects/blob/main/docs/governance/document-migration-register.md)
+Owning repository: Boneman_Projects
+Migrated on: 2026-06-24
+Reason: Repository-governance content moved out of macos-wireless-autoswitch.
 
-```text
-Status: Active
-Superseded by: n/a
-Archived on: n/a
-Reason: Migration register for document consolidation.
-```
-
-| Document group | Canonical owner | Action | Status |
-|---|---|---|---|
-| autonomous-modernization reports | Boneman_Projects | Archive historical evidence | planned |
-| Apple Container docs | Boneman_Projects | Move platform governance | planned |
-| Hermes docs | Hermes | Move product-specific guidance | planned |
-| Wireless docs | macos-wireless-autoswitch | Retain focused project docs | planned |
+This macos-wireless-autoswitch path is retained only as a small compatibility redirect. Use the canonical Boneman_Projects document for current repository governance.

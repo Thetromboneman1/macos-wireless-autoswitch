@@ -46,13 +46,7 @@ Date: 2026-06-23
 | Long-duration stability | `docs/benchmarks/long-duration-stability.md` |
 | Post-cleanup benchmark validation | `docs/benchmarks/post-cleanup-validation.md` |
 | Stability validation phase 2 | `docs/benchmarks/stability-validation-phase2.md` |
-| Local repository inventory | `docs/repository-governance/local-repository-inventory.md` |
-| Repository health audit | `docs/repository-governance/repository-health-audit.md` |
-| Documentation consolidation map | `docs/repository-governance/documentation-consolidation-map.md` |
-| Markdownlint policy | `docs/repository-governance/markdownlint-scope-and-policy.md` |
-| Repository cleanup log | `docs/repository-governance/repository-cleanup-log.md` |
-| Cross-repository consolidation | `docs/repository-governance/cross-repository-consolidation.md` |
-| Repository standards | `docs/repository-governance/repository-standards.md` |
+| Repository governance | [`Boneman_Projects`](https://github.com/Thetromboneman1/Boneman_Projects/tree/main/docs/repository-governance) |
 | Document status register | `docs/governance/document-status-register.md` |
 | GitHub Actions inventory | `docs/github-actions/repository-inventory.md` |
 | GitHub Actions estate inventory | `docs/github-actions/actions-estate-inventory.md` |

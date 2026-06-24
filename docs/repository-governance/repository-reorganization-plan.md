@@ -1,19 +1,9 @@
-# Repository Reorganization Plan
+# repository-reorganization-plan
 
-Updated: 2026-06-24
+Status: Redirect
+Canonical location: [repository-reorganization-plan.md](https://github.com/Thetromboneman1/Boneman_Projects/blob/main/docs/repository-governance/repository-reorganization-plan.md)
+Owning repository: Boneman_Projects
+Migrated on: 2026-06-24
+Reason: Repository-governance content moved out of macos-wireless-autoswitch.
 
-This plan narrows macos-wireless-autoswitch back to wireless automation while preserving platform content in the correct destination repositories.
-
-## Atomic Batches
-
-1. Repository-governance documents to Boneman_Projects.
-2. Apple Container platform tooling and config to Boneman_Projects.
-3. Local AI health, drift, and runtime-profile configuration to Boneman_Projects.
-4. Docker/Odysseus assets to odysseus-gemma-docker.
-5. Hermes-specific docs and tests to the relevant Hermes repository.
-6. Historical modernization reports to `docs/archive/2026/` in the canonical governance repo.
-7. Wireless repo README, docs, tests, LaunchAgents, and CI narrowing after destination validation.
-
-## Commit Order
-
-For each batch: add destination copy, validate destination, commit and push destination, update source references, remove source copy, validate source, commit and push source, then record both commits in the provenance register.
+This macos-wireless-autoswitch path is retained only as a small compatibility redirect. Use the canonical Boneman_Projects document for current repository governance.

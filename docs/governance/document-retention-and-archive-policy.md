@@ -1,16 +1,9 @@
-# Document Retention and Archive Policy
+# document-retention-and-archive-policy
 
-Updated: 2026-06-24
+Status: Redirect
+Canonical location: [document-retention-and-archive-policy.md](https://github.com/Thetromboneman1/Boneman_Projects/blob/main/docs/governance/document-retention-and-archive-policy.md)
+Owning repository: Boneman_Projects
+Migrated on: 2026-06-24
+Reason: Repository-governance content moved out of macos-wireless-autoswitch.
 
-Documents are classified as current, canonical, historical evidence, superseded, obsolete, or third-party reference before they move or archive.
-
-Archived documents must include this banner:
-
-```text
-Status: Archived
-Superseded by: <canonical path>
-Archived on: <date>
-Reason: <reason>
-```
-
-Do not rewrite third-party reference content. Exclude archived or third-party content from linting only with a narrow, documented rule.
+This macos-wireless-autoswitch path is retained only as a small compatibility redirect. Use the canonical Boneman_Projects document for current repository governance.
