@@ -11,9 +11,9 @@ This repository is part of the local AI and macOS automation stack on this Apple
 - Fast-agent model: `mlx-community--gemma-4-e4b-it-4bit`.
 - Routing/utility model: `mlx-community--gemma-4-e2b-it-4bit`.
 - llama.cpp coding lane: `http://127.0.0.1:8002/v1`, no MTP by default.
-- Rapid-MLX lab lane: `http://127.0.0.1:8010/v1`, manual/experimental only.
+- Rapid-MLX Qwen3.6 lane: `http://127.0.0.1:8010/v1`; currently expected to stay available/running unless memory pressure requires a documented stop.
 
-Do not replace oMLX with Ollama or another default unless fresh benchmark evidence shows the new route is better for the workload.
+Do not replace oMLX with Ollama or another default unless fresh benchmark evidence shows the new route is better for the workload. Treat Rapid-MLX as an available specialist lane, not the default front door.
 
 ## Secrets
 

@@ -13,7 +13,7 @@ These SLOs apply to the local AI platform on this Mac. They are operating object
 |---|---|---|
 | oMLX availability | Production endpoint healthy during active work windows | `scripts/health/local-ai-health.py --skip-chat` |
 | Model registry | Four Gemma role models visible | authenticated `/v1/models` |
-| Lab lane control | `8002` and `8010` stopped outside named lab windows | drift detection |
+| Specialist lane control | `8002` and `8010` state matches current operating policy | drift detection |
 | Health checks | Routine endpoint health completes without failures | health JSON `ok: true` |
 | Drift | zero critical drift findings | drift JSON `ok: true` |
 | Benchmark regression | no unreviewed TTFT or throughput warning above threshold | benchmark governance and trend analysis |
