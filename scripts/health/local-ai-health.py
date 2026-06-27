@@ -348,6 +348,26 @@ def check_optional_lane(
 
     started = time.perf_counter()
     result["state"] = "running"
+    status_url = f"{base_url.rstrip('/').removesuffix('/v1')}/__lane_status"
+    try:
+        status = request_json(status_url, api_key=api_key, timeout=3)
+        if status.get("gateway") is True:
+            backend_running = bool(status.get("backend_running"))
+            result.update(
+                {
+                    "ok": True,
+                    "state": "gateway",
+                    "gateway": True,
+                    "backend_running": backend_running,
+                    "backend_port": status.get("backend_port"),
+                    "seconds": round(time.perf_counter() - started, 6),
+                }
+            )
+            if not backend_running:
+                result["model_found"] = False
+                return result
+    except Exception:
+        pass
     try:
         models = request_json(f"{base_url.rstrip('/')}/models", api_key=api_key)
         ids = [item.get("id") for item in models.get("data", [])]

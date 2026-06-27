@@ -42,15 +42,15 @@ Use hardware and workload first, then choose the engine:
 
 ## Residency Rules
 
-The active residency policy keeps oMLX `18080` warm and allows specialist lanes to be stopped without treating that as drift:
+The active residency policy keeps oMLX `18080` warm, keeps specialist gateways listening, and allows heavy backend model processes to be stopped without treating that as drift:
 
-| Swap state | Required listener | Optional listeners |
+| Swap state | Required listeners | Optional backend listeners |
 |---|---|---|
-| Normal | `18080` | `8002`, `8003`, `8010` may be started for explicit work. |
-| High, swap used >= 80 percent | `18080` | Stop `8003` Ornith and `8010` Rapid-MLX. |
-| Critical, swap used >= 88 percent | `18080` | Stop `8002` Gemma GGUF too. |
+| Normal | `18080`, `8002`, `8003`, `8010` | `18002`, `18003`, `18010` may run after tool calls. |
+| High, swap used >= 80 percent | `18080`, `8002`, `8003`, `8010` | Stop `18003` Ornith and `18010` Rapid-MLX. |
+| Critical, swap used >= 88 percent | `18080`, `8002`, `8003`, `8010` | Stop `18002` Gemma GGUF too. |
 
-Use `scripts/local-ai/model-residency-governor.sh enforce` for one-shot remediation and `com.corn.local-ai-residency-governor` for the launchd loop.
+Use `scripts/local-ai/install-on-demand-gateways.sh` to refresh the launchd-safe installed copies, `scripts/local-ai/model-residency-governor.sh enforce` for one-shot remediation, and `com.corn.local-ai-residency-governor` for the launchd loop. Health checks must use `/__lane_status` to avoid waking cold backends.
 
 ## Benchmark Evidence
 

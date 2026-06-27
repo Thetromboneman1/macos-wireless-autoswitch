@@ -31,9 +31,9 @@ scripts/star-tools/start-openhands-docker.sh
 ## Normal Routing
 
 - Default model endpoint: `http://127.0.0.1:18080/v1`.
-- Ornith GGUF coding lane: `http://127.0.0.1:8003/v1`, no MTP, on-demand only under `config/local-ai-platform/residency-policy.json`.
-- Gemma GGUF coding fallback: `http://127.0.0.1:8002/v1`, no MTP, warm fallback unless swap is critical.
-- Rapid-MLX Hermes candidate: `http://127.0.0.1:8010/v1`, start only with `scripts/local-ai/start-rapid-mlx-qwen.sh`.
+- Ornith GGUF coding gateway: `http://127.0.0.1:8003/v1`, no MTP, starts backend `18003` on demand.
+- Gemma GGUF coding fallback gateway: `http://127.0.0.1:8002/v1`, no MTP, starts backend `18002` on demand.
+- Rapid-MLX Hermes candidate gateway: `http://127.0.0.1:8010/v1`, starts backend `18010` on demand.
 - Do not route routine work through OmniRoute or headroom until their lab reviews pass.
 
 ## Model Residency
@@ -43,6 +43,7 @@ The self-healing residency governor keeps oMLX warm and spins down optional heav
 ```bash
 scripts/local-ai/model-residency-governor.sh status
 scripts/local-ai/model-residency-governor.sh enforce
+scripts/local-ai/install-on-demand-gateways.sh
 ```
 
 LaunchAgent:
@@ -57,7 +58,7 @@ Policy:
 config/local-ai-platform/residency-policy.json
 ```
 
-Operating rule: stop Ornith `8003` and Rapid-MLX `8010` at 80 percent swap used; stop Gemma GGUF `8002` too at 88 percent. Keep oMLX `18080` reachable and let its TTL policy unload idle model weights. Detailed docs and the reusable self-healing prompt live in `docs/operations/model-residency-governor.md`.
+Operating rule: keep public gateways `8002`, `8003`, and `8010` listening, but stop their backend model ports under pressure. Stop Ornith backend `18003` and Rapid-MLX backend `18010` at 80 percent swap used; stop Gemma GGUF backend `18002` too at 88 percent. Keep oMLX `18080` reachable and let its TTL policy unload idle model weights. Detailed docs and the reusable self-healing prompt live in `docs/operations/model-residency-governor.md`.
 
 ## Config Consumers
 

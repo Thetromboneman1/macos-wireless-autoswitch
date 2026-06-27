@@ -56,10 +56,12 @@ def test_model_residency_governor_enforces_heavy_lane_policy():
     assert "scripts/gemma4-gguf-coding-lane.sh" in script
     assert "8003" in script
     assert "8010" in script
+    assert "backend_port" in script
     assert policy["thresholds"]["high_swap_used_percent"] == 80
     assert policy["thresholds"]["critical_swap_used_percent"] == 88
     assert policy["always_hot"][0]["id"] == "omlx-production"
     assert policy["on_demand_heavy_lanes"][0]["id"] == "ornith-35b-gguf"
+    assert policy["on_demand_heavy_lanes"][0]["backend_port"] == 18003
 
 
 def test_model_residency_governor_launchagent_loops():
@@ -68,6 +70,36 @@ def test_model_residency_governor_launchagent_loops():
     assert "com.corn.local-ai-residency-governor" in plist
     assert "model-residency-governor.sh" in plist
     assert "<string>loop</string>" in plist
+
+
+def test_on_demand_gateways_are_declared_for_specialist_lanes():
+    gateway = (ROOT / "scripts" / "local-ai" / "on-demand-lane-gateway.py").read_text()
+    policy = json.loads((ROOT / "config" / "local-ai-platform" / "residency-policy.json").read_text())
+
+    assert "/__lane_status" in gateway
+    assert "start_backend" in gateway
+    assert "backend_port" in gateway
+    assert policy["on_demand_gateway"]["installed_script"] == "/Users/corn/.local/bin/local-ai-on-demand-lane-gateway.py"
+    ports = {
+        item["id"]: item["backend_port"]
+        for item in [*policy["warm_when_running"], *policy["on_demand_heavy_lanes"]]
+    }
+    assert ports == {
+        "gemma-gguf-coding-fallback": 18002,
+        "ornith-35b-gguf": 18003,
+        "rapid-mlx-qwen36": 18010,
+    }
+
+
+def test_on_demand_gateway_launchagents_are_present():
+    for name, lane in {
+        "com.corn.local-ai-gemma-gguf-gateway.plist": "gemma-gguf-coding-fallback",
+        "com.corn.local-ai-ornith-gateway.plist": "ornith-35b-gguf",
+        "com.corn.local-ai-rapid-mlx-gateway.plist": "rapid-mlx-qwen36",
+    }.items():
+        plist = (ROOT / "launchd" / name).read_text()
+        assert "local-ai-on-demand-lane-gateway.py" in plist
+        assert lane in plist
 
 
 def test_tool_call_payload_uses_openai_tool_schema():
@@ -222,7 +254,35 @@ def test_health_checker_checks_optional_lane_when_port_is_listening(monkeypatch)
     assert result["ok"] is True
     assert result["state"] == "running"
     assert result["model_found"] is True
-    assert calls == ["http://127.0.0.1:8010/v1/models"]
+    assert calls == ["http://127.0.0.1:8010/__lane_status", "http://127.0.0.1:8010/v1/models"]
+
+
+def test_health_checker_does_not_wake_cold_gateway(monkeypatch):
+    health = load_health_module()
+    calls = []
+
+    def fake_request_json(url, **kwargs):
+        calls.append(url)
+        if url.endswith("/__lane_status"):
+            return {"gateway": True, "backend_running": False, "backend_port": 18003}
+        raise AssertionError("health check should not call /models for a cold gateway")
+
+    monkeypatch.setattr(health, "request_json", fake_request_json)
+
+    ports = [{"port": 8003, "listening": True, "listeners": ["gateway"]}]
+    result = health.check_optional_lane(
+        "ornith-35b-gguf",
+        "http://127.0.0.1:8003/v1",
+        "ornith-1.0-35b-Q4_K_M.gguf",
+        "",
+        8003,
+        ports,
+    )
+
+    assert result["ok"] is True
+    assert result["state"] == "gateway"
+    assert result["backend_running"] is False
+    assert calls == ["http://127.0.0.1:8003/__lane_status"]
 
 
 def test_health_checker_includes_ornith_optional_lane():

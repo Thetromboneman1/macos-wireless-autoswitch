@@ -15,7 +15,7 @@ Usage: scripts/local-ai/model-residency-governor.sh <command>
 
 Commands:
   status      Print swap pressure, listener state, and policy thresholds
-  enforce     Stop optional heavy lanes when swap crosses policy thresholds
+  enforce     Stop optional heavy backend lanes when swap crosses policy thresholds
   loop        Run enforce forever, sleeping between checks
 
 Environment overrides:
@@ -70,6 +70,14 @@ port_listening() {
   lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1
 }
 
+lane_field() {
+  local lane_id="$1"
+  local field="$2"
+  jq -r --arg id "$lane_id" --arg field "$field" '
+    ([.warm_when_running[]?, .on_demand_heavy_lanes[]?] | map(select(.id == $id)) | first | .[$field]) // ""
+  ' "$POLICY"
+}
+
 listener_pids() {
   local port="$1"
   lsof -nP -tiTCP:"$port" -sTCP:LISTEN 2>/dev/null || true
@@ -112,7 +120,7 @@ stop_by_manager() {
 
 stop_rapid_mlx() {
   local pids
-  pids="$(listener_pids 8010)"
+  pids="$(listener_pids "${1:-8010}")"
   if [ -z "$pids" ]; then
     log "rapid-mlx-qwen36 already stopped"
     return 0
@@ -138,7 +146,7 @@ status() {
   printf 'swap_used_percent=%s\n' "$used"
   printf 'high_swap_threshold=%s\n' "$HIGH_SWAP"
   printf 'critical_swap_threshold=%s\n' "$CRITICAL_SWAP"
-  for port in 18080 8002 8003 8010; do
+  for port in 18080 8002 8003 8010 18002 18003 18010; do
     if port_listening "$port"; then
       printf 'port_%s=running\n' "$port"
     else
@@ -151,27 +159,34 @@ enforce() {
   load_policy
   warm_omlx_front_door
   local used
+  local ornith_backend rapid_backend gemma_backend
   used="$(swap_used_percent)"
+  ornith_backend="$(lane_field "ornith-35b-gguf" "backend_port")"
+  rapid_backend="$(lane_field "rapid-mlx-qwen36" "backend_port")"
+  gemma_backend="$(lane_field "gemma-gguf-coding-fallback" "backend_port")"
+  ornith_backend="${ornith_backend:-18003}"
+  rapid_backend="${rapid_backend:-18010}"
+  gemma_backend="${gemma_backend:-18002}"
   log "swap_used_percent=$used high=$HIGH_SWAP critical=$CRITICAL_SWAP"
 
   if awk -v used="$used" -v high="$HIGH_SWAP" 'BEGIN { exit !(used >= high) }'; then
-    if port_listening 8003; then
-      stop_by_manager "ornith-35b-gguf" "scripts/ornith-gguf-coding-lane.sh" "8003"
+    if port_listening "$ornith_backend"; then
+      stop_by_manager "ornith-35b-gguf" "scripts/ornith-gguf-coding-lane.sh" "$ornith_backend"
     else
-      log "ornith-35b-gguf already stopped"
+      log "ornith-35b-gguf backend already stopped"
     fi
-    if port_listening 8010; then
-      stop_rapid_mlx
+    if port_listening "$rapid_backend"; then
+      stop_rapid_mlx "$rapid_backend"
     else
-      log "rapid-mlx-qwen36 already stopped"
+      log "rapid-mlx-qwen36 backend already stopped"
     fi
   fi
 
   if awk -v used="$used" -v critical="$CRITICAL_SWAP" 'BEGIN { exit !(used >= critical) }'; then
-    if port_listening 8002; then
-      stop_by_manager "gemma-gguf-coding-fallback" "scripts/gemma4-gguf-coding-lane.sh" "8002"
+    if port_listening "$gemma_backend"; then
+      stop_by_manager "gemma-gguf-coding-fallback" "scripts/gemma4-gguf-coding-lane.sh" "$gemma_backend"
     else
-      log "gemma-gguf-coding-fallback already stopped"
+      log "gemma-gguf-coding-fallback backend already stopped"
     fi
   fi
 }

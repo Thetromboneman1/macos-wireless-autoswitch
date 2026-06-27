@@ -8,7 +8,8 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - `com.computernetworkbasics.wifionoff.plist`: launchd daemon that watches macOS network state.
 - `install.sh`: install, update, and uninstall helper.
 - `scripts/omlx-power-policy.sh`: host oMLX memory/battery policy for Gemma model TTLs and unload/load actions.
-- `scripts/local-ai/model-residency-governor.sh`: swap-aware governor that keeps oMLX warm and spins down heavy optional model lanes.
+- `scripts/local-ai/on-demand-lane-gateway.py`: lightweight OpenAI-compatible gateway that wakes cold specialist model lanes when tools call them.
+- `scripts/local-ai/model-residency-governor.sh`: swap-aware governor that keeps oMLX and gateways warm while spinning down heavy backend model lanes.
 - `docs/`: wireless automation notes plus redirects for platform content that moved to Boneman_Projects.
 
 ## Supported Platforms
@@ -79,7 +80,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - oMLX memory and battery policy is documented in `docs/OMLX_POWER_POLICY.md`.
 - Local AI model residency and swap thresholds are documented in `docs/operations/model-residency-governor.md`.
 - The measured GGUF/llama.cpp coding lane is managed by `scripts/gemma4-gguf-coding-lane.sh` on `127.0.0.1:8002`.
-- The Ornith GGUF lane is managed by `scripts/ornith-gguf-coding-lane.sh` on `127.0.0.1:8003`, but it is on-demand under the residency governor.
+- The Ornith GGUF lane is tool-facing on `127.0.0.1:8003`; a gateway starts its backend on `127.0.0.1:18003` on demand.
 - AdGuard LocalDNSCrypt is documented in `docs/network/adguard-dnscrypt-setup.md`.
 - GitHub-star modernization decisions are documented in `docs/autonomous-modernization/11-github-stars-full-implementation.md`.
 - Approved GitHub-star trial helpers are documented in `docs/star-tools/approved-star-trials.md`.
@@ -93,8 +94,8 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 flowchart LR
   subgraph Host["macOS host"]
     OMLX["oMLX 0.4.3<br/>127.0.0.1:18080/v1"]
-    ORNITH["Ornith on-demand GGUF lane<br/>127.0.0.1:8003/v1"]
-    GGUF["Gemma GGUF fallback lane<br/>127.0.0.1:8002/v1"]
+    ORNITH["Ornith gateway<br/>127.0.0.1:8003/v1<br/>backend 18003"]
+    GGUF["Gemma GGUF gateway<br/>127.0.0.1:8002/v1<br/>backend 18002"]
     Policy["com.corn.omlx-power-policy<br/>battery/normal TTLs"]
     Residency["com.corn.local-ai-residency-governor<br/>swap-aware spin down"]
   end

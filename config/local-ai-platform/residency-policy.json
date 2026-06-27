@@ -13,7 +13,12 @@
     {
       "id": "gemma-gguf-coding-fallback",
       "base_url": "http://127.0.0.1:8002/v1",
+      "backend_base_url": "http://127.0.0.1:18002/v1",
+      "public_port": 8002,
+      "backend_port": 18002,
       "manager": "scripts/gemma4-gguf-coding-lane.sh",
+      "installed_manager": "/Users/corn/.local/bin/local-ai-gemma4-gguf-coding-lane.sh",
+      "gateway_label": "com.corn.local-ai-gemma-gguf-gateway",
       "stop_at_swap_used_percent": 88,
       "reason": "Fallback coding lane. Stop only under critical swap pressure."
     }
@@ -22,18 +27,39 @@
     {
       "id": "ornith-35b-gguf",
       "base_url": "http://127.0.0.1:8003/v1",
+      "backend_base_url": "http://127.0.0.1:18003/v1",
+      "public_port": 8003,
+      "backend_port": 18003,
       "manager": "scripts/ornith-gguf-coding-lane.sh",
+      "installed_manager": "/Users/corn/.local/bin/local-ai-ornith-gguf-coding-lane.sh",
+      "gateway_label": "com.corn.local-ai-ornith-gateway",
       "stop_at_swap_used_percent": 80,
       "reason": "Preferred high-capability local coding lane, but not an always-resident service on the 64 GB Mac."
     },
     {
       "id": "rapid-mlx-qwen36",
       "base_url": "http://127.0.0.1:8010/v1",
+      "backend_base_url": "http://127.0.0.1:18010/v1",
+      "public_port": 8010,
+      "backend_port": 18010,
       "manager": "scripts/local-ai/start-rapid-mlx-qwen.sh",
+      "installed_manager": "/Users/corn/.local/bin/local-ai-start-rapid-mlx-qwen.sh",
+      "gateway_label": "com.corn.local-ai-rapid-mlx-gateway",
       "stop_at_swap_used_percent": 80,
       "reason": "Manual lab lane. Keep stopped unless an explicit benchmark or Hermes tool-calling test is active."
     }
   ],
+  "on_demand_gateway": {
+    "script": "scripts/local-ai/on-demand-lane-gateway.py",
+    "installed_script": "/Users/corn/.local/bin/local-ai-on-demand-lane-gateway.py",
+    "policy_copy": "/Users/corn/.config/local-ai/residency-policy.json",
+    "behavior": [
+      "Listen on the existing tool-facing lane ports.",
+      "Answer /__lane_status without waking the model backend.",
+      "Start the backend lane on the private backend port before proxying OpenAI-compatible requests.",
+      "Leave spin-down decisions to the residency governor."
+    ]
+  },
   "thresholds": {
     "high_swap_used_percent": 80,
     "critical_swap_used_percent": 88,
@@ -41,9 +67,10 @@
   },
   "operator_policy": [
     "Do not autostart Ornith, Rapid-MLX, or Gemma GGUF solely to keep them warm.",
+    "Do autostart the requested lane when a tool calls its OpenAI-compatible gateway endpoint.",
     "Keep oMLX reachable; let oMLX unload idle model weights by TTL.",
-    "When swap is high, stop Ornith and Rapid-MLX first.",
-    "When swap is critical, stop Gemma GGUF too and rely on oMLX until pressure falls.",
-    "Restart specialist lanes explicitly for benchmark or coding windows."
+    "When swap is high, stop Ornith and Rapid-MLX backends first while leaving their gateways listening.",
+    "When swap is critical, stop the Gemma GGUF backend too and rely on oMLX until pressure falls.",
+    "Tool calls may restart a stopped backend through the gateway; health and drift checks must use /__lane_status to avoid accidental wakeups."
   ]
 }
