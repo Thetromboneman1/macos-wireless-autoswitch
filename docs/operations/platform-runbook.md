@@ -13,6 +13,7 @@ For deeper checks:
 ```bash
 scripts/star-tools/validate-star-deployments.sh
 scripts/health/local-ai-health.py
+scripts/local-ai/model-residency-governor.sh status
 ```
 
 ## Start Optional Services
@@ -30,10 +31,33 @@ scripts/star-tools/start-openhands-docker.sh
 ## Normal Routing
 
 - Default model endpoint: `http://127.0.0.1:18080/v1`.
-- Ornith GGUF coding lane: `http://127.0.0.1:8003/v1`, no MTP.
-- Gemma GGUF coding fallback: `http://127.0.0.1:8002/v1`, no MTP.
+- Ornith GGUF coding lane: `http://127.0.0.1:8003/v1`, no MTP, on-demand only under `config/local-ai-platform/residency-policy.json`.
+- Gemma GGUF coding fallback: `http://127.0.0.1:8002/v1`, no MTP, warm fallback unless swap is critical.
 - Rapid-MLX Hermes candidate: `http://127.0.0.1:8010/v1`, start only with `scripts/local-ai/start-rapid-mlx-qwen.sh`.
 - Do not route routine work through OmniRoute or headroom until their lab reviews pass.
+
+## Model Residency
+
+The self-healing residency governor keeps oMLX warm and spins down optional heavy lanes when swap pressure rises:
+
+```bash
+scripts/local-ai/model-residency-governor.sh status
+scripts/local-ai/model-residency-governor.sh enforce
+```
+
+LaunchAgent:
+
+```text
+com.corn.local-ai-residency-governor
+```
+
+Policy:
+
+```text
+config/local-ai-platform/residency-policy.json
+```
+
+Operating rule: stop Ornith `8003` and Rapid-MLX `8010` at 80 percent swap used; stop Gemma GGUF `8002` too at 88 percent. Keep oMLX `18080` reachable and let its TTL policy unload idle model weights. Detailed docs and the reusable self-healing prompt live in `docs/operations/model-residency-governor.md`.
 
 ## Config Consumers
 
@@ -137,6 +161,7 @@ scripts/star-tools/platform-status.sh
 scripts/star-tools/validate-star-deployments.sh
 jq . config/local-ai-platform/routing-policy.json >/dev/null
 jq . config/local-ai-platform/ornith-desired-state.json >/dev/null
+jq . config/local-ai-platform/residency-policy.json >/dev/null
 jq . config/local-ai-platform/mcp-topology.json >/dev/null
 git diff --check
 git diff | grep -Ei 'secret|token|password|apikey|api_key|private_key|BEGIN RSA|BEGIN OPENSSH' || true

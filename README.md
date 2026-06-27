@@ -8,6 +8,7 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - `com.computernetworkbasics.wifionoff.plist`: launchd daemon that watches macOS network state.
 - `install.sh`: install, update, and uninstall helper.
 - `scripts/omlx-power-policy.sh`: host oMLX memory/battery policy for Gemma model TTLs and unload/load actions.
+- `scripts/local-ai/model-residency-governor.sh`: swap-aware governor that keeps oMLX warm and spins down heavy optional model lanes.
 - `docs/`: wireless automation notes plus redirects for platform content that moved to Boneman_Projects.
 
 ## Supported Platforms
@@ -76,7 +77,9 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Requires admin privileges for system-level network changes.
 - Optional Odysseus/Gemma companion setup is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
 - oMLX memory and battery policy is documented in `docs/OMLX_POWER_POLICY.md`.
+- Local AI model residency and swap thresholds are documented in `docs/operations/model-residency-governor.md`.
 - The measured GGUF/llama.cpp coding lane is managed by `scripts/gemma4-gguf-coding-lane.sh` on `127.0.0.1:8002`.
+- The Ornith GGUF lane is managed by `scripts/ornith-gguf-coding-lane.sh` on `127.0.0.1:8003`, but it is on-demand under the residency governor.
 - AdGuard LocalDNSCrypt is documented in `docs/network/adguard-dnscrypt-setup.md`.
 - GitHub-star modernization decisions are documented in `docs/autonomous-modernization/11-github-stars-full-implementation.md`.
 - Approved GitHub-star trial helpers are documented in `docs/star-tools/approved-star-trials.md`.
@@ -90,8 +93,10 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 flowchart LR
   subgraph Host["macOS host"]
     OMLX["oMLX 0.4.3<br/>127.0.0.1:18080/v1"]
-    GGUF["llama.cpp GGUF coding lane<br/>127.0.0.1:8002/v1"]
+    ORNITH["Ornith on-demand GGUF lane<br/>127.0.0.1:8003/v1"]
+    GGUF["Gemma GGUF fallback lane<br/>127.0.0.1:8002/v1"]
     Policy["com.corn.omlx-power-policy<br/>battery/normal TTLs"]
+    Residency["com.corn.local-ai-residency-governor<br/>swap-aware spin down"]
   end
   subgraph Docker["Optional companion services"]
     Odysseus["Odysseus<br/>127.0.0.1:7000"]
@@ -100,8 +105,11 @@ flowchart LR
     Ntfy["ntfy<br/>127.0.0.1:8091"]
   end
   Policy --> OMLX
+  Residency --> ORNITH
+  Residency --> GGUF
   Odysseus -->|"host.docker.internal:18080/v1"| OMLX
-  Odysseus -->|"coding: host.docker.internal:8002/v1"| GGUF
+  Odysseus -->|"coding on demand: host.docker.internal:8003/v1"| ORNITH
+  Odysseus -->|"fallback: host.docker.internal:8002/v1"| GGUF
   Odysseus --> Chroma
   Odysseus --> Searx
   Odysseus --> Ntfy

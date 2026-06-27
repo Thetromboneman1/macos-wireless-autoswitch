@@ -23,7 +23,7 @@ fi
 
 echo
 echo "== Production sentinels =="
-for port in 18080 8002 8010 3000 4096 4097 7000 8080 8091 8100 8787 18789; do
+for port in 18080 8002 8003 8010 3000 4096 4097 7000 8080 8091 8100 8787 18789; do
   if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
     echo "listening: $port"
   else

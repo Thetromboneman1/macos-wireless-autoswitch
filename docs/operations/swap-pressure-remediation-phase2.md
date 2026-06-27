@@ -57,3 +57,22 @@ Rapid-MLX and llama.cpp were not listening during the cleanup. They were not the
 ## Follow-Up
 
 Swap may not fully return to zero without closing large desktop apps, stopping Docker Desktop, or logging out/rebooting. Do those only when they will not interrupt active work.
+
+## 2026-06-27 Ornith Residency Update
+
+Installing and validating Ornith 35B GGUF proved the local lane is useful, but running Ornith, Gemma GGUF, and oMLX together can push swap back into critical territory.
+
+The current remediation is automated through:
+
+```bash
+scripts/local-ai/model-residency-governor.sh enforce
+```
+
+Policy:
+
+- oMLX `18080` stays warm as the required production front door.
+- Ornith `8003` and Rapid-MLX `8010` are stopped when swap used percent is at or above 80.
+- Gemma GGUF `8002` is also stopped when swap used percent is at or above 88.
+- The LaunchAgent `com.corn.local-ai-residency-governor` runs the same loop every five minutes.
+
+The self-healing prompt and launchd install commands live in `docs/operations/model-residency-governor.md`.

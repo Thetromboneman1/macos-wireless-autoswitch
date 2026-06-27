@@ -82,7 +82,13 @@ TOOLS = [
     "docker",
     "container",
     "op",
+    "designmd",
 ]
+
+UNSUPPORTED_GLOBAL_SKILL_TARGETS = {
+    "Eve": "does not support global skill installation",
+    "PromptScript": "does not support global skill installation",
+}
 
 CONFIG_PATHS = [
     HOME / ".codex/config.toml",
@@ -310,13 +316,21 @@ def doctor() -> dict[str, object]:
     ensure_dirs()
     checks = {
         "generated_at": now(),
-        "agent_reach_version": run(["agent-reach", "version"]),
-        "agent_reach_doctor": run(["agent-reach", "doctor", "--json"], timeout=60),
-        "design_md_help": run(["npx", "-y", "@google/design.md", "--help"], timeout=60),
-        "design_md_spec": run(["npx", "-y", "@google/design.md", "spec"], timeout=60),
-        "skills_list": run(["npx", "-y", "skills@latest", "ls", "-g", "--json"], timeout=60),
+        "agent_reach_version": run(["agent-reach", "version"], timeout=15),
+        "agent_reach_doctor": run(["agent-reach", "doctor", "--json"], timeout=45),
+        "design_md_help": run(["designmd", "--help"], timeout=15),
+        "design_md_spec": run(["designmd", "spec"], timeout=15),
+        "skills_list": run(["npx", "-y", "skills@latest", "ls", "-g", "--json"], timeout=30),
+        "unsupported_global_skill_targets": UNSUPPORTED_GLOBAL_SKILL_TARGETS,
         "permissions": {},
     }
+    launchagents = {}
+    for label in [
+        "com.boneman.agent-platform.maintenance",
+        "com.boneman.linkedin-mcp",
+    ]:
+        launchagents[label] = run(["launchctl", "print", f"gui/{os.getuid()}/{label}"], timeout=8)
+    checks["launchagents"] = launchagents
     for path in [HOME / ".agent-reach", BASE]:
         if path.exists():
             mode = oct(path.stat().st_mode & 0o777)

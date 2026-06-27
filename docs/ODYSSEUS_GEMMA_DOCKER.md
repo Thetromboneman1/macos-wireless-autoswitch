@@ -39,7 +39,7 @@ The configurator creates these Odysseus model endpoints:
 | Role | Endpoint ID | Default model ID | Intended use |
 | --- | --- | --- | --- |
 | Primary | `gemma-primary` | `mlx-community--gemma-4-31b-it-4bit` | Primary chat/reasoning |
-| Coding | `gemma-coding` | `gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf` | Coding/edit/apply via llama.cpp GGUF/MTP |
+| Coding | `gemma-coding` | `gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf` | Coding/edit/apply via llama.cpp GGUF |
 | Fast | `gemma-fast` | `mlx-community--gemma-4-e4b-it-4bit` | Fast chat/edit/apply/autocomplete |
 | Small | `gemma-small` | `mlx-community--gemma-4-e2b-it-4bit` | Small/routing tasks |
 
@@ -58,7 +58,7 @@ Odysseus does not currently expose separate first-class settings for every "codi
 
 ## Model Server Requirement
 
-Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through OpenAI-compatible host APIs. The current default host runtime is oMLX `0.4.3`, with a measured llama.cpp GGUF/MTP lane for the coding role.
+Docker on macOS cannot use Metal GPU acceleration for model serving. This setup therefore expects Gemma to be served outside the Odysseus container through OpenAI-compatible host APIs. The current default host runtime is oMLX `0.4.3`, with a measured llama.cpp GGUF lane for the coding role.
 
 Default oMLX endpoint:
 

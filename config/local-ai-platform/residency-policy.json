@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-27",
+  "purpose": "Keep the local AI stack responsive without allowing optional model lanes to push macOS swap into sustained high pressure.",
+  "always_hot": [
+    {
+      "id": "omlx-production",
+      "base_url": "http://127.0.0.1:18080/v1",
+      "reason": "Primary OpenAI-compatible front door. oMLX model TTL/unload policy handles per-model residency."
+    }
+  ],
+  "warm_when_running": [
+    {
+      "id": "gemma-gguf-coding-fallback",
+      "base_url": "http://127.0.0.1:8002/v1",
+      "manager": "scripts/gemma4-gguf-coding-lane.sh",
+      "stop_at_swap_used_percent": 88,
+      "reason": "Fallback coding lane. Stop only under critical swap pressure."
+    }
+  ],
+  "on_demand_heavy_lanes": [
+    {
+      "id": "ornith-35b-gguf",
+      "base_url": "http://127.0.0.1:8003/v1",
+      "manager": "scripts/ornith-gguf-coding-lane.sh",
+      "stop_at_swap_used_percent": 80,
+      "reason": "Preferred high-capability local coding lane, but not an always-resident service on the 64 GB Mac."
+    },
+    {
+      "id": "rapid-mlx-qwen36",
+      "base_url": "http://127.0.0.1:8010/v1",
+      "manager": "scripts/local-ai/start-rapid-mlx-qwen.sh",
+      "stop_at_swap_used_percent": 80,
+      "reason": "Manual lab lane. Keep stopped unless an explicit benchmark or Hermes tool-calling test is active."
+    }
+  ],
+  "thresholds": {
+    "high_swap_used_percent": 80,
+    "critical_swap_used_percent": 88,
+    "loop_interval_seconds": 300
+  },
+  "operator_policy": [
+    "Do not autostart Ornith, Rapid-MLX, or Gemma GGUF solely to keep them warm.",
+    "Keep oMLX reachable; let oMLX unload idle model weights by TTL.",
+    "When swap is high, stop Ornith and Rapid-MLX first.",
+    "When swap is critical, stop Gemma GGUF too and rely on oMLX until pressure falls.",
+    "Restart specialist lanes explicitly for benchmark or coding windows."
+  ]
+}

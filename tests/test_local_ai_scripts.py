@@ -47,6 +47,29 @@ def test_ornith_gguf_lane_uses_separate_local_port_without_mtp():
     assert "127.0.0.1" in script
 
 
+def test_model_residency_governor_enforces_heavy_lane_policy():
+    script = (ROOT / "scripts" / "local-ai" / "model-residency-governor.sh").read_text()
+    policy = json.loads((ROOT / "config" / "local-ai-platform" / "residency-policy.json").read_text())
+
+    assert "swap_used_percent" in script
+    assert "scripts/ornith-gguf-coding-lane.sh" in script
+    assert "scripts/gemma4-gguf-coding-lane.sh" in script
+    assert "8003" in script
+    assert "8010" in script
+    assert policy["thresholds"]["high_swap_used_percent"] == 80
+    assert policy["thresholds"]["critical_swap_used_percent"] == 88
+    assert policy["always_hot"][0]["id"] == "omlx-production"
+    assert policy["on_demand_heavy_lanes"][0]["id"] == "ornith-35b-gguf"
+
+
+def test_model_residency_governor_launchagent_loops():
+    plist = (ROOT / "launchd" / "com.corn.local-ai-residency-governor.plist").read_text()
+
+    assert "com.corn.local-ai-residency-governor" in plist
+    assert "model-residency-governor.sh" in plist
+    assert "<string>loop</string>" in plist
+
+
 def test_tool_call_payload_uses_openai_tool_schema():
     validator = load_validator_module()
 
@@ -272,5 +295,5 @@ def test_ornith_desired_state_keeps_unvalidated_397b_blocked():
     assert state["provider"]["status"] == "local-35b-gguf-validated"
     assert state["feasibility"]["local_full_397b"] == "rejected"
     assert state["approved_runtime_policy"]["tier_2_remote_full"].startswith("pending-user-approval")
-    assert state["active_local_fallback"]["provider"] == "Ornith 35B GGUF local coding lane"
+    assert state["active_local_fallback"]["provider"] == "Ornith 35B GGUF on-demand local coding lane"
     assert state["active_local_fallback"]["stable_fallback_provider"] == "oMLX native MLX Gemma stack"

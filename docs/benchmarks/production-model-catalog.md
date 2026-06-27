@@ -20,7 +20,7 @@ Date: 2026-06-27
 
 | Model | Backend | Lane | Strengths | Weaknesses | Production Suitability |
 |---|---|---|---|---|---|
-| `ornith-1.0-35b-Q4_K_M.gguf` | llama.cpp | Preferred local coding | Strong local coding throughput, tool calls, reasoning parser output, 65k context configured | Reasoning-first responses need larger `max_tokens`; separate process adds memory pressure | Promoted as preferred local coding candidate |
+| `ornith-1.0-35b-Q4_K_M.gguf` | llama.cpp | Preferred on-demand local coding | Strong local coding throughput, tool calls, reasoning parser output, 65k context configured | Reasoning-first responses need larger `max_tokens`; separate process adds memory pressure | Promoted as preferred on-demand local coding candidate |
 | `mlx-community--gemma-4-26b-a4b-it-4bit` | oMLX/MLX | Stable production | Coding, repo automation, Hermes orchestration, tool calls | Less timing detail than llama.cpp | Production default |
 | `mlx-community--gemma-4-31b-it-4bit` | oMLX/MLX | Reasoning | Architecture, planning, review synthesis | Higher memory cost | Production selectable, not always loaded |
 | `mlx-community--gemma-4-e4b-it-4bit` | oMLX/MLX | Fast agent | Summaries, quick edits, cheaper turns | Lower reasoning depth | Production utility |

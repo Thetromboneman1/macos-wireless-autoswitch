@@ -5,12 +5,12 @@
       "owner": "oMLX production"
     },
     "8002": {
-      "expected": "listening",
-      "owner": "llama.cpp measured GGUF coding lane"
+      "expected": "stopped",
+      "owner": "Gemma GGUF fallback lane; stopped when critical swap pressure is active"
     },
     "8003": {
-      "expected": "listening",
-      "owner": "Ornith 35B GGUF local coding lane"
+      "expected": "stopped",
+      "owner": "Ornith 35B GGUF on-demand coding lane"
     },
     "8010": {
       "expected": "stopped",
@@ -19,6 +19,9 @@
   },
   "launchagents": {
     "com.corn.omlx-power-policy": {
+      "expected": "healthy"
+    },
+    "com.corn.local-ai-residency-governor": {
       "expected": "healthy"
     },
     "com.corn.vllm-mlx": {
@@ -33,10 +36,12 @@
     ".github/workflows/release.yml": "file",
     ".github/workflows/validate.yml": "file",
     "scripts/health/local-ai-health.py": "file",
+    "scripts/local-ai/model-residency-governor.sh": "file",
     "scripts/local-ai/benchmark-engine-bakeoff.py": "file",
     "scripts/gemma4-gguf-coding-lane.sh": "file",
     "scripts/ornith-gguf-coding-lane.sh": "file",
     "config/local-ai-platform/ornith-desired-state.json": "file",
+    "config/local-ai-platform/residency-policy.json": "file",
     "config/local-ai-platform/ornith-task-ledger.json": "file",
     "config/apple-container/port-map.json": "file",
     "scripts/apple-container/validate-port-map.sh": "file",

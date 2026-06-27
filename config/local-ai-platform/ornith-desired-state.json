@@ -21,7 +21,7 @@
       "engine": "llama.cpp",
       "base_url": "http://127.0.0.1:8003/v1",
       "context_tokens": 65536,
-      "status": "validated"
+      "status": "validated-on-demand"
     }
   },
   "official_models": {
@@ -80,7 +80,7 @@
   "approved_runtime_policy": {
     "tier_1_local_full": "blocked-by-hardware",
     "tier_2_remote_full": "pending-user-approval-for-costs-and-credentials",
-    "tier_3_local_fallback": "use Ornith 1.0 35B Q4_K_M GGUF on llama.cpp for preferred local coding when running, with current oMLX/Gemma as stable fallback",
+    "tier_3_local_fallback": "use Ornith 1.0 35B Q4_K_M GGUF on llama.cpp for preferred local coding when explicitly started and swap pressure allows it, with current oMLX/Gemma as stable fallback",
     "remote_preference_order": ["vLLM", "SGLang"],
     "remote_requirements": [
       "OpenAI-compatible endpoint",
@@ -93,7 +93,7 @@
     ]
   },
   "active_local_fallback": {
-    "provider": "Ornith 35B GGUF local coding lane",
+    "provider": "Ornith 35B GGUF on-demand local coding lane",
     "base_url": "http://127.0.0.1:8003/v1",
     "coding_model": "ornith-1.0-35b-Q4_K_M.gguf",
     "reasoning_model": "mlx-community--gemma-4-31b-it-4bit",
@@ -102,7 +102,7 @@
     "stable_fallback_provider": "oMLX native MLX Gemma stack",
     "stable_fallback_base_url": "http://127.0.0.1:18080/v1",
     "stable_fallback_coding_model": "mlx-community--gemma-4-26b-a4b-it-4bit",
-    "status": "validated"
+    "status": "validated-on-demand"
   },
   "blocked_actions": [
     {

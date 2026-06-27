@@ -56,7 +56,7 @@ These numbers do not include KV cache, runtime memory, graph/workspace overhead,
 |---|---|---|
 | Tier 1, full 397B locally | Rejected | Memory is insufficient by multiple factors before overhead. Swap-heavy loading would not be a valid deployment. |
 | Tier 2, full 397B remote | Viable with approval | Requires 8x80 GB-class GPU capacity, auth, TLS/private networking, spend controls, and validation. |
-| Tier 3, best local Ornith | Implemented | `ornith-1.0-35b-Q4_K_M.gguf` is installed, running, benchmarked, and wired as preferred local coding candidate. |
+| Tier 3, best local Ornith | Implemented | `ornith-1.0-35b-Q4_K_M.gguf` is installed, benchmarked, and wired as preferred on-demand local coding candidate. |
 
 ## Desired State
 
@@ -68,7 +68,7 @@ Current policy:
 - Primary alias: `ornith-primary`.
 - Local fallback alias: `ornith-local`.
 - Full model: `deepreinforce-ai/Ornith-1.0-397B`.
-- Local fallback today: `ornith-1.0-35b-Q4_K_M.gguf` on `http://127.0.0.1:8003/v1`, with current oMLX/Gemma production stack preserved as stable fallback.
+- Local fallback today: `ornith-1.0-35b-Q4_K_M.gguf` on `http://127.0.0.1:8003/v1` when explicitly started, with current oMLX/Gemma production stack preserved as stable fallback.
 - Embeddings: keep a separate embedding model.
 - Secrets: 1Password vault `Boneman`.
 - Tool rewiring: completed for OpenCode, Continue, OpenClaw, Odysseus, and platform metadata; Goose keeps oMLX as its single OpenAI host and records Ornith metadata.

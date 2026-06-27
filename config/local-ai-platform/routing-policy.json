@@ -26,11 +26,12 @@
       "model": "ornith-1.0-35b-Q4_K_M.gguf",
       "engine": "llama.cpp llama-server",
       "base_url": "http://127.0.0.1:8003/v1",
-      "use_for": ["preferred local coding candidate", "repo edits", "tool-calling capable agent workflows"],
+      "use_for": ["preferred on-demand local coding candidate", "repo edits", "tool-calling capable agent workflows"],
       "constraints": [
         "Q4_K_M GGUF candidate, not full 397B",
         "reasoning-first responses need larger max_tokens than tiny smoke tests",
-        "no MTP on Apple Silicon"
+        "no MTP on Apple Silicon",
+        "stop when swap used percent is at or above the residency-policy high threshold"
       ],
       "evidence": "docs/autonomous-modernization/benchmark-results-ornith-2026-06-27.json"
     },
@@ -96,7 +97,8 @@
   ],
   "policy": {
     "avoid_default": ["Ollama", "Lightning MLX MTP paths"],
-    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane", "Ornith 397B remote service"],
+    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane", "Ornith 35B GGUF heavy coding lane", "Ornith 397B remote service"],
+    "residency_policy": "config/local-ai-platform/residency-policy.json",
     "secret_vault": "Boneman"
   }
 }
