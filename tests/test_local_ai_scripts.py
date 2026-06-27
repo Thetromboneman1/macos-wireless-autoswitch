@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -236,3 +237,13 @@ def test_launchagent_check_reports_missing_program(tmp_path):
     assert result["ok"] is False
     assert result["program_exists"] is False
     assert result["classification"] == "broken"
+
+
+def test_ornith_desired_state_keeps_unvalidated_397b_blocked():
+    state = json.loads((ROOT / "config" / "local-ai-platform" / "ornith-desired-state.json").read_text())
+
+    assert state["provider"]["name"] == "ornith"
+    assert state["provider"]["status"] == "candidate-blocked"
+    assert state["feasibility"]["local_full_397b"] == "rejected"
+    assert state["approved_runtime_policy"]["tier_2_remote_full"].startswith("pending-user-approval")
+    assert state["active_local_fallback"]["provider"] == "oMLX native MLX Gemma stack"

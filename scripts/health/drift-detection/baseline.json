@@ -5,12 +5,12 @@
       "owner": "oMLX production"
     },
     "8002": {
-      "expected": "stopped",
-      "owner": "llama.cpp manual lab lane"
+      "expected": "listening",
+      "owner": "llama.cpp measured GGUF coding lane"
     },
     "8010": {
-      "expected": "stopped",
-      "owner": "Rapid-MLX manual lab lane"
+      "expected": "listening",
+      "owner": "Rapid-MLX available lab lane"
     }
   },
   "launchagents": {
@@ -22,7 +22,7 @@
     }
   },
   "workflow_actions": {
-    "actions/checkout": "v4",
+    "actions/checkout": "v5",
     "softprops/action-gh-release": "v2"
   },
   "config_paths": {
@@ -31,6 +31,8 @@
     "scripts/health/local-ai-health.py": "file",
     "scripts/local-ai/benchmark-engine-bakeoff.py": "file",
     "scripts/gemma4-gguf-coding-lane.sh": "file",
+    "config/local-ai-platform/ornith-desired-state.json": "file",
+    "config/local-ai-platform/ornith-task-ledger.json": "file",
     "config/apple-container/port-map.json": "file",
     "scripts/apple-container/validate-port-map.sh": "file",
     "scripts/apple-container/status.sh": "file",

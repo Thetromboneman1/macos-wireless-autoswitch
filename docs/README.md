@@ -84,6 +84,7 @@ Date: 2026-06-23
 | Hermes cost final report | `docs/autonomous-modernization/28-hermes-cost-token-context-optimization.md` |
 | Repository consolidation and Actions modernization | `docs/autonomous-modernization/29-repository-consolidation-and-actions-modernization.md` |
 | Dual-runtime operational deployment | `docs/autonomous-modernization/33-dual-runtime-operational-deployment.md` |
+| Ornith feasibility and control plane | `docs/autonomous-modernization/35-ornith-feasibility-and-control-plane.md` |
 | Skills evaluation | `docs/skills/skills-evaluation-matrix.md` |
 | Installed skills | `docs/skills/installed-skills.md` |
 | Codex skills | `docs/skills/codex-skills.md` |

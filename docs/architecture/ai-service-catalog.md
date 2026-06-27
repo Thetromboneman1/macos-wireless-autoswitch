@@ -11,6 +11,7 @@ Date: 2026-06-23
 | Gemma 4 E2B | User | Routing/utility role | on demand through oMLX | `/v1/models` | oMLX | active, manual/on-demand |
 | llama.cpp GGUF | User | Specialist coding/reliability lane | manual script | port `8002`, `/v1/models` when started | local GGUF model, Metal build | dormant |
 | Rapid-MLX Qwen3.6 | User | Experimental high-throughput/tool-call lane | manual script | port `8010`, validation script when started | Rapid-MLX env | dormant experimental |
+| Ornith 1.0 397B | User | Future full-model agentic coding endpoint | remote vLLM/SGLang only after approval | `/v1/models`, chat, reasoning parser, tool-call parser | 8x80 GB-class remote GPU capacity, auth, TLS/private network | blocked candidate |
 | Hermes | User | Host and container agent consumers | host config plus Docker services | Hermes one-shot validation, container health | oMLX endpoint, Docker | running consumer |
 | OpenHands | User | Agent platform trial | manual Docker start | image/container checks | Docker, workspace mount | installed, manual |
 | Octopoda | User | MCP/dashboard experiment | manual start scripts and Docker sidecars | `scripts/star-tools/validate-star-deployments.sh` | Docker or uv tool install | installed, limited use |
@@ -27,3 +28,4 @@ Date: 2026-06-23
 - Large models should be unloaded when idle.
 - Docker consumers use `host.docker.internal`; host tools use `127.0.0.1`.
 - Experimental tools stay manual until they have a narrow owner, health check, and rollback path.
+- Ornith 397B must not be wired as a default until `config/local-ai-platform/ornith-desired-state.json` activation gates pass.

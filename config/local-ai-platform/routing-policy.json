@@ -38,6 +38,18 @@
       "constraints": ["manual start only", "watch memory pressure", "telemetry disabled by launcher"]
     },
     {
+      "id": "ornith-primary-candidate",
+      "model": "deepreinforce-ai/Ornith-1.0-397B",
+      "engine": "remote vLLM or SGLang only",
+      "base_url": "pending approval",
+      "use_for": ["future full-model agentic coding", "future repository automation"],
+      "constraints": [
+        "not local on this 64 GB Apple Silicon Mac",
+        "requires approved remote GPU capacity",
+        "must pass reasoning_content and tool-call validation before becoming default"
+      ]
+    },
+    {
       "id": "fast-agent",
       "model": "mlx-community--gemma-4-e4b-it-4bit",
       "engine": "oMLX/MLX",
@@ -71,7 +83,7 @@
   ],
   "policy": {
     "avoid_default": ["Ollama", "Lightning MLX MTP paths"],
-    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane"],
+    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane", "Ornith 397B remote or local service"],
     "secret_vault": "Boneman"
   }
 }

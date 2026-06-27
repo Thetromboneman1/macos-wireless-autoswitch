@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-27",
+  "provider": {
+    "name": "ornith",
+    "status": "candidate-blocked",
+    "reason": "Full Ornith 1.0 397B is not practical on the current 64 GB Apple Silicon Mac and requires approved remote GPU capacity before activation.",
+    "primary_alias": "ornith-primary",
+    "local_fallback_alias": "ornith-local",
+    "embedding_policy": "Use a separate fit-for-purpose embedding model; Ornith is not promoted as an embedding model.",
+    "secret_vault": "Boneman"
+  },
+  "official_models": {
+    "full_bf16": {
+      "model_id": "deepreinforce-ai/Ornith-1.0-397B",
+      "revision": "5e3e761811e804c295c1d3c0ce68b21da6154209",
+      "parameter_class": "397B MoE",
+      "architecture": "Qwen3_5MoeForConditionalGeneration",
+      "dtype": "bfloat16",
+      "repository_bytes": 793633331312,
+      "repository_gib": 739.13,
+      "context_tokens": 262144,
+      "runtime_floor": {
+        "transformers": ">=5.8.1",
+        "vllm": ">=0.19.1",
+        "sglang": ">=0.5.9"
+      }
+    },
+    "full_fp8": {
+      "model_id": "deepreinforce-ai/Ornith-1.0-397B-FP8",
+      "revision": "8b61f97a8512d9d01bff1a9625c9a16730e115bb",
+      "parameter_class": "397B MoE",
+      "architecture": "Qwen3_5MoeForConditionalGeneration",
+      "quantization": "compressed-tensors FP8",
+      "repository_bytes": 405183264091,
+      "repository_gib": 377.36,
+      "context_tokens": 262144
+    }
+  },
+  "current_mac": {
+    "model": "MacBook Pro MacBookPro18,2",
+    "chip": "Apple M1 Max",
+    "cpu_cores": 10,
+    "gpu_cores": 32,
+    "unified_memory_gb": 64,
+    "metal": "Metal 4",
+    "macos": "26.5.1",
+    "storage_available_gib": 1228,
+    "swap_observed": "total = 10240.00M used = 9241.88M free = 998.12M"
+  },
+  "feasibility": {
+    "local_full_397b": "rejected",
+    "local_full_397b_fp8": "rejected",
+    "reason": "Weight files alone exceed unified memory by a wide margin before KV cache, runtime overhead, process memory, or OS pressure. Storage is available, but memory and practical throughput are not.",
+    "minimum_weight_memory_estimates_gib": {
+      "bf16": 739.48,
+      "fp16": 739.48,
+      "fp8": 369.74,
+      "int8": 369.74,
+      "int6": 277.31,
+      "int5": 231.09,
+      "int4": 184.87
+    },
+    "decision": "Do not download full 397B weights locally. Do not rewire production tools to Ornith until a validated endpoint exists."
+  },
+  "approved_runtime_policy": {
+    "tier_1_local_full": "blocked-by-hardware",
+    "tier_2_remote_full": "pending-user-approval-for-costs-and-credentials",
+    "tier_3_local_fallback": "use-current-oMLX-Gemma-stack-until-an-official-smaller-Ornith-model-is-verified",
+    "remote_preference_order": ["vLLM", "SGLang"],
+    "remote_requirements": [
+      "OpenAI-compatible endpoint",
+      "authentication",
+      "TLS or private network",
+      "reasoning parser qwen3",
+      "tool-call parser qwen3-compatible",
+      "prefix or prompt caching when available",
+      "bounded spend or automatic shutdown"
+    ]
+  },
+  "active_local_fallback": {
+    "provider": "oMLX native MLX Gemma stack",
+    "base_url": "http://127.0.0.1:18080/v1",
+    "coding_model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+    "reasoning_model": "mlx-community--gemma-4-31b-it-4bit",
+    "fast_model": "mlx-community--gemma-4-e4b-it-4bit",
+    "routing_model": "mlx-community--gemma-4-e2b-it-4bit",
+    "status": "preserved"
+  },
+  "blocked_actions": [
+    {
+      "action": "download deepreinforce-ai/Ornith-1.0-397B weights",
+      "blocker": "unsafe storage and memory impact without viable local runtime"
+    },
+    {
+      "action": "create paid GPU instance or remote endpoint",
+      "blocker": "material cost and credentials require explicit approval"
+    },
+    {
+      "action": "make Ornith default in Codex/OpenCode/Hermes/Goose/OpenClaw",
+      "blocker": "no validated Ornith endpoint exists"
+    }
+  ],
+  "validation_gates_before_activation": [
+    "authenticated /v1/models returns exact Ornith model id or served alias",
+    "minimal chat completion succeeds",
+    "reasoning_content is separated from final content",
+    "OpenAI tool_calls are parsed correctly",
+    "reported model identity does not silently fall back to another model",
+    "latency and memory are within the documented operating envelope",
+    "fallback to the current oMLX Gemma provider succeeds"
+  ]
+}

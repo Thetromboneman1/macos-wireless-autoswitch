@@ -26,6 +26,7 @@ Date: 2026-06-23
 | `mlx-community--gemma-4-e2b-it-4bit` | oMLX/MLX | Routing utility | Classification, routing, health pings | Not a deep coding model | Production utility |
 | `gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf` | llama.cpp | Reliability/lab | Strong coding throughput, timing visibility, portability | Separate process, no Apple Silicon MTP | Lab and fallback |
 | `qwen3.6-35b-4bit` | Rapid-MLX | Experimental | High throughput and concurrency candidate | Memory pressure risk | Lab only |
+| `deepreinforce-ai/Ornith-1.0-397B` | Remote vLLM/SGLang | Candidate | Strong advertised agentic coding and tool-calling target | Not feasible locally on 64 GB unified memory; requires approved remote 8x80 GB-class GPU deployment | Blocked, not promoted |
 | `mlx-community--Qwen3.6-35B-A3B-4bit` | Hugging Face cache | Experimental | Available locally for Qwen testing | Needs controlled benchmark pass | Lab only |
 | `mlx-community--Qwen3.6-27B-OptiQ-4bit` | Hugging Face lock/cache reference | Experimental | Candidate OptiQ lane | Not fully benchmarked in this pass | Not promoted |
 | `google/gemma-4-12b` | LM Studio cache | Lab | Smaller Gemma candidate | Not wired into production endpoint | Not promoted |

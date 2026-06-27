@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "updated": "2026-06-27",
+  "tasks": [
+    {
+      "task": "Audit current Mac hardware for Ornith 397B feasibility",
+      "scope": "local machine",
+      "status": "completed",
+      "evidence": [
+        "MacBookPro18,2 Apple M1 Max, 10 CPU cores, 32 GPU cores",
+        "64 GB unified memory",
+        "macOS 26.5.1 with Metal 4",
+        "about 1.2 TiB free storage on /System/Volumes/Data",
+        "swap observed at 9241.88 MB used of 10240 MB"
+      ],
+      "files_changed": ["config/local-ai-platform/ornith-desired-state.json"],
+      "tests_run": [],
+      "result": "Full local Ornith 397B rejected before download.",
+      "blocker": "",
+      "next_action": "Only revisit local full-model deployment if attached compute or memory capacity changes materially."
+    },
+    {
+      "task": "Inspect official Ornith 397B source metadata",
+      "scope": "Hugging Face model repositories",
+      "status": "completed",
+      "evidence": [
+        "deepreinforce-ai/Ornith-1.0-397B revision 5e3e761811e804c295c1d3c0ce68b21da6154209",
+        "deepreinforce-ai/Ornith-1.0-397B-FP8 revision 8b61f97a8512d9d01bff1a9625c9a16730e115bb",
+        "BF16 repository metadata totals 793633331312 bytes",
+        "FP8 repository metadata totals 405183264091 bytes",
+        "official serving recipe targets a single 8x80 GB GPU node using vLLM or SGLang"
+      ],
+      "files_changed": [
+        "config/local-ai-platform/ornith-desired-state.json",
+        "docs/autonomous-modernization/35-ornith-feasibility-and-control-plane.md"
+      ],
+      "tests_run": [],
+      "result": "Remote 8x80 GB GPU deployment is the realistic full-model path.",
+      "blocker": "",
+      "next_action": "Request approval before provisioning, purchasing, or exposing a remote endpoint."
+    },
+    {
+      "task": "Preserve existing local AI production lane",
+      "scope": "local config and docs",
+      "status": "completed",
+      "evidence": [
+        "Existing routing policy keeps oMLX on http://127.0.0.1:18080/v1 as default front door",
+        "Gemma 4 role contract remains intact",
+        "No application provider config was changed because no Ornith endpoint has passed activation gates"
+      ],
+      "files_changed": [
+        "config/local-ai-platform/routing-policy.json",
+        "docs/benchmarks/production-model-catalog.md",
+        "docs/architecture/ai-service-catalog.md"
+      ],
+      "tests_run": [],
+      "result": "Ornith documented as candidate only; production remains oMLX/Gemma.",
+      "blocker": "",
+      "next_action": "Validate current oMLX health after documentation/config updates."
+    },
+    {
+      "task": "Configure full Ornith remote endpoint",
+      "scope": "Tier 2 deployment",
+      "status": "blocked",
+      "evidence": [
+        "No approved remote GPU host, API key, Tailscale route, TLS endpoint, or spend boundary was provided."
+      ],
+      "files_changed": [],
+      "tests_run": [],
+      "result": "",
+      "blocker": "Material cost and credentials require explicit user approval.",
+      "next_action": "After approval, provision vLLM or SGLang on 8x80 GB-class GPU capacity and run activation gates before tool rewiring."
+    },
+    {
+      "task": "Evaluate smaller local Ornith candidates",
+      "scope": "Tier 3 local fallback",
+      "status": "blocked",
+      "evidence": [
+        "No official smaller Ornith GGUF or MLX candidate was downloaded in this pass."
+      ],
+      "files_changed": [],
+      "tests_run": [],
+      "result": "",
+      "blocker": "Requires separate candidate discovery and controlled download/benchmark window.",
+      "next_action": "Search official model repositories for 35B, 31B, and 9B variants, then test only candidates with verified MLX or GGUF support."
+    }
+  ]
+}

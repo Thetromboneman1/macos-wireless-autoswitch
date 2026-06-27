@@ -45,6 +45,7 @@ Live capacity snapshot from 2026-06-23:
 2. Concurrent model loading plus Docker plus editor processes is the most likely pressure amplifier.
 3. Rapid-MLX remains lab-only because its prior performance upside came with startup memory-pressure risk.
 4. Benchmark trend evidence shows one coding-patch TTFT regression that should be watched before treating current oMLX behavior as a new baseline.
+5. Ornith 1.0 397B is not a local-capacity expansion target on this Mac; even compressed full-model weights exceed the 64 GB unified-memory budget by multiple factors.
 
 ## Growth Limits
 
@@ -64,6 +65,7 @@ The platform can support continued single-user local AI operations with oMLX as 
 
 - Keep oMLX on `18080` as the only default production endpoint.
 - Keep llama.cpp and Rapid-MLX stopped unless a named benchmark, fallback, or validation window is active.
+- Treat Ornith 397B as remote-only unless attached compute changes materially.
 - Run endpoint-only health checks during routine monitoring.
 - Run full chat/tool-call checks only for validation, promotion, or incident recovery.
 - Start promotion or long benchmark work only when swap is below 75 percent, or explicitly record high swap as the experiment variable.
