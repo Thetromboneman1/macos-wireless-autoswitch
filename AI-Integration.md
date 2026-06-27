@@ -1,17 +1,21 @@
 # AI Integration
 
-## Integration Scope
-No direct model inference in the macOS Wi-Fi auto-switch daemon. Odysseus is installed as a separate Docker companion stack for local AI workspace workflows.
+This wireless automation repository does not own local AI runtime, model
+serving, agent-platform, Apple Container pilot, or model residency files.
 
-## Operational Notes
-- Use OpenAI-compatible endpoint abstractions when possible.
-- Keep secrets in environment/config, not in repository source.
-- Validate model endpoint health before enabling automated workflows.
-- Odysseus Docker/Gemma setup lives in `odysseus/` and is managed by `scripts/odysseus-docker.sh`.
-- Gemma model role mapping is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
-- Host-side oMLX memory and battery behavior is managed by `scripts/omlx-power-policy.sh` and documented in `docs/OMLX_POWER_POLICY.md`.
+Canonical local AI platform home:
 
-## Risks
-Incorrect interface detection may disable expected network paths; validate after OS updates.
-Odysseus automation depends on a reachable host or remote model server; Docker on macOS does not provide Metal GPU acceleration to the container.
-Pinned oMLX models ignore idle TTLs. Keep large Gemma models unpinned unless there is a deliberate need to keep them resident.
+```text
+/Users/corn/Documents/Boneman_Projects
+```
+
+Start with:
+
+```text
+/Users/corn/Documents/Boneman_Projects/local-ai-platform/ARCHITECTURE.md
+/Users/corn/Documents/Boneman_Projects/local-ai-platform/LOCAL_AI_PLATFORM.md
+/Users/corn/Documents/Boneman_Projects/local-ai-platform/MODEL_RESIDENCY.md
+```
+
+The only AI-related note for this repo is that the Wi-Fi auto-switch daemon
+must not depend on model serving to install, run, or recover.

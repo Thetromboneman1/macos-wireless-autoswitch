@@ -1,9 +1,0 @@
-# document-retention-and-archive-policy
-
-Status: Redirect
-Canonical location: [document-retention-and-archive-policy.md](https://github.com/Thetromboneman1/Boneman_Projects/blob/main/docs/governance/document-retention-and-archive-policy.md)
-Owning repository: Boneman_Projects
-Migrated on: 2026-06-24
-Reason: Repository-governance content moved out of macos-wireless-autoswitch.
-
-This macos-wireless-autoswitch path is retained only as a small compatibility redirect. Use the canonical Boneman_Projects document for current repository governance.

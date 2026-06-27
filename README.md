@@ -7,10 +7,7 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - `wireless.sh`: core detection and Wi-Fi toggle logic.
 - `com.computernetworkbasics.wifionoff.plist`: launchd daemon that watches macOS network state.
 - `install.sh`: install, update, and uninstall helper.
-- `scripts/omlx-power-policy.sh`: host oMLX memory/battery policy for Gemma model TTLs and unload/load actions.
-- `scripts/local-ai/on-demand-lane-gateway.py`: lightweight OpenAI-compatible gateway that wakes cold specialist model lanes when tools call them.
-- `scripts/local-ai/model-residency-governor.sh`: swap-aware governor that keeps oMLX and gateways warm while spinning down heavy backend model lanes.
-- `docs/`: wireless automation notes plus redirects for platform content that moved to Boneman_Projects.
+- `docs/`: wireless automation notes plus small compatibility redirects for platform content now owned by Boneman_Projects.
 
 ## Supported Platforms
 
@@ -76,54 +73,8 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Includes VLAN virtual interfaces (for example `vlan10`) when deciding whether Wi-Fi should be disabled.
 - Ignores loopback and self-assigned IP ranges when deciding wired status.
 - Requires admin privileges for system-level network changes.
-- Optional Odysseus/Gemma companion setup is documented in `docs/ODYSSEUS_GEMMA_DOCKER.md`.
-- oMLX memory and battery policy is documented in `docs/OMLX_POWER_POLICY.md`.
-- Local AI model residency and swap thresholds are documented in `docs/operations/model-residency-governor.md`.
-- The measured GGUF/llama.cpp coding lane is managed by `scripts/gemma4-gguf-coding-lane.sh` on `127.0.0.1:8002`.
-- The Ornith GGUF lane is tool-facing on `127.0.0.1:8003`; a gateway starts its backend on `127.0.0.1:18003` on demand.
 - AdGuard LocalDNSCrypt is documented in `docs/network/adguard-dnscrypt-setup.md`.
-- GitHub-star modernization decisions are documented in `docs/autonomous-modernization/11-github-stars-full-implementation.md`.
-- Approved GitHub-star trial helpers are documented in `docs/star-tools/approved-star-trials.md`.
-- Unified local-AI platform architecture is documented in `docs/autonomous-modernization/16-unified-ai-platform-architecture.md`.
-- Daily platform status can be checked with `scripts/star-tools/platform-status.sh`.
-- Weekly AI repository review records are canonical in `/Users/corn/Documents/Boneman_Projects/docs/ai-trending-repos/`.
-
-## Local AI Companion Architecture
-
-```mermaid
-flowchart LR
-  subgraph Host["macOS host"]
-    OMLX["oMLX 0.4.3<br/>127.0.0.1:18080/v1"]
-    ORNITH["Ornith gateway<br/>127.0.0.1:8003/v1<br/>backend 18003"]
-    GGUF["Gemma GGUF gateway<br/>127.0.0.1:8002/v1<br/>backend 18002"]
-    Policy["com.corn.omlx-power-policy<br/>battery/normal TTLs"]
-    Residency["com.corn.local-ai-residency-governor<br/>swap-aware spin down"]
-  end
-  subgraph Docker["Optional companion services"]
-    Odysseus["Odysseus<br/>127.0.0.1:7000"]
-    Chroma["ChromaDB<br/>127.0.0.1:8100"]
-    Searx["SearXNG<br/>internal only"]
-    Ntfy["ntfy<br/>127.0.0.1:8091"]
-  end
-  Policy --> OMLX
-  Residency --> ORNITH
-  Residency --> GGUF
-  Odysseus -->|"host.docker.internal:18080/v1"| OMLX
-  Odysseus -->|"coding on demand: host.docker.internal:8003/v1"| ORNITH
-  Odysseus -->|"fallback: host.docker.internal:8002/v1"| GGUF
-  Odysseus --> Chroma
-  Odysseus --> Searx
-  Odysseus --> Ntfy
-```
-
-The canonical cross-repo local AI map is maintained in `/Users/corn/Documents/Boneman_Projects/local-ai-platform/ARCHITECTURE.md`.
-
-Repository-governance and platform migration records are canonical in
-[`Boneman_Projects`](https://github.com/Thetromboneman1/Boneman_Projects/tree/main/docs/repository-governance).
-
-The repo-local integration map for the GitHub-star platform layer is maintained in `docs/architecture/`, with the operational runbook at `docs/operations/platform-runbook.md`.
-
-Codex, VS Code, and shared skill integration is documented in `docs/autonomous-modernization/25-skills-installation-and-integration.md` and `docs/skills/`.
+- Local AI, model residency, platform governance, agent-platform, Apple Container pilot, and AI tooling docs are canonical in `/Users/corn/Documents/Boneman_Projects` and `https://github.com/Thetromboneman1/Boneman_Projects`.
 
 ## License
 
