@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-06-22",
+  "updated": "2026-06-27",
   "default_front_door": {
     "name": "oMLX native MLX Gemma stack",
     "base_url": "http://127.0.0.1:18080/v1",
@@ -19,14 +19,27 @@
       "model": "mlx-community--gemma-4-26b-a4b-it-4bit",
       "engine": "oMLX/MLX",
       "base_url": "http://127.0.0.1:18080/v1",
-      "use_for": ["default local coding", "repo edits", "agent workflows"]
+      "use_for": ["stable local coding fallback", "repo edits", "agent workflows"]
+    },
+    {
+      "id": "ornith-local-coding",
+      "model": "ornith-1.0-35b-Q4_K_M.gguf",
+      "engine": "llama.cpp llama-server",
+      "base_url": "http://127.0.0.1:8003/v1",
+      "use_for": ["preferred local coding candidate", "repo edits", "tool-calling capable agent workflows"],
+      "constraints": [
+        "Q4_K_M GGUF candidate, not full 397B",
+        "reasoning-first responses need larger max_tokens than tiny smoke tests",
+        "no MTP on Apple Silicon"
+      ],
+      "evidence": "docs/autonomous-modernization/benchmark-results-ornith-2026-06-27.json"
     },
     {
       "id": "gguf-coding-specialist",
       "model": "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
       "engine": "llama.cpp llama-server",
       "base_url": "http://127.0.0.1:8002/v1",
-      "use_for": ["GGUF benchmark lane", "portable coding lane", "llama.cpp production simulation"],
+      "use_for": ["Gemma GGUF fallback", "portable coding lane", "llama.cpp production simulation"],
       "constraints": ["no MTP on Apple Silicon"]
     },
     {
@@ -83,7 +96,7 @@
   ],
   "policy": {
     "avoid_default": ["Ollama", "Lightning MLX MTP paths"],
-    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane", "Ornith 397B remote or local service"],
+    "no_autostart": ["OmniRoute", "headroom", "OpenHands", "Octopoda dashboard", "Rapid-MLX Qwen3.6 lab lane", "Ornith 397B remote service"],
     "secret_vault": "Boneman"
   }
 }

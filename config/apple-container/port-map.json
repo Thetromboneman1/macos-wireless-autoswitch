@@ -14,6 +14,7 @@
       4097,
       7000,
       8002,
+      8003,
       8010,
       8080,
       8091,
@@ -27,6 +28,7 @@
     "production_endpoints": {
       "omlx": "http://127.0.0.1:18080/v1",
       "llama_cpp": "http://127.0.0.1:8002/v1",
+      "ornith_gguf": "http://127.0.0.1:8003/v1",
       "rapid_mlx": "http://127.0.0.1:8010/v1"
     },
     "storage_root": "~/.local/share/apple-container-pilot"

@@ -6,7 +6,7 @@ Date: 2026-06-27
 
 Do not download or attempt to run `deepreinforce-ai/Ornith-1.0-397B` on this Mac.
 
-The full 397B model is a remote-GPU candidate, not a practical Apple Silicon local model on the current machine. The current production front door remains oMLX at `http://127.0.0.1:18080/v1` with the Gemma role contract intact.
+The full 397B model is a remote-GPU candidate, not a practical Apple Silicon local model on the current machine. The local Ornith path is `Ornith-1.0-35B-GGUF` Q4_K_M on llama.cpp at `http://127.0.0.1:8003/v1`; the production oMLX/Gemma role contract remains the stable fallback and non-coding role set.
 
 ## Evidence
 
@@ -29,6 +29,7 @@ Official model metadata checked on 2026-06-27:
 |---|---|---:|---:|
 | `deepreinforce-ai/Ornith-1.0-397B` | `5e3e761811e804c295c1d3c0ce68b21da6154209` | 136 | 793,633,331,312 bytes |
 | `deepreinforce-ai/Ornith-1.0-397B-FP8` | `8b61f97a8512d9d01bff1a9625c9a16730e115bb` | 136 | 405,183,264,091 bytes |
+| `deepreinforce-ai/Ornith-1.0-35B-GGUF` Q4_K_M | `c2e1703039380de4ce6820e97afd185682d3c16c` | 1 model file plus metadata | 21,166,757,760 bytes for Q4_K_M |
 
 The BF16 config reports `Qwen3_5MoeForConditionalGeneration`, `dtype: bfloat16`, 60 text layers, 512 experts, 10 experts per token, and `262144` max position embeddings. The FP8 repo uses `compressed-tensors` FP8 quantization.
 
@@ -55,7 +56,7 @@ These numbers do not include KV cache, runtime memory, graph/workspace overhead,
 |---|---|---|
 | Tier 1, full 397B locally | Rejected | Memory is insufficient by multiple factors before overhead. Swap-heavy loading would not be a valid deployment. |
 | Tier 2, full 397B remote | Viable with approval | Requires 8x80 GB-class GPU capacity, auth, TLS/private networking, spend controls, and validation. |
-| Tier 3, best local Ornith | Deferred | Only evaluate official smaller Ornith variants after verifying actual MLX/GGUF/runtime support and download size. |
+| Tier 3, best local Ornith | Implemented | `ornith-1.0-35b-Q4_K_M.gguf` is installed, running, benchmarked, and wired as preferred local coding candidate. |
 
 ## Desired State
 
@@ -67,10 +68,10 @@ Current policy:
 - Primary alias: `ornith-primary`.
 - Local fallback alias: `ornith-local`.
 - Full model: `deepreinforce-ai/Ornith-1.0-397B`.
-- Local fallback today: current oMLX/Gemma production stack.
+- Local fallback today: `ornith-1.0-35b-Q4_K_M.gguf` on `http://127.0.0.1:8003/v1`, with current oMLX/Gemma production stack preserved as stable fallback.
 - Embeddings: keep a separate embedding model.
 - Secrets: 1Password vault `Boneman`.
-- Tool rewiring: blocked until a real Ornith endpoint passes activation gates.
+- Tool rewiring: completed for OpenCode, Continue, OpenClaw, Odysseus, and platform metadata; Goose keeps oMLX as its single OpenAI host and records Ornith metadata.
 
 ## Activation Gates
 
@@ -103,5 +104,5 @@ After approval, the preferred implementation is a private vLLM or SGLang endpoin
 
 - No approved remote GPU host or spend boundary.
 - No remote API key or private network endpoint.
-- No validated smaller local Ornith candidate.
+- No local full 397B path; use the validated 35B GGUF lane locally.
 - `agent-reach` skill is installed, but the `agent-reach` CLI was not on PATH during this pass; web evidence was collected through Hugging Face APIs instead.

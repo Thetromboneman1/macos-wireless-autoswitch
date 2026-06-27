@@ -1,6 +1,6 @@
 # Local AI Platform Runbook
 
-Date: 2026-06-22
+Date: 2026-06-27
 
 ## Daily Status
 
@@ -30,7 +30,8 @@ scripts/star-tools/start-openhands-docker.sh
 ## Normal Routing
 
 - Default model endpoint: `http://127.0.0.1:18080/v1`.
-- GGUF coding lane: `http://127.0.0.1:8002/v1`, no MTP.
+- Ornith GGUF coding lane: `http://127.0.0.1:8003/v1`, no MTP.
+- Gemma GGUF coding fallback: `http://127.0.0.1:8002/v1`, no MTP.
 - Rapid-MLX Hermes candidate: `http://127.0.0.1:8010/v1`, start only with `scripts/local-ai/start-rapid-mlx-qwen.sh`.
 - Do not route routine work through OmniRoute or headroom until their lab reviews pass.
 
@@ -42,6 +43,7 @@ These user and workspace configs are wired to the shared policy files:
 |---|---|
 | Codex | `~/.codex/config.toml` |
 | OpenCode | `~/.config/opencode/opencode.json` |
+| Continue | `~/.continue/config.yaml` |
 | Goose | `~/.config/goose/config.yaml` |
 | Hermes | `~/.hermes/config.yaml` |
 | Hermes WebUI | `~/.hermes/webui/settings.json` |
@@ -70,6 +72,7 @@ Hermes running on the macOS host must use loopback endpoints:
 ```text
 oMLX: http://127.0.0.1:18080/v1
 GGUF: http://127.0.0.1:8002/v1
+Ornith: http://127.0.0.1:8003/v1
 ```
 
 Use `host.docker.internal` only for Docker consumers. The 2026-06-23 Hermes RCA found that host-side `host.docker.internal` entries caused the CLI to retry until `API call failed after 3 retries: Connection error`.
@@ -133,6 +136,7 @@ Before committing:
 scripts/star-tools/platform-status.sh
 scripts/star-tools/validate-star-deployments.sh
 jq . config/local-ai-platform/routing-policy.json >/dev/null
+jq . config/local-ai-platform/ornith-desired-state.json >/dev/null
 jq . config/local-ai-platform/mcp-topology.json >/dev/null
 git diff --check
 git diff | grep -Ei 'secret|token|password|apikey|api_key|private_key|BEGIN RSA|BEGIN OPENSSH' || true

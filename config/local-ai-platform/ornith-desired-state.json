@@ -3,12 +3,26 @@
   "updated": "2026-06-27",
   "provider": {
     "name": "ornith",
-    "status": "candidate-blocked",
-    "reason": "Full Ornith 1.0 397B is not practical on the current 64 GB Apple Silicon Mac and requires approved remote GPU capacity before activation.",
+    "status": "local-35b-gguf-validated",
+    "reason": "Full Ornith 1.0 397B is not practical on the current 64 GB Apple Silicon Mac; Ornith 1.0 35B Q4_K_M GGUF is validated as the local coding candidate.",
     "primary_alias": "ornith-primary",
     "local_fallback_alias": "ornith-local",
     "embedding_policy": "Use a separate fit-for-purpose embedding model; Ornith is not promoted as an embedding model.",
     "secret_vault": "Boneman"
+  },
+  "local_models": {
+    "ornith_35b_gguf_q4": {
+      "model_id": "ornith-1.0-35b-Q4_K_M.gguf",
+      "source_repo": "deepreinforce-ai/Ornith-1.0-35B-GGUF",
+      "revision": "c2e1703039380de4ce6820e97afd185682d3c16c",
+      "filename": "ornith-1.0-35b-Q4_K_M.gguf",
+      "bytes": 21166757760,
+      "local_path": "/Users/corn/Developer/ML-Models/Ornith/models/deepreinforce-ai-Ornith-1.0-35B-GGUF/ornith-1.0-35b-Q4_K_M.gguf",
+      "engine": "llama.cpp",
+      "base_url": "http://127.0.0.1:8003/v1",
+      "context_tokens": 65536,
+      "status": "validated"
+    }
   },
   "official_models": {
     "full_bf16": {
@@ -66,7 +80,7 @@
   "approved_runtime_policy": {
     "tier_1_local_full": "blocked-by-hardware",
     "tier_2_remote_full": "pending-user-approval-for-costs-and-credentials",
-    "tier_3_local_fallback": "use-current-oMLX-Gemma-stack-until-an-official-smaller-Ornith-model-is-verified",
+    "tier_3_local_fallback": "use Ornith 1.0 35B Q4_K_M GGUF on llama.cpp for preferred local coding when running, with current oMLX/Gemma as stable fallback",
     "remote_preference_order": ["vLLM", "SGLang"],
     "remote_requirements": [
       "OpenAI-compatible endpoint",
@@ -79,13 +93,16 @@
     ]
   },
   "active_local_fallback": {
-    "provider": "oMLX native MLX Gemma stack",
-    "base_url": "http://127.0.0.1:18080/v1",
-    "coding_model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+    "provider": "Ornith 35B GGUF local coding lane",
+    "base_url": "http://127.0.0.1:8003/v1",
+    "coding_model": "ornith-1.0-35b-Q4_K_M.gguf",
     "reasoning_model": "mlx-community--gemma-4-31b-it-4bit",
     "fast_model": "mlx-community--gemma-4-e4b-it-4bit",
     "routing_model": "mlx-community--gemma-4-e2b-it-4bit",
-    "status": "preserved"
+    "stable_fallback_provider": "oMLX native MLX Gemma stack",
+    "stable_fallback_base_url": "http://127.0.0.1:18080/v1",
+    "stable_fallback_coding_model": "mlx-community--gemma-4-26b-a4b-it-4bit",
+    "status": "validated"
   },
   "blocked_actions": [
     {
@@ -97,8 +114,8 @@
       "blocker": "material cost and credentials require explicit approval"
     },
     {
-      "action": "make Ornith default in Codex/OpenCode/Hermes/Goose/OpenClaw",
-      "blocker": "no validated Ornith endpoint exists"
+      "action": "make full Ornith 397B default in Codex/OpenCode/Hermes/Goose/OpenClaw",
+      "blocker": "no full 397B endpoint exists"
     }
   ],
   "validation_gates_before_activation": [

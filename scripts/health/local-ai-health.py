@@ -18,7 +18,7 @@ from typing import Any
 
 
 DEFAULT_MODEL = "mlx-community--gemma-4-26b-a4b-it-4bit"
-DEFAULT_PORTS = (18080, 8002, 8010)
+DEFAULT_PORTS = (18080, 8002, 8003, 8010)
 APPLE_CONTAINER_PORT_MAP = Path.cwd() / "config" / "apple-container" / "port-map.json"
 PROCESS_PATTERNS = ("oMLX", "omlx-server", "llama-server", "rapid-mlx", "Docker", "LM Studio")
 EXPECTED_CODEX_SKILLS = (
@@ -450,6 +450,14 @@ def main() -> int:
                         "gemma-4-26B-A4B-it-UD-Q4_K_XL.gguf",
                         "",
                         8002,
+                        ports,
+                    ),
+                    check_optional_lane(
+                        "ornith-35b-gguf",
+                        "http://127.0.0.1:8003/v1",
+                        "ornith-1.0-35b-Q4_K_M.gguf",
+                        "",
+                        8003,
                         ports,
                     ),
                     check_optional_lane("rapid-mlx", "http://127.0.0.1:8010/v1", "qwen3.6-35b-4bit", "", 8010, ports),

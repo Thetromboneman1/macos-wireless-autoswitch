@@ -53,6 +53,13 @@ ENGINES = [
         "process_pattern": "llama-server",
     },
     {
+        "name": "ornith-35b-gguf",
+        "base_url": os.environ.get("ORNITH_GGUF_BASE_URL", "http://127.0.0.1:8003/v1"),
+        "model": os.environ.get("ORNITH_GGUF_MODEL_ID", "ornith-1.0-35b-Q4_K_M.gguf"),
+        "headers": {},
+        "process_pattern": "ornith-1.0-35b|ornith-gguf|llama-server",
+    },
+    {
         "name": "rapid-mlx-qwen36",
         "base_url": "http://127.0.0.1:8010/v1",
         "model": "qwen3.6-35b-4bit",

@@ -37,6 +37,16 @@ def test_gguf_coding_lane_does_not_enable_mtp_on_apple_silicon():
     assert "no-MTP" in script
 
 
+def test_ornith_gguf_lane_uses_separate_local_port_without_mtp():
+    script = (ROOT / "scripts" / "ornith-gguf-coding-lane.sh").read_text()
+
+    assert "ORNITH_GGUF_PORT:-8003" in script
+    assert "ornith-1.0-35b-Q4_K_M.gguf" in script
+    assert "--spec-type draft-mtp" not in script
+    assert "--model-draft" not in script
+    assert "127.0.0.1" in script
+
+
 def test_tool_call_payload_uses_openai_tool_schema():
     validator = load_validator_module()
 
@@ -90,6 +100,14 @@ def test_benchmark_bakeoff_includes_rapid_mlx_candidate():
 
     assert '"name": "rapid-mlx-qwen36"' in script
     assert '"base_url": "http://127.0.0.1:8010/v1"' in script
+
+
+def test_benchmark_bakeoff_includes_ornith_candidate():
+    script = (ROOT / "scripts" / "local-ai" / "benchmark-engine-bakeoff.py").read_text()
+
+    assert '"name": "ornith-35b-gguf"' in script
+    assert "ORNITH_GGUF_BASE_URL" in script
+    assert "ornith-1.0-35b-Q4_K_M.gguf" in script
 
 
 def test_rollback_script_returns_to_omlx_default():
@@ -184,6 +202,14 @@ def test_health_checker_checks_optional_lane_when_port_is_listening(monkeypatch)
     assert calls == ["http://127.0.0.1:8010/v1/models"]
 
 
+def test_health_checker_includes_ornith_optional_lane():
+    script = (ROOT / "scripts" / "health" / "local-ai-health.py").read_text()
+
+    assert "ornith-35b-gguf" in script
+    assert "http://127.0.0.1:8003/v1" in script
+    assert "ornith-1.0-35b-Q4_K_M.gguf" in script
+
+
 def test_health_checker_reports_codex_skill_metadata(tmp_path):
     health = load_health_module()
     skill_dir = tmp_path / "gh-fix-ci"
@@ -243,7 +269,8 @@ def test_ornith_desired_state_keeps_unvalidated_397b_blocked():
     state = json.loads((ROOT / "config" / "local-ai-platform" / "ornith-desired-state.json").read_text())
 
     assert state["provider"]["name"] == "ornith"
-    assert state["provider"]["status"] == "candidate-blocked"
+    assert state["provider"]["status"] == "local-35b-gguf-validated"
     assert state["feasibility"]["local_full_397b"] == "rejected"
     assert state["approved_runtime_policy"]["tier_2_remote_full"].startswith("pending-user-approval")
-    assert state["active_local_fallback"]["provider"] == "oMLX native MLX Gemma stack"
+    assert state["active_local_fallback"]["provider"] == "Ornith 35B GGUF local coding lane"
+    assert state["active_local_fallback"]["stable_fallback_provider"] == "oMLX native MLX Gemma stack"

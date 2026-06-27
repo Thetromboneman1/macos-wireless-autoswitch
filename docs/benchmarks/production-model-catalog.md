@@ -1,25 +1,26 @@
 # Production Model Catalog
 
-Date: 2026-06-23
+Date: 2026-06-27
 
 ## Current Ranking
 
 | Rank | Category | Winner | Reason |
 |---:|---|---|---|
-| 1 | Best Overall | Gemma 4 26B-A4B on oMLX | Stable production endpoint, strong coding, low TTFT, Hermes now verified. |
-| 2 | Best Coding | Gemma 4 26B-A4B GGUF on llama.cpp | Strong decode and useful timing metadata; keep as reliability lane. |
-| 3 | Best Tool Calling | Gemma 4 26B-A4B on oMLX | Current validator passes forced OpenAI tool-call schema. |
-| 4 | Best Hermes | Gemma 4 26B-A4B on oMLX | Hermes one-shot now returns `OK.` after host endpoint fix. |
-| 5 | Best Orchestration | Gemma 4 E2B/E4B on oMLX | Best fit for routing, summaries, and fast utility turns. |
-| 6 | Fastest | Rapid-MLX Qwen3.6 35B-A3B | Prior benchmark showed the highest concurrency throughput; lab-only due memory pressure. |
+| 1 | Best Local Coding | Ornith 1.0 35B Q4 GGUF on llama.cpp | Best measured local coding throughput in the 2026-06-27 benchmark and tool-call validation passed. |
+| 2 | Best Stable Overall | Gemma 4 26B-A4B on oMLX | Stable production endpoint, strong coding fallback, low TTFT, Hermes verified. |
+| 3 | Best GGUF Fallback | Gemma 4 26B-A4B GGUF on llama.cpp | Strong decode and useful timing metadata; keep as reliability lane. |
+| 4 | Best Tool Calling | Ornith 1.0 35B Q4 GGUF on llama.cpp | Forced OpenAI tool-call schema returned parsed `tool_calls`. |
+| 5 | Best Hermes | Gemma 4 26B-A4B on oMLX | Hermes one-shot now returns `OK.` after host endpoint fix. |
+| 6 | Best Orchestration | Gemma 4 E2B/E4B on oMLX | Best fit for routing, summaries, and fast utility turns. |
 | 7 | Best Low Memory | Gemma 4 E2B on oMLX | Small routing/utility role with low latency. |
-| 8 | Best Long Context | llama.cpp reliability lane | Best place to test explicit context/KV/cache settings before production use. |
+| 8 | Best Long Context | llama.cpp reliability lanes | Best place to test explicit context/KV/cache settings before production use. |
 | 9 | Best Multimodal | Not promoted | Vision/mmproj remains a lab task. |
 
 ## Catalog
 
 | Model | Backend | Lane | Strengths | Weaknesses | Production Suitability |
 |---|---|---|---|---|---|
+| `ornith-1.0-35b-Q4_K_M.gguf` | llama.cpp | Preferred local coding | Strong local coding throughput, tool calls, reasoning parser output, 65k context configured | Reasoning-first responses need larger `max_tokens`; separate process adds memory pressure | Promoted as preferred local coding candidate |
 | `mlx-community--gemma-4-26b-a4b-it-4bit` | oMLX/MLX | Stable production | Coding, repo automation, Hermes orchestration, tool calls | Less timing detail than llama.cpp | Production default |
 | `mlx-community--gemma-4-31b-it-4bit` | oMLX/MLX | Reasoning | Architecture, planning, review synthesis | Higher memory cost | Production selectable, not always loaded |
 | `mlx-community--gemma-4-e4b-it-4bit` | oMLX/MLX | Fast agent | Summaries, quick edits, cheaper turns | Lower reasoning depth | Production utility |
