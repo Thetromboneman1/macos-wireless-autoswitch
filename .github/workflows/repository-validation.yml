@@ -71,8 +71,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          find config .vscode -name '*.json' -print0 2>/dev/null |
-            xargs -0 --no-run-if-empty jq empty
+          json_files=()
+          for dir in config .vscode; do
+            if [[ -d "$dir" ]]; then
+              while IFS= read -r -d '' file; do
+                json_files+=("$file")
+              done < <(find "$dir" -name '*.json' -print0)
+            fi
+          done
+
+          if ((${#json_files[@]} > 0)); then
+            jq empty "${json_files[@]}"
+          fi
 
       - name: YAML configuration
         shell: bash
