@@ -18,6 +18,7 @@ Scope: `.github/workflows/*.yml` in this repository.
 - Expanded `repository-validation.yml` path filters to cover GitHub prompt/chatmode assets and new self-healing prompt artifacts.
 - Hardened JSON validation so missing optional config directories do not fail the job through unmatched shell globs.
 - Added gitleaks coverage to repository validation and workflow health audit.
+- Upgraded `gitleaks/gitleaks-action` from `v2` to `v3` for Node 24 runtime support and moved repository checkouts to `actions/checkout@v6`.
 
 ## Standard
 
