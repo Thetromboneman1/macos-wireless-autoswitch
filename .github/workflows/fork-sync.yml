@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout fork
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           token: ${{ github.token }}
@@ -37,11 +37,11 @@ jobs:
       - name: Add and fetch upstream
         run: |
           set -Eeuo pipefail
-          
+
           # Add or update upstream remote
           git remote add upstream https://github.com/locus313/macos-wireless-autoswitch.git 2>/dev/null || \
             git remote set-url upstream https://github.com/locus313/macos-wireless-autoswitch.git
-          
+
           # Fetch upstream main with retries (3 attempts, 5s backoff between each)
           # Use anonymous fetch to avoid occasional credential-header issues
           for attempt in 1 2 3; do
@@ -50,14 +50,14 @@ jobs:
               echo "✓ Successfully fetched upstream/main"
               exit 0
             fi
-            
+
             if [ "$attempt" -lt 3 ]; then
               sleep_seconds=$((attempt * 5))
               echo "⚠ Fetch failed, retrying in ${sleep_seconds}s..."
               sleep "$sleep_seconds"
             fi
           done
-          
+
           echo "::error::Failed to fetch upstream/main after 3 attempts"
           exit 1
 
@@ -65,12 +65,11 @@ jobs:
         id: strategy
         run: |
           set -Eeuo pipefail
-          
+
           # Check if fork is an ancestor of upstream (clean fork state)
           if git merge-base --is-ancestor HEAD upstream/main; then
-            STRATEGY="fast-forward"
             echo "strategy=fast-forward" >> "$GITHUB_OUTPUT"
-            
+
             # Check if already up-to-date
             if [ "$(git rev-parse HEAD)" = "$(git rev-parse upstream/main)" ]; then
               echo "status=up-to-date" >> "$GITHUB_OUTPUT"
@@ -80,7 +79,6 @@ jobs:
               echo "ℹ Fork is behind upstream/main by $(git rev-list --count HEAD..upstream/main) commits"
             fi
           else
-            STRATEGY="diverged"
             echo "strategy=diverged" >> "$GITHUB_OUTPUT"
             echo "status=diverged" >> "$GITHUB_OUTPUT"
             echo "⚠ Fork has diverged: $(git rev-list --count upstream/main..HEAD) local commits not in upstream"
@@ -90,10 +88,10 @@ jobs:
         if: steps.strategy.outputs.status != 'up-to-date'
         run: |
           set -Eeuo pipefail
-          
+
           STRATEGY="${{ steps.strategy.outputs.strategy }}"
           STATUS="${{ steps.strategy.outputs.status }}"
-          
+
           if [ "$STRATEGY" = "fast-forward" ] && [ "$STATUS" = "behind" ]; then
             echo "Performing fast-forward merge from upstream/main..."
             git merge --ff-only upstream/main
@@ -120,7 +118,7 @@ jobs:
             echo "**Triggered by:** ${{ github.event_name }}"
             echo "**Run:** [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
             echo ""
-            
+
             if [ "${{ job.status }}" = "success" ]; then
               echo "### ✅ Status: SUCCESS"
               if [ "${{ steps.strategy.outputs.status }}" = "up-to-date" ]; then

@@ -8,6 +8,8 @@ on:
       - ".yamllint"
       - "config/**"
       - "docs/**"
+      - ".github/chatmodes/**"
+      - ".github/prompts/**"
       - "scripts/**"
       - "tests/**"
   pull_request:
@@ -17,6 +19,8 @@ on:
       - ".yamllint"
       - "config/**"
       - "docs/**"
+      - ".github/chatmodes/**"
+      - ".github/prompts/**"
       - "scripts/**"
       - "tests/**"
   workflow_dispatch:
@@ -65,7 +69,10 @@ jobs:
 
       - name: JSON configuration
         shell: bash
-        run: jq empty config/local-ai-platform/*.json .vscode/*.json
+        run: |
+          set -euo pipefail
+          find config .vscode -name '*.json' -print0 2>/dev/null |
+            xargs -0 --no-run-if-empty jq empty
 
       - name: YAML configuration
         shell: bash
@@ -73,3 +80,8 @@ jobs:
 
       - name: GitHub Actions syntax
         uses: rhysd/actionlint@v1.7.12
+
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
