@@ -79,3 +79,19 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 ## License
 
 MIT. See `LICENSE`.
+
+## Spec Kit Development Workflow
+
+GitHub Spec Kit `v0.12.15` is initialized in this repository for
+specification-driven wireless automation changes. Use `.specify/` for shared
+workflow artifacts, `.agents/skills/speckit-*` with Codex,
+`.opencode/commands/` with OpenCode, and `.goose/recipes/` with Goose.
+
+```bash
+specify version
+specify integration status --json
+```
+
+`AGENTS.md` remains authoritative: this repository owns wireless automation
+only, while fleet-wide Spec Kit governance and repair commands stay in
+[Boneman_Projects](https://github.com/Thetromboneman1/Boneman_Projects).
