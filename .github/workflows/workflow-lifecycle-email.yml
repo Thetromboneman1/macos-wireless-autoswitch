@@ -36,4 +36,3 @@ jobs:
           workload-summary: Observed lifecycle transition for the source workflow run.
           correlation-id: ${{ github.repository }}:${{ github.event.workflow_run.id }}:${{ github.event.workflow_run.run_attempt }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
