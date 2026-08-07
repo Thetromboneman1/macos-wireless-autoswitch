@@ -15,21 +15,8 @@ tags: [process, cicd, github-actions, automation, macos, shell-scripts, validati
 
 ## Execution Flow Diagram
 
-```mermaid
-graph TD
-    A[Trigger Event] --> B[Syntax Validation]
-    B --> C[ShellCheck Analysis]
-    C --> D[Mock Testing]
-    D --> E[Documentation Check]
-    E --> F[Security Scan]
-    F --> G[Integration Tests]
-    
-    B --> H[Parallel: Style Check]
-    H --> G
-    
-    style A fill:#e1f5fe
-    style G fill:#e8f5e8
-```
+![Rendered system diagram](../docs/architecture/generated/mermaid-ae66a2e2d09d.png)
+
 
 ## Jobs & Dependencies
 

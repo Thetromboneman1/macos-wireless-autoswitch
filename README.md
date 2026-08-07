@@ -95,3 +95,19 @@ specify integration status --json
 `AGENTS.md` remains authoritative: this repository owns wireless automation
 only, while fleet-wide Spec Kit governance and repair commands stay in
 [Boneman_Projects](https://github.com/Thetromboneman1/Boneman_Projects).
+
+<!-- documentation-health:start -->
+## Current repository state
+
+![macos-wireless-autoswitch system architecture](docs/architecture/macos-wireless-autoswitch-system-architecture.png)
+
+- **Default branch:** `main`
+- **Implementation fingerprint:** `517d0c8cfb340261`
+- **Detected structure:** Automation modules, GitHub Actions, Tests and validation, Maintained documentation.
+- **Documentation contract:** editable diagram sources, committed PNG renderings,
+  resolved local image links, and generated state are checked on every commit.
+- **Refresh command:** `python3 scripts/documentation_health.py --write`
+
+See [repository state](docs/REPOSITORY_STATE.md) and the
+[architecture asset guide](docs/architecture/README.md).
+<!-- documentation-health:end -->
