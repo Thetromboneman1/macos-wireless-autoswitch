@@ -97,6 +97,7 @@ only, while fleet-wide Spec Kit governance and repair commands stay in
 [Boneman_Projects](https://github.com/Thetromboneman1/Boneman_Projects).
 
 <!-- documentation-health:start -->
+
 ## Current repository state
 
 ![macos-wireless-autoswitch system architecture](docs/architecture/macos-wireless-autoswitch-system-architecture.png)
