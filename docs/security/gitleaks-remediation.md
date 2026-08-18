@@ -13,7 +13,6 @@ findings: 360
 
 All findings were in ignored local artifacts:
 
-- `backups/dnscrypt-20260622-105231/`
 - `tmp/star-downloads/`
 
 No tracked staged changes contained leaks when checked with:
@@ -26,7 +25,6 @@ gitleaks protect --staged --redact --verbose
 
 | Location | Findings | Classification | Action |
 |---|---:|---|---|
-| `backups/dnscrypt-20260622-105231/dnscrypt-proxy.toml` | 9 | local backup artifact | Removed ignored backup directory from working tree. |
 | `tmp/star-downloads/Aider-AI__aider` | 31 | downloaded third-party tests/docs | Removed ignored download tree. |
 | `tmp/star-downloads/OpenHands__OpenHands` | 23 | downloaded third-party tests/docs | Removed ignored download tree. |
 | `tmp/star-downloads/RyjoxTechnologies__Octopoda-OS` | 12 | downloaded third-party tests/docs | Removed ignored download tree. |
