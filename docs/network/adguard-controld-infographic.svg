@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">AdGuard HTTPS filtering optimization infographic</title>
+  <desc id="desc">Summary of the August 18 2026 AdGuard and Control D remediation, including Pandora root cause, current filtering settings, validation evidence, retired DNSCrypt components, and the intentional disabled USB LAN DNS exception.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071521"/><stop offset="1" stop-color="#15384a"/></linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#0b6670"/><stop offset="1" stop-color="#154f63"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#000" flood-opacity=".26"/></filter>
+    <style>
+      .h1{font:800 46px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .h2{font:700 25px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .body{font:400 18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#d7e8ee}
+      .small{font:500 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#b9ced8}
+      .metric{font:800 34px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#fff}
+      .ok{font:700 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#b7f7d0;letter-spacing:.6px}
+      .warn{font:700 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#ffd1d9;letter-spacing:.6px}
+    </style>
+  </defs>
+  <rect width="1600" height="900" rx="30" fill="url(#bg)"/>
+  <circle cx="1430" cy="40" r="240" fill="#44c8d4" opacity=".08"/>
+  <circle cx="80" cy="850" r="220" fill="#f6c85f" opacity=".06"/>
+
+  <rect x="60" y="50" width="1480" height="150" rx="28" fill="url(#hero)" filter="url(#shadow)"/>
+  <text x="105" y="115" class="h1">AdGuard + Control D</text>
+  <text x="105" y="158" class="body">Optimized HTTPS filtering on macOS • Verified 2026-08-18</text>
+  <rect x="1240" y="88" width="245" height="72" rx="20" fill="#174b36" stroke="#70d6a0" stroke-width="2"/>
+  <text x="1362" y="118" text-anchor="middle" class="ok">LIVE STATUS</text>
+  <text x="1362" y="146" text-anchor="middle" class="h2">FILTERING</text>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="235" width="710" height="250" rx="26" fill="#132b3a" stroke="#4d7587"/>
+    <text x="95" y="280" class="h2">Current protected path</text>
+    <rect x="95" y="315" width="135" height="74" rx="16" fill="#153c51" stroke="#56c7d9"/>
+    <text x="162" y="347" text-anchor="middle" class="body">Mac apps</text><text x="162" y="372" text-anchor="middle" class="small">Pandora</text>
+    <path d="M235 352H285" stroke="#78d5dc" stroke-width="4"/><path d="M278 344l12 8-12 8" fill="#78d5dc"/>
+    <rect x="290" y="315" width="180" height="74" rx="16" fill="#0d5961" stroke="#67e8d0"/>
+    <text x="380" y="347" text-anchor="middle" class="body">AdGuard</text><text x="380" y="372" text-anchor="middle" class="small">HTTPS + filters</text>
+    <path d="M475 352H525" stroke="#78d5dc" stroke-width="4"/><path d="M518 344l12 8-12 8" fill="#78d5dc"/>
+    <rect x="530" y="315" width="195" height="74" rx="16" fill="#6a5314" stroke="#f6c85f"/>
+    <text x="627" y="347" text-anchor="middle" class="body">Gold Control D</text><text x="627" y="372" text-anchor="middle" class="small">Encrypted DoH</text>
+    <text x="95" y="433" class="ok">✓ HTTPS EXCLUSIONS PRESERVED</text>
+    <text x="405" y="433" class="ok">✓ NO LOCAL DNSCRYPT HOP</text>
+    <text x="95" y="463" class="small">Allowed DNS leaves the Mac only after local filtering.</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="830" y="235" width="710" height="250" rx="26" fill="#132b3a" stroke="#4d7587"/>
+    <text x="865" y="280" class="h2">Pandora RCA and correction</text>
+    <rect x="865" y="315" width="290" height="120" rx="18" fill="#532331" stroke="#ff7188"/>
+    <text x="890" y="350" class="warn">ROOT CAUSE</text>
+    <text x="890" y="383" class="body">Archived Electron app absent</text>
+    <text x="890" y="412" class="body">from filtered-app catalog</text>
+    <path d="M1170 375H1215" stroke="#80d9df" stroke-width="4"/><path d="M1208 367l12 8-12 8" fill="#80d9df"/>
+    <rect x="1225" y="315" width="275" height="120" rx="18" fill="#174b36" stroke="#70d6a0"/>
+    <text x="1250" y="350" class="ok">FIXED</text>
+    <text x="1250" y="383" class="body">Pandora + 5 bundle IDs</text>
+    <text x="1250" y="412" class="body">explicitly HTTPS-filtered</text>
+    <text x="865" y="463" class="small">Old cache quarantined so previously downloaded ads cannot replay.</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="60" y="525" width="450" height="265" rx="26" fill="#132b3a" stroke="#4d7587"/>
+    <text x="95" y="570" class="h2">Verified runtime</text>
+    <text x="95" y="635" class="metric">2.19.0.2258</text><text x="95" y="665" class="small">AdGuard + Network Extension active</text>
+    <text x="95" y="710" class="ok">✓ HTTPS FILTERING ON</text>
+    <text x="95" y="743" class="ok">✓ PERSONAL CA OBSERVED</text>
+    <text x="95" y="776" class="ok">✓ AD DOMAINS → 0.0.0.0</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="575" y="525" width="450" height="265" rx="26" fill="#132b3a" stroke="#4d7587"/>
+    <text x="610" y="570" class="h2">Filter posture</text>
+    <text x="610" y="620" class="body">Core lists retained</text>
+    <text x="610" y="652" class="small">Base • Tracking • URL • Social</text>
+    <text x="610" y="684" class="small">AdGuard Annoyances • Security</text>
+    <text x="610" y="728" class="body">Redundant lists disabled</text>
+    <text x="610" y="760" class="small">Language + duplicate annoyance lists</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="1090" y="525" width="450" height="265" rx="26" fill="#132b3a" stroke="#4d7587"/>
+    <text x="1125" y="570" class="h2">Deliberate exceptions</text>
+    <text x="1125" y="622" class="body">HTTP/3 inspection off</text>
+    <text x="1125" y="651" class="small">Chromium/Electron certificate compatibility</text>
+    <text x="1125" y="700" class="body">Disabled USB LAN DNS</text>
+    <text x="1125" y="729" class="small">192.168.10.1 retained intentionally</text>
+    <text x="1125" y="772" class="ok">✓ ALL OTHER ADAPTERS AUTOMATIC</text>
+  </g>
+
+  <text x="800" y="850" text-anchor="middle" class="small">Canonical runbook: docs/network/adguard-controld-macos.md</text>
+</svg>

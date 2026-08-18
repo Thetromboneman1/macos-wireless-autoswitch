@@ -10,7 +10,10 @@ LaunchDaemon, and project-local GitHub Actions/security notes.
 | Repository README | `../README.md` |
 | Operations | `../Operations.md` |
 | AI boundary redirect | `../AI-Integration.md` |
-| AdGuard LocalDNSCrypt | `network/adguard-dnscrypt-setup.md` |
+| AdGuard + Control D | `network/adguard-controld-setup.md` |
+| AdGuard traffic-flow source | `network/adguard-controld-flow.mmd` |
+| AdGuard rendered visual | `network/adguard-controld-flow.svg` / `.png` |
+| AdGuard HTTPS infographic | `network/adguard-controld-infographic.svg` / `.png` |
 | GitHub Actions inventory | `github-actions/repository-inventory.md` |
 | GitHub Actions audit | `github-actions/workflow-audit.md` |
 | GitHub Actions security | `security/github-actions-security-audit.md` |

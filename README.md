@@ -73,7 +73,7 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 - Includes VLAN virtual interfaces (for example `vlan10`) when deciding whether Wi-Fi should be disabled.
 - Ignores loopback and self-assigned IP ranges when deciding wired status.
 - Requires admin privileges for system-level network changes.
-- AdGuard LocalDNSCrypt is documented in `docs/network/adguard-dnscrypt-setup.md`.
+- The current AdGuard + Control D setup is documented in `docs/network/adguard-controld-setup.md`.
 - Local AI, model residency, platform governance, agent-platform, Apple Container pilot, and AI tooling docs are canonical in `/Users/corn/Documents/Boneman_Projects` and `https://github.com/Thetromboneman1/Boneman_Projects`.
 
 ## License
@@ -103,7 +103,7 @@ only, while fleet-wide Spec Kit governance and repair commands stay in
 ![macos-wireless-autoswitch system architecture](docs/architecture/macos-wireless-autoswitch-system-architecture.png)
 
 - **Default branch:** `main`
-- **Implementation fingerprint:** `517d0c8cfb340261`
+- **Implementation fingerprint:** `42b7f2873bf409d9`
 - **Detected structure:** Automation modules, GitHub Actions, Tests and validation, Maintained documentation.
 - **Documentation contract:** editable diagram sources, committed PNG renderings,
   resolved local image links, and generated state are checked on every commit.

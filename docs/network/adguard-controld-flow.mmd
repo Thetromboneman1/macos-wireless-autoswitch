@@ -1,0 +1,26 @@
+flowchart LR
+    apps["macOS apps<br/>Pandora + helpers"]
+    ne["AdGuard Network Extension<br/>HTTPS inspection"]
+    filters["AdGuard filters<br/>DNS + network + cosmetic"]
+    controld["Gold Control D<br/>DNS over HTTPS"]
+    internet["Allowed destinations"]
+    blocked["Blocked<br/>ads + trackers"]
+    exclusions["HTTPS exclusions<br/>preserved"]
+
+    apps --> ne --> filters --> controld --> internet
+    filters --> blocked
+    exclusions -. bypass inspection .-> ne
+
+    classDef app fill:#15324a,stroke:#56c7d9,color:#fff,stroke-width:2px;
+    classDef guard fill:#0d5961,stroke:#67e8d0,color:#fff,stroke-width:2px;
+    classDef dns fill:#6a5314,stroke:#f6c85f,color:#fff,stroke-width:2px;
+    classDef allow fill:#174b36,stroke:#70d6a0,color:#fff,stroke-width:2px;
+    classDef deny fill:#651f2b,stroke:#ff7188,color:#fff,stroke-width:2px;
+    classDef note fill:#303846,stroke:#98a6b8,color:#fff,stroke-width:1px;
+
+    class apps app;
+    class ne,filters guard;
+    class controld dns;
+    class internet allow;
+    class blocked deny;
+    class exclusions note;
