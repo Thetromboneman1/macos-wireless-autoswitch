@@ -22,7 +22,8 @@ Use `docs/agents/agent-catalog.md` to select the correct copilot before producin
 - Preserve oMLX at `http://127.0.0.1:18080/v1` as the default local production lane.
 - Preserve the Gemma role contract: 31B reasoning, 26B A4B coding, E4B fast agent, E2B routing/utility.
 - Use llama.cpp at `http://127.0.0.1:8002/v1` only for measured GGUF coding or reliability tasks.
-- Keep Rapid-MLX at `http://127.0.0.1:8010/v1` as a manual lab lane.
+- Qwen3.6/Rapid-MLX is retired. Use the Qwen3.8 stock or uncensored Q6_K
+  selectors on `8040`/`8041` for explicit local Qwen work.
 - Do not default to Ollama.
 - Do not expose secret values. Refer to Boneman item names or retrieval methods only.
 

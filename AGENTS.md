@@ -10,7 +10,7 @@ support. It does not own the local AI platform.
 - Put local AI runtime, model routing, model residency, agent-platform, Apple
   Container pilot, benchmark, and platform-governance work in
   `/Users/corn/Documents/Boneman_Projects`.
-- Do not add new oMLX, GGUF, Rapid-MLX, MCP, or agent-platform runtime files to
+- Do not add new oMLX, GGUF, retired Qwen3.6/Rapid-MLX, MCP, or agent-platform runtime files to
   this repository.
 
 ## Secrets
