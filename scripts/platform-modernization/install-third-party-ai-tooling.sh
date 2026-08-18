@@ -14,7 +14,6 @@ REPOS=(
   "Osmantic/ODS"
   "itsfatduck/optimizerDuck"
   "inkeep/open-knowledge"
-  "JustVugg/colibri"
   "tirth8205/code-review-graph"
 )
 
@@ -126,7 +125,6 @@ decisions = {
     "ODS": ("lab-candidate", "Local AI platform stack overlaps Boneman_Projects runtime ownership; clone only."),
     "optimizerDuck": ("audit-only", "Windows-only optimization app; no macOS installation."),
     "open-knowledge": ("lab-candidate", "Knowledge editor/wiki candidate; no replacement of existing llm-wiki setup."),
-    "colibri": ("lab-candidate", "Experimental large-model inference engine; requires benchmark before runtime wiring."),
     "code-review-graph": ("verified-candidate", "MCP/code graph candidate kept alongside active codebase-memory-mcp."),
 }
 
@@ -153,7 +151,7 @@ manifest = {
         "default": "oMLX",
         "openai_base_url": "http://127.0.0.1:18080/v1",
         "gguf_coding_lane": "http://127.0.0.1:8002/v1",
-        "rapid_mlx_lab_lane": "http://127.0.0.1:8010/v1",
+        "retired_lanes": ["rapid-mlx-qwen3.6", "colibri-glm-5.2"],
         "ollama_default": False,
     },
     "repositories": repos,

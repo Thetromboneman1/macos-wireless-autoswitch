@@ -3,6 +3,13 @@
 > Local AI note, 2026-08-18: Qwen3.6/Rapid-MLX is retired. Canonical model
 > routing remains in Boneman_Projects with four oMLX Gemma roles and Qwen3.8
 > stock/uncensored Q6_K selectors.
+> Colibri is also retired and deleted. Ports `8010`, `8020`, `18010`, and
+> `18020` must stay closed.
+
+Local image generation is owned by Boneman_Projects. Its FLUX.2 Klein 4B Q8
+gateway stays available on `127.0.0.1:18081`, loads weights only for a request,
+and unloads them after 300 idle seconds without using Codex allowance or
+`OPENAI_API_KEY`.
 
 Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, then restore Wi-Fi when all wired/VLAN links disconnect.
 
