@@ -18,7 +18,7 @@ The local toolchain should absorb reusable, licensed agent knowledge while prese
 | `Osmantic/ODS` | Lab candidate | Apache-2.0 local AI platform stack. Not started or installed because it overlaps the existing Boneman local-AI platform and may expose services or change Docker/runtime state. |
 | `itsfatduck/optimizerDuck` | Audit-only | Windows optimization app. Not applicable to this Apple Silicon macOS toolchain beyond reusable prompt/skill ideas. |
 | `inkeep/open-knowledge` | Lab candidate | GPL-3.0 knowledge editor/wiki. Cloned for review; no replacement of the existing llm-wiki/Open Knowledge setup during this pass. |
-| `JustVugg/colibri` | Lab candidate | Apache-2.0 experimental GLM-5.2 inference engine. Not started or installed because it requires large model assets and should be benchmarked against oMLX/Rapid-MLX first. |
+| `JustVugg/colibri` | Lab candidate | Apache-2.0 experimental GLM-5.2 inference engine. Keep it explicit and benchmark it against oMLX and the retained Qwen3.8 lanes before promotion. |
 | `tirth8205/code-review-graph` | Verified candidate | MIT MCP/code graph tool. Kept as a candidate alongside the already active `codebase-memory-mcp`; no config replacement without measured benefit. |
 
 ## Installed Skill Roots

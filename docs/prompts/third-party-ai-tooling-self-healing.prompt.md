@@ -22,7 +22,7 @@ Download, classify, install, and wire the approved parts of these repositories i
 - Preserve local model routing defaults:
   - oMLX: `http://127.0.0.1:18080/v1`
   - llama.cpp GGUF coding lane: `http://127.0.0.1:8002/v1`
-  - Rapid-MLX lab lane: `http://127.0.0.1:8010/v1`
+  - Qwen3.8 stock and uncensored lanes: `http://127.0.0.1:8040/v1` and `http://127.0.0.1:8041/v1`
   - no Ollama default unless fresh benchmark evidence changes the architecture.
 - Never copy leaked proprietary system prompts into tool instructions, model prompts, or committed docs.
 - Never commit secrets. Store secret references only, using 1Password vault `Boneman`.

@@ -1,5 +1,9 @@
 # macOS Wireless Auto-Switch
 
+> Local AI note, 2026-08-18: Qwen3.6/Rapid-MLX is retired. Canonical model
+> routing remains in Boneman_Projects with four oMLX Gemma roles and Qwen3.8
+> stock/uncensored Q6_K selectors.
+
 Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, then restore Wi-Fi when all wired/VLAN links disconnect.
 
 ## What This Repo Contains
