@@ -1,10 +1,10 @@
 # AdGuard + Control D
 
 The Mac's DNS filtering path is owned by AdGuard for Mac. AdGuard sends allowed
-queries directly to the `Gold Controld` DNS-over-HTTPS provider:
+queries directly to the `CornLaptop Control D` DNS-over-HTTPS provider:
 
 ```text
-https://dns.controld.com/lcs1k6kfek
+https://dns.controld.com/1gal2v8sn7g
 ```
 
 There is no local DNSCrypt service or loopback DNS upstream. The canonical
