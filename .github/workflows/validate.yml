@@ -68,6 +68,14 @@ jobs:
         run: |
           set -euo pipefail
 
-          grep -q 'uname -a' wireless.sh
-          grep -q '23|24|25' wireless.sh
-          grep -q 'networksetup.*listnetworkserviceorder' wireless.sh
+          grep -q 'get_os_version()' wireless.sh
+          grep -Fq -- '-r | awk -F.' wireless.sh
+          grep -q 'MINIMUM_DARWIN_MAJOR=23' wireless.sh
+          grep -q 'TESTED_DARWIN_MAJOR=27' wireless.sh
+          grep -q 'get_enabled_service_interfaces' wireless.sh
+          grep -q 'get_hardware_interfaces' wireless.sh
+          grep -q 'get_interface_type' wireless.sh
+          if grep -Eq 'SUPPORTED_ADAPTERS|get_vlan_interfaces|23\|24\|25' wireless.sh; then
+            echo 'Legacy hardcoded adapter or OS allowlist found' >&2
+            exit 1
+          fi
