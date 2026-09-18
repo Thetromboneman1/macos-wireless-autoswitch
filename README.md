@@ -132,7 +132,7 @@ only, while fleet-wide Spec Kit governance and repair commands stay in
 ![macos-wireless-autoswitch system architecture](docs/architecture/macos-wireless-autoswitch-system-architecture.png)
 
 - **Default branch:** `main`
-- **Implementation fingerprint:** `3cf33859cbb64ed4`
+- **Implementation fingerprint:** `585afc9c0953b02f`
 - **Detected structure:** Automation modules, GitHub Actions, Tests and validation, Maintained documentation.
 - **Documentation contract:** editable diagram sources, committed PNG renderings,
   resolved local image links, and generated state are checked on every commit.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import plistlib
 import subprocess
 from pathlib import Path
 
@@ -278,13 +279,10 @@ exit 1
 
 def test_launchd_has_startup_and_periodic_reconciliation() -> None:
     plist = ROOT / "com.computernetworkbasics.wifionoff.plist"
+    with plist.open("rb") as handle:
+        launchd = plistlib.load(handle)
 
-    def value(key: str) -> str:
-        return subprocess.check_output(
-            ["/usr/bin/plutil", "-extract", key, "raw", str(plist)], text=True
-        ).strip()
-
-    assert value("RunAtLoad") == "true"
-    assert value("StartInterval") == "60"
-    assert value("KeepAlive") == "false"
-    assert value("WatchPaths.0") == "/Library/Preferences/SystemConfiguration"
+    assert launchd["RunAtLoad"] is True
+    assert launchd["StartInterval"] == 60
+    assert launchd["KeepAlive"] is False
+    assert launchd["WatchPaths"] == ["/Library/Preferences/SystemConfiguration"]
