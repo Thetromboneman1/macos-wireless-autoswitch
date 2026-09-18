@@ -1,7 +1,8 @@
 # Architecture
 
 ## Purpose
-Automatic Wi-Fi control based on wired/VLAN link state on macOS via launchd.
+Automatic Wi-Fi control based on dynamically discovered physical wired link
+state on macOS via launchd. Virtual VLAN and bridge adapters are excluded.
 
 ## Core Components
 - wireless.sh detection and Wi-Fi toggling

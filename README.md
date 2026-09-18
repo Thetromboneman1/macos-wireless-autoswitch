@@ -11,7 +11,9 @@ gateway stays available on `127.0.0.1:18081`, loads weights only for a request,
 and unloads them after 300 idle seconds without using Codex allowance or
 `OPENAI_API_KEY`.
 
-Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, then restore Wi-Fi when all wired/VLAN links disconnect.
+Automatically disable Wi-Fi when an enabled physical wired connection is active,
+then restore Wi-Fi when physical wired links disconnect. Tagged VLAN and other
+virtual network adapters are deliberately ignored.
 
 ## What This Repo Contains
 
@@ -25,6 +27,8 @@ Automatically disable Wi-Fi when a wired or VLAN virtual connection is active, t
 - macOS Sonoma (14.x)
 - macOS Sequoia (15.x)
 - macOS Tahoe (16.x)
+- macOS Golden Gate (current Darwin 27 release)
+- Later macOS releases use runtime discovery with a compatibility warning
 
 ## Quick Start
 
@@ -55,7 +59,9 @@ cd macos-wireless-autoswitch
 ```bash
 sudo launchctl list | grep com.computernetworkbasics.wifionoff
 sudo /Library/Scripts/NetBasics/wireless.sh
-networksetup -getairportpower Wi-Fi
+/bin/bash -c 'source /Library/Scripts/NetBasics/wireless.sh; for wifi_device in $(get_wifi_interfaces); do /usr/sbin/networksetup -getairportpower "$wifi_device"; done'
+sudo launchctl print system/com.computernetworkbasics.wifionoff
+tail -50 /var/log/wireless-autoswitch.log
 ```
 
 ## Troubleshooting
@@ -67,6 +73,10 @@ sudo launchctl load /Library/LaunchDaemons/com.computernetworkbasics.wifionoff.p
 
 # list hardware ports
 networksetup -listallhardwareports
+
+# confirm current routes and interface service order
+route -n get default
+networksetup -listnetworkserviceorder
 ```
 
 ## Fork Sync CI (Maintainers)
@@ -80,9 +90,17 @@ The fork sync workflow (`.github/workflows/fork-sync.yml`) runs every 30 minutes
 
 ## Project Notes
 
-- Uses hardware-port detection for Ethernet, LAN, Thunderbolt, AX88179A, and VLAN adapters.
-- Includes VLAN virtual interfaces (for example `vlan10`) when deciding whether Wi-Fi should be disabled.
+- Intersects enabled services with real hardware-port records, then classifies
+  them by live macOS driver type. It does not depend on a dock name, service
+  name, vendor, or `en` number.
+- Deliberately excludes tagged VLAN and bridge virtual interfaces from dock detection.
 - Ignores loopback and self-assigned IP ranges when deciding wired status.
+- Uses a short driver-publication grace window plus a bounded DHCP settle window
+  so late or renamed dock adapters do not leave Wi-Fi in the wrong state.
+- Runs at login/startup, reacts to network configuration changes, and performs a
+  60-second reconciliation pass to recover from missed dock or wake events.
+- Changes only Wi-Fi radio power. It does not modify DNS servers, search domains,
+  AdGuard, Control D, or other resolver settings.
 - Requires admin privileges for system-level network changes.
 - The current AdGuard + Control D setup is documented in `docs/network/adguard-controld-setup.md`.
 - Local AI, model residency, platform governance, agent-platform, Apple Container pilot, and AI tooling docs are canonical in `/Users/corn/Documents/Boneman_Projects` and `https://github.com/Thetromboneman1/Boneman_Projects`.
@@ -114,7 +132,7 @@ only, while fleet-wide Spec Kit governance and repair commands stay in
 ![macos-wireless-autoswitch system architecture](docs/architecture/macos-wireless-autoswitch-system-architecture.png)
 
 - **Default branch:** `main`
-- **Implementation fingerprint:** `7ae0c5aa967d26fa`
+- **Implementation fingerprint:** `3cf33859cbb64ed4`
 - **Detected structure:** Automation modules, GitHub Actions, Tests and validation, Maintained documentation.
 - **Documentation contract:** editable diagram sources, committed PNG renderings,
   resolved local image links, and generated state are checked on every commit.

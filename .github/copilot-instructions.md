@@ -13,10 +13,14 @@ This is a simple macOS utility that automatically toggles WiFi off when a wired 
 ### Key Patterns
 
 #### Network Detection Logic (`wireless.sh`)
-- Detects ethernet interfaces using `networksetup -listnetworkserviceorder` with hardware port filtering
-- Looks for "Ethernet", "LAN", "Thunderbolt", or "AX88179A" adapter types
+- Parses enabled devices from `networksetup -listnetworkserviceorder`, intersects
+  them with real hardware-port records, and classifies them with `ifconfig -v`
+- Accepts live driver types ending in `Ethernet`; never hardcode a dock, service,
+  vendor, interface number, port label, or VLAN tag
+- Tagged VLAN, bridge, WiFi, disabled, and other virtual services are not dock Ethernet
 - Uses `ifconfig` + `grep` to find valid IP addresses (excludes 127.0.0.1 and 169.254.x.x)
-- OS version detection via `uname -a` determines compatibility (supports Sonoma #23, Sequoia #24, Tahoe #25)
+- OS version detection uses the Darwin major from `uname -r`; Sonoma and later
+  are accepted, with warning-and-continue behavior for newer untested releases
 
 #### Installation Structure
 - Scripts install to `/Library/Scripts/NetBasics/`
@@ -27,11 +31,10 @@ This is a simple macOS utility that automatically toggles WiFi off when a wired 
 
 #### Testing Network Detection
 ```bash
-# Test interface detection manually
-networksetup -listnetworkserviceorder | grep "Hardware Port" | grep "Ethernet\|LAN\|Thunderbolt\|AX88179A"
-
-# Check current WiFi interfaces
-networksetup -listallhardwareports | tr '\n' ' ' | sed -e 's/Hardware Port:/\'$'\n/g' | grep Wi-Fi
+# Use the same dynamic discovery functions as production
+source ./wireless.sh
+get_wired_interfaces
+get_wifi_interfaces
 ```
 
 #### Installation Commands
@@ -42,7 +45,8 @@ networksetup -listallhardwareports | tr '\n' ' ' | sed -e 's/Hardware Port:/\'$'
 ### macOS-Specific Considerations
 - Uses `networksetup -setairportpower` for WiFi control (requires admin privileges)
 - LaunchDaemon watches SystemConfiguration for network state changes
-- Sleep delay (10s) prevents LaunchDaemon restart loops
+- Idempotent writes, bounded settle/recovery checks, and 60-second periodic
+  reconciliation prevent loops and recover missed dock or wake events
 - Logging via `logger` command integrates with system logs
 
 ### Error Handling Patterns
@@ -51,8 +55,8 @@ networksetup -listallhardwareports | tr '\n' ' ' | sed -e 's/Hardware Port:/\'$'
 - Sudo detection and privilege escalation in install script
 
 ### Compatibility Notes
-- Bash 4+ recommended for proper array handling
-- Hardware port detection includes modern adapter types (AX88179A for USB-C)
-- OS version checks ensure compatibility with recent macOS releases
+- Keep compatibility with the macOS system Bash 3.2 runtime
+- Driver-class discovery must remain independent of adapter and interface names
+- Runtime compatibility checks must not become a future OS-update kill switch
 
 When modifying this codebase, always test network detection logic thoroughly and ensure LaunchDaemon integration works correctly with system network events.

@@ -146,6 +146,17 @@ start_daemon() {
 }
 
 #
+# Verify the installed LaunchDaemon is registered after install/update.
+#
+verify_daemon() {
+    if ! $SUDO launchctl print "system/${DAEMON_NAME}" >/dev/null; then
+        log_error_and_exit "LaunchDaemon is not registered after installation"
+    fi
+
+    log_message "Verified LaunchDaemon registration: system/${DAEMON_NAME}"
+}
+
+#
 # Install system components
 #
 install_components() {
@@ -183,6 +194,7 @@ install_components() {
     log_message "Set ownership (root:wheel) on: $daemon_dest"
     
     start_daemon
+    verify_daemon
     log_message "Installation completed successfully"
 }
 
@@ -264,6 +276,7 @@ update_components() {
     fi
     
     start_daemon
+    verify_daemon
     log_message "Update completed successfully"
 }
 
@@ -292,7 +305,7 @@ Examples:
 
 Requirements:
   - Administrator privileges (sudo access)
-  - macOS Sonoma (14.x), Sequoia (15.x), or Tahoe (16.x)
+  - macOS Sonoma (14.x) or later, including Golden Gate
   - Source files: $WIRELESS_SCRIPT, $DAEMON_PLIST
 
 For more information, see the project documentation.

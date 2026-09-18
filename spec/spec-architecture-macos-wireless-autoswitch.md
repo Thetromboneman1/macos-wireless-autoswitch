@@ -1,20 +1,20 @@
 ---
 title: Architecture Specification - macOS Wireless Auto-Switch Utility
-version: 1.1
+version: 1.2
 date_created: 2025-09-14
-last_updated: 2026-04-29
+last_updated: 2026-09-18
 owner: System Architecture Team
 tags: [architecture, macos, networking, launchd, system-utility, automation]
 ---
 
 # Introduction
 
-This specification defines the architecture, requirements, and implementation guidelines for the macOS Wireless Auto-Switch utility - a system service that automatically manages WiFi connectivity based on wired and VLAN virtual adapter status. The utility provides seamless network switching without user intervention, eliminating connection conflicts between wired/VLAN and wireless interfaces.
+This specification defines the architecture, requirements, and implementation guidelines for the macOS Wireless Auto-Switch utility - a system service that automatically manages WiFi connectivity based on dynamically discovered physical wired adapter status. The utility ignores tagged VLAN and other virtual adapters.
 
 ## 1. Purpose & Scope
 
 ### Purpose
-Define the complete architecture and requirements for a macOS system utility that automatically toggles WiFi connectivity based on the presence of active wired or VLAN network connections.
+Define the complete architecture and requirements for a macOS system utility that automatically toggles WiFi connectivity based on active physical wired network connections without depending on a dock name, service name, vendor, interface number, or VLAN tag.
 
 ### Scope
 - **In Scope**: Network interface detection, WiFi state management, system service integration, installation/management tooling, macOS compatibility (Sonoma 14.x, Sequoia 15.x, Tahoe 16.x)
@@ -30,23 +30,24 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **Airport Power**: macOS WiFi radio state (on/off) controlled via networksetup command
 - **System Configuration**: macOS framework for network and system state monitoring located at `/Library/Preferences/SystemConfiguration`
 - **Self-Assigned Address**: IPv4 address in 169.254.x.x range assigned when DHCP fails
-- **Wired/VLAN Interface**: Ethernet, Thunderbolt, LAN, USB-C, or VLAN virtual network adapters with active IP assignment
+- **Physical Wired Interface**: An enabled macOS network-service device present in a real hardware-port record whose live driver class ends in `Ethernet` and has active carrier plus a usable IP address
 
 ## 3. Requirements, Constraints & Guidelines
 
 ### Functional Requirements
-- **REQ-001**: System shall detect active wired or VLAN network connections with valid IP addresses
-- **REQ-002**: System shall automatically disable WiFi when wired or VLAN connection is active
-- **REQ-003**: System shall automatically enable WiFi when no wired or VLAN connections are active
-- **REQ-004**: System shall support multiple adapter types (Ethernet, Thunderbolt, LAN, AX88179A, VLAN)
+- **REQ-001**: System shall detect active physical wired network services with valid IP addresses
+- **REQ-002**: System shall automatically disable WiFi when a physical wired connection is active
+- **REQ-003**: System shall automatically enable WiFi when no physical wired connection is active
+- **REQ-004**: System shall discover dock adapters through hardware-record membership and live driver class without hardcoded service, port, vendor, interface, or VLAN names
 - **REQ-005**: System shall ignore loopback (127.0.0.1) and self-assigned (169.254.x.x) IP addresses
 - **REQ-006**: System shall respond to network configuration changes in real-time
 - **REQ-007**: System shall provide comprehensive installation and management tooling
+- **REQ-008**: System shall briefly retry an empty candidate set to catch a dock driver published after the launchd event
 
 ### Performance Requirements
-- **PERF-001**: Network state detection shall complete within 5 seconds
+- **PERF-001**: Immediate link-state detection shall complete promptly; driver publication may use a bounded 4-second grace and active carrier awaiting DHCP may use a bounded 30-second settle window
 - **PERF-002**: WiFi toggle operations shall complete within 10 seconds
-- **PERF-003**: System shall introduce maximum 10-second delay to prevent LaunchDaemon restart loops
+- **PERF-003**: Periodic reconciliation shall remain bounded and idempotent
 
 ### Security Requirements
 - **SEC-001**: System shall require administrator privileges for installation and execution
@@ -55,8 +56,8 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **SEC-004**: Scripts shall be owned by root with appropriate execution permissions
 
 ### Compatibility Requirements
-- **COMP-001**: System shall support macOS Sonoma (23.x), Sequoia (24.x), and Tahoe (25.x)
-- **COMP-002**: System shall require Bash 4+ for proper array handling
+- **COMP-001**: System shall support macOS Sonoma (Darwin 23) and later, including Golden Gate (Darwin 27), while warning and continuing on newer Darwin majors
+- **COMP-002**: System shall remain compatible with the macOS system Bash 3.2 runtime
 - **COMP-003**: System shall integrate with standard macOS networking utilities
 
 ### Operational Constraints
@@ -72,7 +73,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **GUD-004**: Maintain backward compatibility within supported macOS versions
 
 ### Architecture Patterns
-- **PAT-001**: Use event-driven architecture with file system monitoring for network changes
+- **PAT-001**: Use network-change monitoring for fast response plus periodic reconciliation for missed or race-prone events
 - **PAT-002**: Implement idempotent operations for safe repeated execution
 - **PAT-003**: Separate concerns between detection logic and configuration management
 - **PAT-004**: Use declarative configuration for LaunchDaemon properties
@@ -132,18 +133,18 @@ Define the complete architecture and requirements for a macOS system utility tha
 ## 5. Acceptance Criteria
 
 ### Network Detection
-- **AC-001**: Given multiple network interfaces, When wired or VLAN interface has valid IP address, Then system shall detect active wired/VLAN connection
-- **AC-002**: Given wired or VLAN interface with self-assigned IP (169.254.x.x), When evaluating connection status, Then system shall treat as inactive connection
-- **AC-003**: Given no wired or VLAN interfaces with valid IPs, When evaluating connection status, Then system shall detect no active wired/VLAN connections
+- **AC-001**: Given multiple renamed network interfaces, When an enabled physical wired device has active carrier and a valid IP address, Then system shall detect the wired connection without a name mapping
+- **AC-002**: Given a physical wired interface with self-assigned IP (169.254.x.x), When evaluating connection status, Then system shall treat it as inactive
+- **AC-003**: Given tagged, bridge, WiFi, disabled, and physical wired services, Then only enabled devices whose driver class ends in `Ethernet` shall be wired candidates
 
 ### WiFi State Management  
-- **AC-004**: Given active wired/VLAN connection detected, When WiFi is currently enabled, Then system shall disable WiFi and log action
-- **AC-005**: Given no active wired/VLAN connections, When WiFi is currently disabled, Then system shall enable WiFi and log action
+- **AC-004**: Given an active physical wired connection, When WiFi is currently enabled, Then system shall disable WiFi and log action
+- **AC-005**: Given no active physical wired connection, When WiFi is currently disabled, Then system shall enable WiFi and log action
 - **AC-006**: Given WiFi state change command fails, When executing networksetup command, Then system shall exit with error code 1
 
 ### System Integration
 - **AC-007**: Given network configuration changes, When SystemConfiguration directory is modified, Then LaunchDaemon shall trigger script execution within 5 seconds
-- **AC-008**: Given script execution completes, When processing finishes, Then system shall sleep 10 seconds to prevent restart loops
+- **AC-008**: Given repeated triggers, When the requested WiFi state is already correct, Then system shall perform no state write
 - **AC-009**: Given system startup, When LaunchDaemon loads, Then service shall start automatically without user intervention
 
 ### Installation Process
@@ -157,7 +158,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **Unit Testing**: Shell script function validation using bash test framework
 - **Integration Testing**: Network interface detection with mocked system commands
 - **System Testing**: End-to-end validation on target macOS versions
-- **Compatibility Testing**: Cross-version validation on Sonoma, Sequoia, Tahoe
+- **Compatibility Testing**: Cross-version validation on Sonoma and later releases
 
 ### Testing Frameworks
 - **Shell Testing**: Bash Automated Testing System (BATS) for script validation
@@ -168,7 +169,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 ### Test Data Management
 - **Network Mocking**: Predefined interface configurations for consistent testing
 - **IP Address Scenarios**: Valid, invalid, self-assigned, and loopback address sets
-- **Hardware Simulation**: Mock data for various adapter types and configurations
+- **Hardware Simulation**: Mock data with renamed physical devices, disabled services, WiFi, bridges, and tagged virtual devices
 
 ### CI/CD Integration
 - **Automated Testing**: GitHub Actions workflow with macOS matrix builds
@@ -195,9 +196,9 @@ Define the complete architecture and requirements for a macOS system utility tha
 **Decision**: Use LaunchDaemon for system-level network monitoring
 **Rationale**: Requires root privileges for networksetup commands and must operate regardless of user login status
 
-#### File System Monitoring vs Polling
-**Decision**: Monitor `/Library/Preferences/SystemConfiguration` for network changes
-**Rationale**: Event-driven approach provides real-time response without continuous polling overhead
+#### File System Monitoring and Reconciliation
+**Decision**: Monitor `/Library/Preferences/SystemConfiguration` for fast response and reconcile every 60 seconds
+**Rationale**: macOS documents `WatchPaths` as race-prone; bounded periodic reconciliation recovers missed dock and wake events
 
 #### Shell Script vs Compiled Binary
 **Decision**: Implement core logic in Bash shell script
@@ -213,9 +214,9 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **Trade-off**: 10-second sleep delay after execution
 - **Rationale**: Prevents LaunchDaemon restart loops at cost of slight delay in rapid network changes
 
-#### Flexibility vs Simplicity
-- **Trade-off**: Hardcoded adapter type detection vs dynamic discovery
-- **Rationale**: Explicit adapter type list (Ethernet, LAN, Thunderbolt, AX88179A, VLAN) provides predictable behavior
+#### Physical Hardware vs Virtual Configuration
+- **Trade-off**: Only enabled services backed by the physical hardware-port inventory qualify as dock Ethernet
+- **Rationale**: Live driver classification survives service, port, and interface renames while excluding unreliable virtual adapters
 
 #### Security vs Usability
 - **Trade-off**: Requires sudo privileges for installation
@@ -236,7 +237,7 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **FWK-003**: LaunchDaemon framework - System service execution environment
 
 ### Hardware Dependencies
-- **HW-001**: Network interfaces - Physical Ethernet, Thunderbolt, LAN, USB-C, or VLAN virtual adapters
+- **HW-001**: Network interfaces - Any enabled physical wired device exposed by the active dock driver
 - **HW-002**: WiFi capability - Wireless network interface for state management
 - **HW-003**: Administrator access - User account with sudo privileges
 
@@ -246,28 +247,30 @@ Define the complete architecture and requirements for a macOS system utility tha
 - **FS-003**: System logging - Write access to system log facilities
 
 ### Network Dependencies
-- **NET-001**: DHCP services - For valid IP address assignment to wired and VLAN interfaces
-- **NET-002**: Network infrastructure - Physical network connectivity for wired adapters and parent VLAN links
+- **NET-001**: DHCP services - For valid IP address assignment to the physical wired interface
+- **NET-002**: Network infrastructure - Physical dock network connectivity
 
 ### Version Dependencies
 - **VER-001**: macOS Sonoma 14.x+ - Minimum supported operating system version
-- **VER-002**: Bash 4.0+ - Required for proper array handling and script execution
+- **VER-002**: Bash 3.2+ - Compatible with the macOS system shell
 
 ## 9. Examples & Edge Cases
 
 ### Basic Network Detection Logic
 ```bash
-# Detect wired and VLAN interfaces with valid IP addresses
-WIRED_INTERFACES=$(networksetup -listnetworkserviceorder | \
-    grep "Hardware Port" | \
-    grep "Ethernet\|LAN\|Thunderbolt\|AX88179A\|VLAN" | \
-    awk -F ": " '{print $3}' | sed 's/)//g')
+# Discover enabled service devices, then classify each with ifconfig -v.
+ENABLED_INTERFACES=$(networksetup -listnetworkserviceorder | \
+    awk '/^\([0-9]+\)/ { disabled=0; next }
+         /^\(\*\)/ { disabled=1; next }
+         /^\(Hardware Port:/ && !disabled {
+             device=$0; sub(/^.*Device: /,"",device); sub(/\).*$/,"",device)
+             printf "%s ", device
+         }')
 
-VLAN_INTERFACES=$(ifconfig -l | tr ' ' '\n' | grep -E '^vlan[0-9]+$')
-
-INTERFACES="$WIRED_INTERFACES $VLAN_INTERFACES"
-
-for INTERFACE in $INTERFACES; do
+for INTERFACE in $ENABLED_INTERFACES; do
+    INTERFACE_TYPE=$(ifconfig -v "$INTERFACE" | \
+        awk -F ': ' '/^[[:space:]]*type: / {print $2; exit}')
+    [[ "$INTERFACE_TYPE" == *Ethernet ]] || continue
     IPCHECK=$(ifconfig "$INTERFACE" | \
         grep -E 'inet [0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | \
         grep -E -v '127.0.0.1|169.254.' | \
@@ -281,14 +284,12 @@ done
 
 ### WiFi State Management
 ```bash
-# Get WiFi interface identifier
-WIFIINTERFACES=$(networksetup -listallhardwareports | \
-    tr '\n' ' ' | \
-    sed -e 's/Hardware Port:/\'$'\n/g' | \
-    grep Wi-Fi | awk '{print $3}')
+# Reuse the structural service + hardware-record + driver-class discovery.
+source ./wireless.sh
+WIFIINTERFACES=$(get_wifi_interfaces)
 
-# Toggle WiFi based on wired/VLAN connection status
-if [ $IPFOUND ]; then
+# Toggle WiFi based on physical wired connection status
+if [[ -n "${IPFOUND:-}" ]]; then
     networksetup -setairportpower "$WIFIINTERFACES" off || exit 1
     logger "wireless.sh: turning off wireless card ($WIFIINTERFACES)"
 else
@@ -300,12 +301,12 @@ fi
 ### Edge Cases
 
 #### Multiple Wired Interfaces
-- **Scenario**: System has Ethernet and VLAN adapters connected
-- **Behavior**: Detection logic finds first interface with valid IP and enables wired/VLAN mode
+- **Scenario**: System has multiple physical network devices and virtual tagged or bridge services
+- **Behavior**: Detection ignores virtual devices and finds the first enabled physical interface with active carrier and a valid IP
 - **Handling**: Loop through all interfaces, set IPFOUND=true on first valid IP
 
 #### Rapid Network Changes
-- **Scenario**: User frequently connects/disconnects wired or VLAN adapter
+- **Scenario**: User frequently connects/disconnects a physical dock adapter
 - **Behavior**: Each change triggers LaunchDaemon execution
 - **Handling**: 10-second sleep prevents rapid cycling and system instability
 
@@ -315,8 +316,8 @@ fi
 - **Handling**: Check for WiFi interface existence before state changes
 
 #### Invalid IP Assignments
-- **Scenario**: Wired or VLAN interface gets self-assigned IP (169.254.x.x)
-- **Behavior**: System treats as no valid wired/VLAN connection
+- **Scenario**: Physical wired interface gets self-assigned IP (169.254.x.x)
+- **Behavior**: System treats it as no valid wired connection
 - **Handling**: Explicit exclusion of 169.254.x.x range in IP detection
 
 #### Permission Failures
@@ -327,7 +328,7 @@ fi
 ## 10. Validation Criteria
 
 ### Functional Validation
-- **VAL-001**: Script correctly identifies all supported wired/VLAN adapter types on test hardware
+- **VAL-001**: Script identifies renamed enabled physical dock interfaces by live driver class and rejects tagged, bridge, WiFi, and disabled services
 - **VAL-002**: WiFi toggle operations complete successfully across all supported macOS versions
 - **VAL-003**: IP address filtering excludes loopback and self-assigned addresses correctly
 - **VAL-004**: LaunchDaemon responds to network configuration changes within specified timeframes

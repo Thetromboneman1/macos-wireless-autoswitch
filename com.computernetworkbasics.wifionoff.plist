@@ -23,9 +23,13 @@
     <string>/var/log/wireless-autoswitch.log</string>
     
     <key>RunAtLoad</key>
-    <false/>
+    <true/>
     <key>KeepAlive</key>
     <false/>
+
+    <!-- Recover from missed dock events, delayed DHCP, or wake races. -->
+    <key>StartInterval</key>
+    <integer>60</integer>
     
     <key>ThrottleInterval</key>
     <integer>5</integer>
